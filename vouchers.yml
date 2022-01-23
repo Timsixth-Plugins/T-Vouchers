@@ -1,0 +1,6 @@
+vouchers:
+  test:
+    command: 'pex user {NICK} group set vip'
+    displayname: '&a&lTEST'
+    lore:
+      - '&a&lTEST12343'
