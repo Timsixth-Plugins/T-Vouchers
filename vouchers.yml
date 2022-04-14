@@ -2,5 +2,7 @@ vouchers:
   test:
     command: 'pex user {NICK} group set vip'
     displayname: '&a&lTEST'
+    enchants:
+      - 'DURABILITY;10'
     lore:
       - '&a&lTEST12343'

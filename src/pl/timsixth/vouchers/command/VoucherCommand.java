@@ -40,9 +40,9 @@ public class VoucherCommand implements CommandExecutor {
                     if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
                         Voucher voucher = voucherManager.getVoucher(args[1]);
                         ((Player) sender).getInventory().addItem(voucherManager.getItemVoucher(voucher));
-                        sender.sendMessage(ConfigFile.ADDEDVOUCHER);
+                        sender.sendMessage(ConfigFile.ADDED_VOUCHER);
                     } else {
-                        sender.sendMessage(ConfigFile.DOESNTEXISTS);
+                        sender.sendMessage(ConfigFile.VOUCHER_DOESNT_EXISTS);
                     }
                 } else {
                     sender.sendMessage(ConfigFile.CORRECT_USE);
@@ -58,15 +58,15 @@ public class VoucherCommand implements CommandExecutor {
                     if (other != null) {
                         Voucher voucher = voucherManager.getVoucher(args[1]);
                         other.getInventory().addItem(voucherManager.getItemVoucher(voucher));
-                        other.sendMessage(ConfigFile.ADDEDVOUCHER);
-                        String message = ConfigFile.ADDEDVOUCHER_TO_OTHER_PLAYER;
+                        other.sendMessage(ConfigFile.ADDED_VOUCHER);
+                        String message = ConfigFile.ADDED_VOUCHER_TO_OTHER_PLAYER;
                         message = message.replace("{PLAYER_NAME}", sender.getName());
                         sender.sendMessage(message);
                     } else {
-                        sender.sendMessage(ConfigFile.OFFLINEPLAYER);
+                        sender.sendMessage(ConfigFile.OFFLINE_PLAYER);
                     }
                 } else {
-                    sender.sendMessage(ConfigFile.DOESNTEXISTS);
+                    sender.sendMessage(ConfigFile.VOUCHER_DOESNT_EXISTS);
                 }
             } else {
                 sender.sendMessage(ConfigFile.CORRECT_USE);

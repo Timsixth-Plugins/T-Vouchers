@@ -1,6 +1,4 @@
 permission: 'timsixth.voucher'
-enchant: 'DURABILITY'
-level: 10
 messages:
   no_permission: '&cYou dont have premission'
   correct_use: '&cCorrect use: /voucher list|give <name> <player>'

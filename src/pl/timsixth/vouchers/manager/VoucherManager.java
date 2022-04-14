@@ -11,7 +11,9 @@ import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VoucherManager {
 
@@ -19,7 +21,7 @@ public class VoucherManager {
 
     private final List<Voucher> voucherList = new ArrayList<>();
 
-    public VoucherManager(ConfigFile configFile){
+    public VoucherManager(ConfigFile configFile) {
         yamlVouchers = YamlConfiguration.loadConfiguration(configFile.vouchersFile);
     }
 
@@ -28,12 +30,15 @@ public class VoucherManager {
 
         for (String voucherName : vouchers.getKeys(false)) {
             ConfigurationSection section = vouchers.getConfigurationSection(voucherName);
-            Voucher voucher = new Voucher(
-                    voucherName,
-                    section.getString("command"),
-                    section.getStringList("lore"),
-                    section.getString("displayname")
-            );
+            Voucher  voucher = new Voucher(
+                        voucherName,
+                        section.getString("command"),
+                        section.getStringList("lore"),
+                        section.getString("displayname")
+                );
+            if (section.getStringList("enchants") != null) {
+                voucher.setEnchantments(getEnchants(section));
+            }
             voucherList.add(voucher);
         }
     }
@@ -43,7 +48,10 @@ public class VoucherManager {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatUtil.chatColor(voucher.getDisplayName()));
         meta.setLore(ChatUtil.chatColor(voucher.getLore()));
-        meta.addEnchant(Enchantment.getByName(ConfigFile.ENCHANT_NAME), ConfigFile.LEVEL, true);
+
+        if (voucher.getEnchantments() != null){
+            voucher.getEnchantments().forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
+        }
         meta.setLocalizedName(voucher.getName());
         item.setItemMeta(meta);
 
@@ -60,5 +68,15 @@ public class VoucherManager {
 
     public List<Voucher> getVoucherList() {
         return voucherList;
+    }
+
+    private Map<Enchantment, Integer> getEnchants(ConfigurationSection section) {
+        List<String> enchantsString = section.getStringList("enchants");
+        Map<Enchantment, Integer> enchants = new HashMap<>();
+        enchantsString.forEach(enchantString -> {
+            String[] enchantAndLevel = enchantString.split(";");
+            enchants.put(Enchantment.getByName(enchantAndLevel[0]), Integer.parseInt(enchantAndLevel[1]));
+        });
+        return enchants;
     }
 }
