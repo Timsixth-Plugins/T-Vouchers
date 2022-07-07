@@ -1,4 +1,4 @@
-package pl.timsixth.vouchers.test.TestPattern;
+package pl.timsixth.vouchers.test;
 
 import org.junit.Test;
 
