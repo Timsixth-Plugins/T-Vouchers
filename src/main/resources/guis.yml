@@ -1,0 +1,182 @@
+guis:
+  main:
+    displayname: '&a&lVoucher manager in gui'
+    size: 27
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      12:
+        material: WORKBENCH
+        displayname: '&aCreate new voucher'
+        click_action:
+          type: OPEN_MENU
+          run_action:
+             - 'voucherCreator'
+        lore:
+          - '&7Right click to open menu'
+      14:
+        material: PAPER
+        displayname: '&aList of all vouchers'
+        click_action:
+          type: OPEN_MENU_AND_GENERATED_ITEMS
+          run_action:
+            - 'listOfAllVouchers'
+        lore:
+          - '&7Right click to open menu'
+  voucherCreator:
+    displayname: '&a&lVoucher creator'
+    size: 27
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      13:
+        material: ANVIL
+        displayname: '&aCreate new voucher'
+        click_action:
+          type: CLOSE_MENU
+          run_action:
+            - 'open_chat'
+        lore:
+          - '&7Right click to start creating voucher'
+  listOfAllVouchers:
+    displayname: '&a&lList of all vouchers'
+    size: 54
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      22:
+        material: WOOL
+        id: 14
+        displayname: '&cList is empty'
+  listOfAllEnchants:
+    displayname: '&a&lChoose enchants'
+    size: 54
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      0:
+        material: BARRIER
+        displayname: '&aSet enchants to none'
+        click_action:
+          type: NONE_ENCHANTS
+          run_action:
+            - ''
+        lore:
+          - '&7Right click to set enchants to none'
+  chooseEnchantLevel:
+    displayname: '&a&lChoose enchant level'
+    size: 27
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      0:
+        material: STAINED_CLAY
+        id: 5
+        displayname: '&aSet enchant level 1'
+        click_action:
+          type: CHOOSE_LEVEL
+          run_action:
+            - '1'
+        lore:
+          - '&7Right click to set enchant level'
+      1:
+        material: STAINED_CLAY
+        id: 5
+        displayname: '&aSet enchant level 2'
+        click_action:
+          type: CHOOSE_LEVEL
+          run_action:
+            - '2'
+        lore:
+          - '&7Right click to set enchant level'
+      2:
+        material: STAINED_CLAY
+        id: 5
+        displayname: '&aSet enchant level 3'
+        click_action:
+          type: CHOOSE_LEVEL
+          run_action:
+            - '3'
+        lore:
+          - '&7Right click to set enchant level'
+      3:
+        material: STAINED_CLAY
+        id: 5
+        displayname: '&aSet enchant level 4'
+        click_action:
+          type: CHOOSE_LEVEL
+          run_action:
+            - '4'
+        lore:
+          - '&7Right click to set enchant level'
+      4:
+        material: STAINED_CLAY
+        id: 5
+        displayname: '&aSet enchant level 5'
+        click_action:
+          type: CHOOSE_LEVEL
+          run_action:
+            - '5'
+        lore:
+          - '&7Right click to set enchant level'
+      24:
+        material: WOOL
+        id: 5
+        displayname: '&aReplace voucher'
+        click_action:
+          type: REPLACE_VOUCHER
+          run_action:
+            - ''
+        lore:
+          - '&7Right click to replace voucher'
+      25:
+        material: WOOL
+        id: 5
+        displayname: '&aCreate voucher'
+        click_action:
+          type: CREATE_VOUCHER
+          run_action:
+            - ''
+        lore:
+          - '&7Right click to create voucher'
+      26:
+        material: WOOL
+        id: 11
+        displayname: '&aChoose more enchants'
+        click_action:
+          type: OPEN_MENU
+          run_action:
+            - 'listOfAllEnchants'
+        lore:
+          - '&7Right click to choose more enchants'
+  manageVouchers:
+    displayname: '&a&lManage vouchers'
+    size: 27
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      12:
+        material: WOOL
+        id: 14
+        displayname: '&aDelete voucher'
+        click_action:
+          type: DELETE_VOUCHER
+          run_action:
+            - ''
+        lore:
+          - '&7Right click to delete voucher'
+      14:
+        material: ANVIL
+        displayname: '&aEdit voucher'
+        click_action:
+          type: EDIT_VOUCHER
+          run_action:
+            - 'open_chat'
+        lore:
+          - '&7Right click to edit voucher'

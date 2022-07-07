@@ -1,22 +1,22 @@
 package pl.timsixth.vouchers.command;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ChatUtil;
 
+@RequiredArgsConstructor
 public class VoucherCommand implements CommandExecutor {
 
     private final VoucherManager voucherManager;
-
-    public VoucherCommand(VoucherManager voucherManager) {
-        this.voucherManager = voucherManager;
-    }
+    private final MenuManager menuManager;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -25,7 +25,6 @@ public class VoucherCommand implements CommandExecutor {
             return true;
         }
 
-
         if (args.length == 0) {
             sender.sendMessage(ConfigFile.CORRECT_USE);
             return true;
@@ -33,6 +32,11 @@ public class VoucherCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("list")) {
                 sender.sendMessage(ChatUtil.chatColor("&eVouchers:&7"));
                 voucherManager.getVoucherList().forEach(voucher -> sender.sendMessage(ChatUtil.chatColor("&7 " + voucher.getName())));
+            }else if (args[0].equalsIgnoreCase("gui")){
+                if (sender instanceof Player){
+                    Player player = (Player) sender;
+                    player.openInventory(menuManager.createMenu(menuManager.getMenuByName("main")));
+                }
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("give")) {

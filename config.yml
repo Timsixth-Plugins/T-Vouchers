@@ -1,8 +1,0 @@
-permission: 'timsixth.voucher'
-messages:
-  no_permission: '&cYou dont have premission'
-  correct_use: '&cCorrect use: /voucher list|give <name> <player>'
-  added_voucher: '&aVoucher has added to your inventory'
-  doesnt_exists: '&cThis voucher doesnt exists!'
-  offline_player: '&cThis player is offline'
-  added_voucher_other_player: '&aYou has been added voucher to player {PLAYER_NAME}'

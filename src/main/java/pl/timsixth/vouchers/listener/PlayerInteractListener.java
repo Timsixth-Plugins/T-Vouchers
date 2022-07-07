@@ -10,16 +10,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 
-public class PlayerInteractListner implements Listener {
+public class PlayerInteractListener implements Listener {
 
     private final VoucherManager voucherManager;
 
-    public PlayerInteractListner(VoucherManager voucherManager) {
+    public PlayerInteractListener(VoucherManager voucherManager) {
         this.voucherManager = voucherManager;
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    private void onInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_AIR) {
             return;
         }

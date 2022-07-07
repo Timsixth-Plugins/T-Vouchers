@@ -1,6 +1,0 @@
-name: T-Vouchers
-main: pl.timsixth.vouchers.Main
-version: 1.0
-author: timsixth
-commands:
-  voucher:
