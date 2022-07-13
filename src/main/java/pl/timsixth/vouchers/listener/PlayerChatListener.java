@@ -94,14 +94,14 @@ public class PlayerChatListener implements Listener {
             }
         } else if (editProcessManager.isProcessedByUser(editProcessManager.getProcessByUser(player.getUniqueId()), player)) {
             player.sendMessage(ConfigFile.CANCEL_PROCESS);
-
+            EditProcess   editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
             if (event.getMessage().equalsIgnoreCase("cancel")) {
-                editProcessManager.cancelProcess(editProcessManager.getProcessByUser(player.getUniqueId()));
+                editProcessManager.cancelProcess(editProcess);
                 prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()));
                 event.setCancelled(true);
                 return;
             }
-            EditProcess editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
+
             if (editProcess.getCurrentVoucher() == null) {
                 event.setCancelled(true);
                 return;

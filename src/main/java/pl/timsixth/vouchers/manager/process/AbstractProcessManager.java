@@ -2,7 +2,6 @@ package pl.timsixth.vouchers.manager.process;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.manager.VoucherManager;
@@ -19,12 +18,9 @@ public abstract class AbstractProcessManager<T extends IProcess> implements IPro
     private final ConfigFile configFile;
     private final VoucherManager voucherManager;
 
-    private final YamlConfiguration yamlVouchers;
-
     public AbstractProcessManager(ConfigFile configFile, VoucherManager voucherManager){
         this.configFile = configFile;
         this.voucherManager = voucherManager;
-        yamlVouchers = YamlConfiguration.loadConfiguration(configFile.vouchersFile);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class MenuManager {
     private final YamlConfiguration ymlGuis;
 
     public MenuManager(ConfigFile configFile) {
-        ymlGuis = YamlConfiguration.loadConfiguration(configFile.guisFile);
+        ymlGuis = YamlConfiguration.loadConfiguration(configFile.getGuisFile());
     }
 
     public void load() {

@@ -22,7 +22,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
         if (process.getCurrentVoucher() == null) {
             return;
         }
-        ConfigurationSection vouchersSection = getYamlVouchers().getConfigurationSection("vouchers");
+        ConfigurationSection vouchersSection = getConfigFile().getYmlVouchers().getConfigurationSection("vouchers");
         Voucher currentVoucher = process.getCurrentVoucher();
         if (vouchersSection.getConfigurationSection(currentVoucher.getName()) != null) {
             return;
@@ -37,7 +37,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
 
             newVoucherSection.set("enchants", enchants);
         }
-        getYamlVouchers().save(getConfigFile().vouchersFile);
+        getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
         getVoucherManager().getVoucherList().add(currentVoucher);
         process.setContinue(false);
         cancelProcess(process);

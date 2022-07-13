@@ -3,6 +3,7 @@ package pl.timsixth.vouchers.listener;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,10 +20,7 @@ import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.menu.ClickAction;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.process.CreationProcess;
-import pl.timsixth.vouchers.model.process.DeleteProcess;
-import pl.timsixth.vouchers.model.process.EditProcess;
-import pl.timsixth.vouchers.model.process.IProcess;
+import pl.timsixth.vouchers.model.process.*;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.io.IOException;
@@ -148,16 +146,12 @@ public class InventoryClickListener implements Listener {
                     }
                     String actionArgs = menuItem.getClickAction().getCalledAction().get(0);
                     if (actionArgs.equalsIgnoreCase("open_chat")) {
-                        Voucher currentVoucher = voucherManager.getVoucher(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()).getLocalizeName());
+                        Voucher voucher = voucherManager.getVoucher(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()).getLocalizeName());
                         EditProcess editProcess = new EditProcess(player.getUniqueId());
+                        Voucher currentVoucher = new Voucher(voucher.getName(),null,null,null);
+                        currentVoucher.setEnchantments(new HashMap<>());
                         editProcess.setCurrentVoucher(currentVoucher);
-                        if (editProcess.getCurrentVoucher().getName() != null) {
-                            currentVoucher.setDisplayName(null);
-                            currentVoucher.setLore(null);
-                            currentVoucher.setCommand(null);
-                            currentVoucher.setEnchantments(new HashMap<>());
-                            player.sendMessage(ConfigFile.TYPE_VOUCHER_DISPLAY_NAME);
-                        }
+                        player.sendMessage(ConfigFile.TYPE_VOUCHER_DISPLAY_NAME);
                         editProcessManager.startProcess(editProcess);
                         player.closeInventory();
                     }
@@ -175,7 +169,6 @@ public class InventoryClickListener implements Listener {
                     deleteProcessManager.saveProcess(deleteProcess);
 
                     player.sendMessage(ConfigFile.DELETED_VOUCHER);
-                    prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()));
                     player.closeInventory();
                     event.setCancelled(true);
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.REPLACE_VOUCHER) {
@@ -185,7 +178,6 @@ public class InventoryClickListener implements Listener {
                     }
                     EditProcess editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
                     editProcessManager.saveProcess(editProcess);
-                    prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()));
                     player.sendMessage(ConfigFile.UPDATED_VOUCHER);
                     player.closeInventory();
                     event.setCancelled(true);
@@ -223,10 +215,14 @@ public class InventoryClickListener implements Listener {
     }
 
     private <T extends IProcess> void setNoneEnchants(Player player, IProcessManager<T> iProcessManager) throws IOException {
-        T creationProcess = iProcessManager.getProcessByUser(player.getUniqueId());
-        creationProcess.getCurrentVoucher().setEnchantments(null);
-        iProcessManager.saveProcess(creationProcess);
-        player.sendMessage(ConfigFile.CREATED_VOUCHER);
+        T process = iProcessManager.getProcessByUser(player.getUniqueId());
+        process.getCurrentVoucher().setEnchantments(null);
+        iProcessManager.saveProcess(process);
+        if (process instanceof CreationProcess){
+            player.sendMessage(ConfigFile.CREATED_VOUCHER);
+        }else if (process instanceof EditProcess){
+            player.sendMessage(ConfigFile.UPDATED_VOUCHER);
+        }
         player.closeInventory();
     }
 }

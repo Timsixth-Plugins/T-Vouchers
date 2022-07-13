@@ -1,8 +1,10 @@
 package pl.timsixth.vouchers.model.process;
 
+import lombok.ToString;
 import pl.timsixth.vouchers.model.Voucher;
 
 import java.util.UUID;
+@ToString
 public abstract class AbstractProcess implements IProcess{
 
     private final UUID userUUID;

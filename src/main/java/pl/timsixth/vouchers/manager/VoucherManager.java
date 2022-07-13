@@ -1,8 +1,8 @@
 package pl.timsixth.vouchers.manager;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,28 +14,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@RequiredArgsConstructor
 public class VoucherManager {
 
-    private final YamlConfiguration yamlVouchers;
-
+    private final ConfigFile configFile;
     private final List<Voucher> voucherList = new ArrayList<>();
 
-    public VoucherManager(ConfigFile configFile) {
-        yamlVouchers = YamlConfiguration.loadConfiguration(configFile.vouchersFile);
-    }
-
     public void loadVouchers() {
-        ConfigurationSection vouchers = yamlVouchers.getConfigurationSection("vouchers");
+        ConfigurationSection vouchers = configFile.getYmlVouchers().getConfigurationSection("vouchers");
 
         for (String voucherName : vouchers.getKeys(false)) {
             ConfigurationSection section = vouchers.getConfigurationSection(voucherName);
-            Voucher  voucher = new Voucher(
-                        voucherName,
-                        section.getString("command"),
-                        section.getStringList("lore"),
-                        section.getString("displayname")
-                );
+            Voucher voucher = new Voucher(
+                    voucherName,
+                    section.getString("command"),
+                    section.getStringList("lore"),
+                    section.getString("displayname")
+            );
             if (section.getStringList("enchants") != null) {
                 voucher.setEnchantments(getEnchants(section));
             }
@@ -49,7 +44,7 @@ public class VoucherManager {
         meta.setDisplayName(ChatUtil.chatColor(voucher.getDisplayName()));
         meta.setLore(ChatUtil.chatColor(voucher.getLore()));
 
-        if (voucher.getEnchantments() != null){
+        if (voucher.getEnchantments() != null) {
             voucher.getEnchantments().forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
         }
         meta.setLocalizedName(voucher.getName());

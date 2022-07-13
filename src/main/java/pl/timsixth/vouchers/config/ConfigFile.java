@@ -1,18 +1,21 @@
 package pl.timsixth.vouchers.config;
 
+import lombok.Getter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.io.File;
 import java.io.IOException;
 
+@Getter
 public class ConfigFile {
 
+    private final File vouchersFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "vouchers.yml");
+    private final File guisFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "guis.yml");
+    private final YamlConfiguration ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
 
-    public final File vouchersFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "vouchers.yml");
-    public final File guisFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "guis.yml");
     public static final String PERMISSION = VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("permission");
-
     public static final String NO_PERMISSION = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.no_permission"));
     public static final String CORRECT_USE = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.correct_use"));
     public static final String ADDED_VOUCHER = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.added_voucher"));
@@ -37,7 +40,7 @@ public class ConfigFile {
     public static final String TYPE_VOUCHER_COMMAND = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.type_voucher_command"));
     public static final String SET_VOUCHER_ENCHANTS = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.set_voucher_enchants"));
 
-    public static final String INVALID_FORMAT_OF_NAME = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.invalid_name_format"));;
+    public static final String INVALID_FORMAT_OF_NAME = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.invalid_name_format"));
 
 
     public ConfigFile() {
@@ -46,8 +49,8 @@ public class ConfigFile {
     }
 
     private void createFileByBukkit(String name) {
-        if (!VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder().mkdir()) {
-            VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder().mkdirs();
+        if (!VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder().exists()) {
+            VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder().mkdir();
         }
         File file = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), name);
         if (!file.exists()) {
