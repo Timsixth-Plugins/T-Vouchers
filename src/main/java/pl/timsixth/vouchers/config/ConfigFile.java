@@ -6,14 +6,13 @@ import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.io.File;
-import java.io.IOException;
 
 @Getter
 public class ConfigFile {
 
     private final File vouchersFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "vouchers.yml");
     private final File guisFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "guis.yml");
-    private final File logsFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(),"logs.yml");
+    private final File logsFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "logs.yml");
     private final YamlConfiguration ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
     private final YamlConfiguration ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
 
@@ -57,12 +56,7 @@ public class ConfigFile {
         }
         File file = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), name);
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-                VouchersPlugin.getPlugin(VouchersPlugin.class).saveResource(name, true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            VouchersPlugin.getPlugin(VouchersPlugin.class).saveResource(name, true);
         }
     }
 }

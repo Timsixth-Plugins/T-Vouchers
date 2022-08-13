@@ -34,6 +34,7 @@ public final class VouchersPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        configFile = new ConfigFile();
         voucherManager = new VoucherManager(configFile);
         menuManager = new MenuManager(configFile);
         prepareToProcessManager = new PrepareToProcessManager();
