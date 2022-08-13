@@ -44,7 +44,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
         getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
         getVoucherManager().getVoucherList().add(currentVoucher);
         process.setContinue(false);
-        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" was created",new Date(), ProcessType.CREATE));
         cancelProcess(process);
+        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" was created",new Date(), ProcessType.CREATE));
     }
 }
