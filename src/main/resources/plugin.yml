@@ -1,6 +1,6 @@
 name: T-Vouchers
 main: pl.timsixth.vouchers.VouchersPlugin
-version: 1.2
+version: 1.3
 author: timsixth
 commands:
   voucher:
