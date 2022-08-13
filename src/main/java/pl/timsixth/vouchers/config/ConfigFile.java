@@ -13,7 +13,9 @@ public class ConfigFile {
 
     private final File vouchersFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "vouchers.yml");
     private final File guisFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "guis.yml");
+    private final File logsFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(),"logs.yml");
     private final YamlConfiguration ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
+    private final YamlConfiguration ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
 
     public static final String PERMISSION = VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("permission");
     public static final String NO_PERMISSION = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.no_permission"));
@@ -46,6 +48,7 @@ public class ConfigFile {
     public ConfigFile() {
         createFileByBukkit("vouchers.yml");
         createFileByBukkit("guis.yml");
+        createFileByBukkit("logs.yml");
     }
 
     private void createFileByBukkit(String name) {

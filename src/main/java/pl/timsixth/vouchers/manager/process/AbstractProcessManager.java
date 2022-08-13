@@ -2,14 +2,18 @@ package pl.timsixth.vouchers.manager.process;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.process.IProcess;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+@RequiredArgsConstructor
 @Getter(AccessLevel.PROTECTED)
 public abstract class AbstractProcessManager<T extends IProcess> implements IProcessManager<T> {
 
@@ -17,11 +21,7 @@ public abstract class AbstractProcessManager<T extends IProcess> implements IPro
 
     private final ConfigFile configFile;
     private final VoucherManager voucherManager;
-
-    public AbstractProcessManager(ConfigFile configFile, VoucherManager voucherManager){
-        this.configFile = configFile;
-        this.voucherManager = voucherManager;
-    }
+    private final LogsManager logsManager;
 
     @Override
     public void cancelProcess(T process) {

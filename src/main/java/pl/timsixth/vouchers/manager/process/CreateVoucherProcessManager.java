@@ -2,19 +2,23 @@ package pl.timsixth.vouchers.manager.process;
 
 import org.bukkit.configuration.ConfigurationSection;
 import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.enums.ProcessType;
+import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
+import pl.timsixth.vouchers.model.Log;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CreateVoucherProcessManager extends AbstractProcessManager<CreationProcess> {
 
 
-    public CreateVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager) {
-        super(configFile, voucherManager);
+    public CreateVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, LogsManager logsManager) {
+        super(configFile, voucherManager, logsManager);
     }
 
     @Override
@@ -40,6 +44,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
         getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
         getVoucherManager().getVoucherList().add(currentVoucher);
         process.setContinue(false);
+        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" was created",new Date(), ProcessType.CREATE));
         cancelProcess(process);
     }
 }

@@ -1,25 +1,26 @@
 package pl.timsixth.vouchers.manager.process;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.enums.ProcessType;
+import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.PrepareToProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
+import pl.timsixth.vouchers.model.Log;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.process.EditProcess;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EditVoucherProcessManager extends AbstractProcessManager<EditProcess> {
 
     private final PrepareToProcessManager prepareToProcessManager;
 
-
-    public EditVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, PrepareToProcessManager prepareToProcessManager) {
-        super(configFile, voucherManager);
+    public EditVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, PrepareToProcessManager prepareToProcessManager, LogsManager logsManager) {
+        super(configFile, voucherManager, logsManager);
         this.prepareToProcessManager = prepareToProcessManager;
     }
 
@@ -59,5 +60,6 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         vouchers.set(index, currentVoucher);
         process.setContinue(false);
         cancelProcess(process);
+        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" has been updated",new Date(), ProcessType.EDIT));
     }
 }
