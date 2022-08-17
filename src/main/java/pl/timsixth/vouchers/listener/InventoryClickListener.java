@@ -10,20 +10,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.enums.ActionClickType;
+import pl.timsixth.vouchers.enums.GeneratedItemsType;
+import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.PrepareToProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
+import pl.timsixth.vouchers.model.IGenerable;
 import pl.timsixth.vouchers.model.PrepareToProcess;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.model.menu.ClickAction;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.process.*;
+import pl.timsixth.vouchers.model.process.CreationProcess;
+import pl.timsixth.vouchers.model.process.DeleteProcess;
+import pl.timsixth.vouchers.model.process.EditProcess;
+import pl.timsixth.vouchers.model.process.IProcess;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.io.IOException;
-import java.util.*;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
@@ -39,9 +48,10 @@ public class InventoryClickListener implements Listener {
     private final VoucherManager voucherManager;
 
     private final PrepareToProcessManager prepareToProcessManager;
+    private final LogsManager logsManager;
 
     @EventHandler
-    private void onClick(InventoryClickEvent event) throws IOException {
+    private void onClick(InventoryClickEvent event) throws IOException, ParseException {
         Player player = (Player) event.getWhoClicked();
 
         for (Menu menu : menuManager.getMenus()) {
@@ -51,7 +61,7 @@ public class InventoryClickListener implements Listener {
         }
     }
 
-    private void actionsInMenu(InventoryClickEvent event, Menu mainMenu, Player player) throws IOException {
+    private void actionsInMenu(InventoryClickEvent event, Menu mainMenu, Player player) throws IOException, ParseException {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
             return;
         }
@@ -113,24 +123,14 @@ public class InventoryClickListener implements Listener {
                     player.closeInventory();
                     event.setCancelled(true);
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.OPEN_MENU_AND_GENERATED_ITEMS) {
-                    Menu listOfAllVoucherMenu = menuManager.getMenuByName(menuItem.getClickAction().getCalledAction().get(0));
-                    List<Voucher> voucherList = voucherManager.getVoucherList();
-                    Set<MenuItem> menuItems = listOfAllVoucherMenu.getItems();
-                    menuItems.clear();
-                    for (int i = 0; i < voucherList.size(); i++) {
-                        Voucher voucher = voucherList.get(i);
-                        MenuItem voucherMenuItem = new MenuItem(i, Material.PAPER, ChatUtil.chatColor(voucher.getDisplayName()), ChatUtil.chatColor(voucher.getLore()));
-                        voucherMenuItem.setClickAction(new ClickAction(ActionClickType.MANAGE_VOUCHER, new ArrayList<>()));
-                        voucherMenuItem.setLocalizedName(voucher.getName());
-                        if (voucher.getEnchantments() != null) {
-                            voucherMenuItem.setEnchantments(voucher.getEnchantments());
-                        } else {
-                            voucherMenuItem.setEnchantments(new HashMap<>());
-                        }
-                        menuItems.add(voucherMenuItem);
+                    Menu menuToOpen = menuManager.getMenuByName(menuItem.getClickAction().getCalledAction().get(0));
+                    GeneratedItemsType typeOfGeneratedItems = GeneratedItemsType.valueOf(menuItem.getClickAction().getCalledAction().get(1));
+                    if (typeOfGeneratedItems == GeneratedItemsType.VOUCHERS) {
+                        List<Voucher> voucherList = voucherManager.getVoucherList();
+                        openGeneratedMenu(player,menuToOpen,voucherList);
+                    } else if (typeOfGeneratedItems == GeneratedItemsType.LOGS) {
+                        openGeneratedMenu(player,menuToOpen,logsManager.getLogsToShowInGui());
                     }
-                    listOfAllVoucherMenu.setItems(menuItems);
-                    player.openInventory(menuManager.createMenu(listOfAllVoucherMenu));
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.MANAGE_VOUCHER) {
                     String voucherName = menuItem.getLocalizedName();
                     PrepareToProcess prepareToProcess = new PrepareToProcess(player.getUniqueId(), voucherName);
@@ -147,7 +147,7 @@ public class InventoryClickListener implements Listener {
                     if (actionArgs.equalsIgnoreCase("open_chat")) {
                         Voucher voucher = voucherManager.getVoucher(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()).getLocalizeName());
                         EditProcess editProcess = new EditProcess(player.getUniqueId());
-                        Voucher currentVoucher = new Voucher(voucher.getName(),null,null,null);
+                        Voucher currentVoucher = new Voucher(voucher.getName(), null, null, null);
                         currentVoucher.setEnchantments(new HashMap<>());
                         editProcess.setCurrentVoucher(currentVoucher);
                         player.sendMessage(ConfigFile.TYPE_VOUCHER_DISPLAY_NAME);
@@ -179,6 +179,10 @@ public class InventoryClickListener implements Listener {
                     editProcessManager.saveProcess(editProcess);
                     player.sendMessage(ConfigFile.UPDATED_VOUCHER);
                     player.closeInventory();
+                    event.setCancelled(true);
+                } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.CLEAR_ALL_TODAY_LOGS) {
+                    logsManager.clearAllLogsByCurrentDate();
+                    player.sendMessage(ConfigFile.CLEAR_ALL_TODAY_LOGS);
                     event.setCancelled(true);
                 }
             }
@@ -217,11 +221,21 @@ public class InventoryClickListener implements Listener {
         T process = iProcessManager.getProcessByUser(player.getUniqueId());
         process.getCurrentVoucher().setEnchantments(null);
         iProcessManager.saveProcess(process);
-        if (process instanceof CreationProcess){
+        if (process instanceof CreationProcess) {
             player.sendMessage(ConfigFile.CREATED_VOUCHER);
-        }else if (process instanceof EditProcess){
+        } else if (process instanceof EditProcess) {
             player.sendMessage(ConfigFile.UPDATED_VOUCHER);
         }
         player.closeInventory();
+    }
+
+    private <T extends IGenerable> void openGeneratedMenu(Player player, Menu menuToOpen, List<T> listOfItems) {
+        Set<MenuItem> menuItems = menuToOpen.getItems();
+        menuItems.clear();
+        for (int i = 0; i < listOfItems.size(); i++) {
+            menuItems.add(listOfItems.get(i).getGeneratedItem(i));
+        }
+        menuToOpen.setItems(menuItems);
+        player.openInventory(menuManager.createMenu(menuToOpen));
     }
 }

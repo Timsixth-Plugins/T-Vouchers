@@ -6,7 +6,7 @@ guis:
       id: 7
       material: STAINED_GLASS_PANE
     slots:
-      12:
+      11:
         material: WORKBENCH
         displayname: '&aCreate new voucher'
         click_action:
@@ -15,13 +15,23 @@ guis:
              - 'voucherCreator'
         lore:
           - '&7Right click to open menu'
-      14:
+      13:
+        material: MAP
+        displayname: '&aLogs'
+        click_action:
+          type: OPEN_MENU
+          run_action:
+            - 'logs'
+        lore:
+          - '&7Right click to open menu'
+      15:
         material: PAPER
         displayname: '&aList of all vouchers'
         click_action:
           type: OPEN_MENU_AND_GENERATED_ITEMS
           run_action:
             - 'listOfAllVouchers'
+            - 'VOUCHERS'
         lore:
           - '&7Right click to open menu'
   voucherCreator:
@@ -180,3 +190,41 @@ guis:
             - 'open_chat'
         lore:
           - '&7Right click to edit voucher'
+  logs:
+    displayname: '&a&lManage logs'
+    size: 27
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      12:
+        material: PAPER
+        id: 14
+        displayname: '&aShow all logs which created today'
+        click_action:
+          type: OPEN_MENU_AND_GENERATED_ITEMS
+          run_action:
+            - 'listOfAllTodayLogs'
+            - 'LOGS'
+        lore:
+          - '&7Right click to show menu'
+      14:
+        material: BARRIER
+        displayname: '&aClear all logs which created today'
+        click_action:
+          type: CLEAR_ALL_TODAY_LOGS
+          run_action:
+            - ''
+        lore:
+          - '&7Right click to clear logs'
+  listOfAllTodayLogs:
+    displayname: '&a&lToday''s logs'
+    size: 54
+    empty_slots:
+      id: 7
+      material: STAINED_GLASS_PANE
+    slots:
+      22:
+        material: WOOL
+        id: 14
+        displayname: '&cList is empty'

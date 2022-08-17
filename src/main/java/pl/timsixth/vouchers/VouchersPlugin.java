@@ -29,6 +29,7 @@ public final class VouchersPlugin extends JavaPlugin {
     private IProcessManager<CreationProcess> createVoucherProcessManager;
     private IProcessManager<EditProcess> editVoucherManager;
     private IProcessManager<DeleteProcess> deleteVoucherManager;
+    private LogsManager logsManager;
 
     private ConfigFile configFile;
 
@@ -38,7 +39,7 @@ public final class VouchersPlugin extends JavaPlugin {
         voucherManager = new VoucherManager(configFile);
         menuManager = new MenuManager(configFile);
         prepareToProcessManager = new PrepareToProcessManager();
-        LogsManager logsManager = new LogsManager(configFile);
+        logsManager = new LogsManager(configFile);
         createVoucherProcessManager = new CreateVoucherProcessManager(configFile, voucherManager, logsManager);
         editVoucherManager = new EditVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, logsManager);
         deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, this, logsManager);
@@ -54,7 +55,7 @@ public final class VouchersPlugin extends JavaPlugin {
     private void loadListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerInteractListener(voucherManager), this);
-        pluginManager.registerEvents(new InventoryClickListener(menuManager, createVoucherProcessManager, deleteVoucherManager, editVoucherManager, voucherManager, prepareToProcessManager), this);
+        pluginManager.registerEvents(new InventoryClickListener(menuManager, createVoucherProcessManager, deleteVoucherManager, editVoucherManager, voucherManager, prepareToProcessManager,logsManager), this);
         pluginManager.registerEvents(new PlayerChatListener(createVoucherProcessManager, editVoucherManager, menuManager, voucherManager, this, prepareToProcessManager), this);
         pluginManager.registerEvents(new InventoryCloseListener(menuManager, createVoucherProcessManager, editVoucherManager), this);
     }

@@ -17,3 +17,4 @@ messages:
   cancel_process: '&cIf do you want cancel this process,you will type "cancel" in chat.'
   voucher_already_exits: '&cThis voucher already exists'
   invalid_name_format: '&cIn voucher''s name you can only use letters and numbers'
+  clear_all_today_logs: '&aSuccessfully cleared logs which created today'

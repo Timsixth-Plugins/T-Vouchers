@@ -53,7 +53,7 @@ public class VoucherCommand implements CommandExecutor {
                     return true;
                 }
             }else{
-                System.out.println("Player only use this command");
+                Bukkit.getLogger().info("Player only use this command");
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("give")) {

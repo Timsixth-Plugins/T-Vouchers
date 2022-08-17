@@ -13,5 +13,6 @@ public enum ActionClickType {
     DELETE_VOUCHER,
     MANAGE_VOUCHER,
     REPLACE_VOUCHER,
+    CLEAR_ALL_TODAY_LOGS,
     NONE
 }

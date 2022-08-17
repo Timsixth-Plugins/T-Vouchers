@@ -10,6 +10,7 @@ import java.io.File;
 @Getter
 public class ConfigFile {
 
+
     private final File vouchersFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "vouchers.yml");
     private final File guisFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "guis.yml");
     private final File logsFile = new File(VouchersPlugin.getPlugin(VouchersPlugin.class).getDataFolder(), "logs.yml");
@@ -42,8 +43,7 @@ public class ConfigFile {
     public static final String SET_VOUCHER_ENCHANTS = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.set_voucher_enchants"));
 
     public static final String INVALID_FORMAT_OF_NAME = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.invalid_name_format"));
-
-
+    public static final String CLEAR_ALL_TODAY_LOGS = ChatUtil.chatColor(VouchersPlugin.getPlugin(VouchersPlugin.class).getConfig().getString("messages.clear_all_today_logs"));
     public ConfigFile() {
         createFileByBukkit("vouchers.yml");
         createFileByBukkit("guis.yml");

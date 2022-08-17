@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertFalse;
 
-
 public class TestPattern {
 
     private final Pattern voucherNamePattern = Pattern.compile("[a-zA-Z\\d]{2,30}");
