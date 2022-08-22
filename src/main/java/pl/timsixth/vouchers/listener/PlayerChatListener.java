@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
-import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.enums.ActionClickType;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.PrepareToProcessManager;
@@ -44,6 +44,8 @@ public class PlayerChatListener implements Listener {
 
     private final PrepareToProcessManager prepareToProcessManager;
 
+    private final Messages messages;
+
     private final Pattern voucherNamePattern = Pattern.compile("[a-zA-Z\\d]{2,30}");
 
     @EventHandler
@@ -51,7 +53,7 @@ public class PlayerChatListener implements Listener {
         Player player = event.getPlayer();
 
         if (createProcessManager.isProcessedByUser(createProcessManager.getProcessByUser(player.getUniqueId()), player)) {
-            player.sendMessage(ConfigFile.CANCEL_PROCESS);
+            player.sendMessage(messages.getCancelProcess());
 
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 cancelProcess(createProcessManager, player, event);
@@ -61,7 +63,7 @@ public class PlayerChatListener implements Listener {
             CreationProcess creationProcess = createProcessManager.getProcessByUser(player.getUniqueId());
             if (creationProcess.getCurrentVoucher() == null || creationProcess.getCurrentVoucher().getName() == null) {
                 if (voucherManager.voucherExists(voucherManager.getVoucher(event.getMessage()))) {
-                    player.sendMessage(ConfigFile.VOUCHER_ALREADY_EXISTS);
+                    player.sendMessage(messages.getVoucherAlreadyExists());
                     cancelProcess(createProcessManager, player, event);
                     return;
                 }
@@ -70,7 +72,7 @@ public class PlayerChatListener implements Listener {
 
                 if (!matcher.matches()) {
                     createProcessManager.cancelProcess(creationProcess);
-                    player.sendMessage(ConfigFile.INVALID_FORMAT_OF_NAME);
+                    player.sendMessage(messages.getInvalidFormatOfName());
                     event.setCancelled(true);
                     return;
                 }
@@ -79,12 +81,12 @@ public class PlayerChatListener implements Listener {
                 voucher.setName(ChatColor.stripColor(event.getMessage()));
                 creationProcess.setCurrentVoucher(voucher);
                 event.setCancelled(true);
-                player.sendMessage(ConfigFile.TYPE_VOUCHER_DISPLAY_NAME);
+                player.sendMessage(messages.getTypeVoucherDisplayName());
             } else if (creationProcess.getCurrentVoucher().getDisplayName() == null) {
                 Voucher currentVoucher = creationProcess.getCurrentVoucher();
                 currentVoucher.setDisplayName(event.getMessage());
                 event.setCancelled(true);
-                player.sendMessage(ConfigFile.TYPE_VOUCHER_COMMAND);
+                player.sendMessage(messages.getTypeVoucherCommand());
             } else if (creationProcess.getCurrentVoucher().getCommand() == null) {
                 Voucher currentVoucher = creationProcess.getCurrentVoucher();
                 setCommand(event, player, currentVoucher);
@@ -93,8 +95,8 @@ public class PlayerChatListener implements Listener {
                 setLore(event, player, currentVoucher);
             }
         } else if (editProcessManager.isProcessedByUser(editProcessManager.getProcessByUser(player.getUniqueId()), player)) {
-            player.sendMessage(ConfigFile.CANCEL_PROCESS);
-            EditProcess   editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
+            player.sendMessage(messages.getCancelProcess());
+            EditProcess editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 editProcessManager.cancelProcess(editProcess);
                 prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()));
@@ -112,7 +114,7 @@ public class PlayerChatListener implements Listener {
                 voucher.setName(editProcess.getCurrentVoucher().getName());
                 editProcess.setCurrentVoucher(voucher);
                 event.setCancelled(true);
-                player.sendMessage(ConfigFile.TYPE_VOUCHER_COMMAND);
+                player.sendMessage(messages.getTypeVoucherCommand());
             } else if (editProcess.getCurrentVoucher().getCommand() == null) {
                 Voucher currentVoucher = editProcess.getCurrentVoucher();
                 setCommand(event, player, currentVoucher);
@@ -127,7 +129,7 @@ public class PlayerChatListener implements Listener {
         String[] lore = event.getMessage().split("\\|");
         currentVoucher.setLore(Arrays.asList(lore));
         event.setCancelled(true);
-        player.sendMessage(ConfigFile.SET_VOUCHER_ENCHANTS);
+        player.sendMessage(messages.getSetVoucherEnchants());
         Bukkit.getScheduler().runTask(vouchersPlugin, () -> {
             List<Enchantment> allEnchantments = ItemUtil.getAllEnchantments();
             Menu enchantsMenu = menuManager.getMenuByName("listOfAllEnchants");
@@ -146,7 +148,7 @@ public class PlayerChatListener implements Listener {
     private void setCommand(AsyncPlayerChatEvent event, Player player, Voucher currentVoucher) {
         currentVoucher.setCommand(event.getMessage());
         event.setCancelled(true);
-        player.sendMessage(ConfigFile.TYPE_VOUCHER_LORE);
+        player.sendMessage(messages.getTypeVoucherLore());
     }
 
     private <T extends IProcess> void cancelProcess(IProcessManager<T> createProcessManager, Player player, AsyncPlayerChatEvent event) {

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.enums.ActionClickType;
 import pl.timsixth.vouchers.enums.GeneratedItemsType;
 import pl.timsixth.vouchers.manager.LogsManager;
@@ -50,6 +50,8 @@ public class InventoryClickListener implements Listener {
     private final PrepareToProcessManager prepareToProcessManager;
     private final LogsManager logsManager;
 
+    private final Messages messages;
+
     @EventHandler
     private void onClick(InventoryClickEvent event) throws IOException, ParseException {
         Player player = (Player) event.getWhoClicked();
@@ -87,7 +89,7 @@ public class InventoryClickListener implements Listener {
                     if (actionArgs.equalsIgnoreCase("open_chat")) {
                         CreationProcess creationProcess = new CreationProcess(player.getUniqueId());
                         createProcessManager.startProcess(creationProcess);
-                        player.sendMessage(ConfigFile.TYPE_VOUCHER_NAME);
+                        player.sendMessage(messages.getTypeVoucherName());
                     }
                     player.closeInventory();
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.NONE_ENCHANTS) {
@@ -119,7 +121,7 @@ public class InventoryClickListener implements Listener {
                     CreationProcess creationProcess = createProcessManager.getProcessByUser(player.getUniqueId());
                     createProcessManager.saveProcess(creationProcess);
 
-                    player.sendMessage(ConfigFile.CREATED_VOUCHER);
+                    player.sendMessage(messages.getCreatedVoucher());
                     player.closeInventory();
                     event.setCancelled(true);
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.OPEN_MENU_AND_GENERATED_ITEMS) {
@@ -150,7 +152,7 @@ public class InventoryClickListener implements Listener {
                         Voucher currentVoucher = new Voucher(voucher.getName(), null, null, null);
                         currentVoucher.setEnchantments(new HashMap<>());
                         editProcess.setCurrentVoucher(currentVoucher);
-                        player.sendMessage(ConfigFile.TYPE_VOUCHER_DISPLAY_NAME);
+                        player.sendMessage(messages.getTypeVoucherDisplayName());
                         editProcessManager.startProcess(editProcess);
                         player.closeInventory();
                     }
@@ -167,7 +169,7 @@ public class InventoryClickListener implements Listener {
 
                     deleteProcessManager.saveProcess(deleteProcess);
 
-                    player.sendMessage(ConfigFile.DELETED_VOUCHER);
+                    player.sendMessage(messages.getDeletedVoucher());
                     player.closeInventory();
                     event.setCancelled(true);
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.REPLACE_VOUCHER) {
@@ -177,12 +179,12 @@ public class InventoryClickListener implements Listener {
                     }
                     EditProcess editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
                     editProcessManager.saveProcess(editProcess);
-                    player.sendMessage(ConfigFile.UPDATED_VOUCHER);
+                    player.sendMessage(messages.getUpdatedVoucher());
                     player.closeInventory();
                     event.setCancelled(true);
                 } else if (menuItem.getClickAction().getActionClickType() == ActionClickType.CLEAR_ALL_TODAY_LOGS) {
                     logsManager.clearAllLogsByCurrentDate();
-                    player.sendMessage(ConfigFile.CLEAR_ALL_TODAY_LOGS);
+                    player.sendMessage(messages.getClearAllTodayLogs());
                     event.setCancelled(true);
                 }
             }
@@ -222,9 +224,9 @@ public class InventoryClickListener implements Listener {
         process.getCurrentVoucher().setEnchantments(null);
         iProcessManager.saveProcess(process);
         if (process instanceof CreationProcess) {
-            player.sendMessage(ConfigFile.CREATED_VOUCHER);
+            player.sendMessage(messages.getCreatedVoucher());
         } else if (process instanceof EditProcess) {
-            player.sendMessage(ConfigFile.UPDATED_VOUCHER);
+            player.sendMessage(messages.getUpdatedVoucher());
         }
         player.closeInventory();
     }

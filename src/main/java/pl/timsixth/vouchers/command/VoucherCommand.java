@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.timsixth.vouchers.config.ConfigFile;
+import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
@@ -18,15 +19,19 @@ public class VoucherCommand implements CommandExecutor {
     private final VoucherManager voucherManager;
     private final MenuManager menuManager;
 
+    private final ConfigFile configFile;
+
+    private final Messages messages;
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission(ConfigFile.PERMISSION)) {
-            sender.sendMessage(ConfigFile.NO_PERMISSION);
+        if (!sender.hasPermission(configFile.getPermission())) {
+            sender.sendMessage(messages.getNoPermission());
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ConfigFile.CORRECT_USE);
+            sender.sendMessage(messages.getCorrectUse());
             return true;
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
@@ -44,12 +49,12 @@ public class VoucherCommand implements CommandExecutor {
                     if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
                         Voucher voucher = voucherManager.getVoucher(args[1]);
                         ((Player) sender).getInventory().addItem(voucherManager.getItemVoucher(voucher));
-                        sender.sendMessage(ConfigFile.ADDED_VOUCHER);
+                        sender.sendMessage(messages.getAddedVoucher());
                     } else {
-                        sender.sendMessage(ConfigFile.VOUCHER_DOESNT_EXISTS);
+                        sender.sendMessage(messages.getVoucherDoesntExists());
                     }
                 } else {
-                    sender.sendMessage(ConfigFile.CORRECT_USE);
+                    sender.sendMessage(messages.getCorrectUse());
                     return true;
                 }
             }else{
@@ -62,22 +67,22 @@ public class VoucherCommand implements CommandExecutor {
                     if (other != null) {
                         Voucher voucher = voucherManager.getVoucher(args[1]);
                         other.getInventory().addItem(voucherManager.getItemVoucher(voucher));
-                        other.sendMessage(ConfigFile.ADDED_VOUCHER);
-                        String message = ConfigFile.ADDED_VOUCHER_TO_OTHER_PLAYER;
-                        message = message.replace("{PLAYER_NAME}", sender.getName());
+                        other.sendMessage(messages.getAddedVoucher());
+                        String message = messages.getAddedVoucherToOtherPlayer()
+                                .replace("{PLAYER_NAME}", sender.getName());
                         sender.sendMessage(message);
                     } else {
-                        sender.sendMessage(ConfigFile.OFFLINE_PLAYER);
+                        sender.sendMessage(messages.getOfflinePlayer());
                     }
                 } else {
-                    sender.sendMessage(ConfigFile.VOUCHER_DOESNT_EXISTS);
+                    sender.sendMessage(messages.getVoucherDoesntExists());
                 }
             } else {
-                sender.sendMessage(ConfigFile.CORRECT_USE);
+                sender.sendMessage(messages.getCorrectUse());
                 return true;
             }
         } else {
-            sender.sendMessage(ConfigFile.CORRECT_USE);
+            sender.sendMessage(messages.getCorrectUse());
             return true;
         }
         return false;
