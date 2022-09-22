@@ -21,6 +21,7 @@ import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
+import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
 
 public final class VouchersPlugin extends JavaPlugin {
 
@@ -48,6 +49,7 @@ public final class VouchersPlugin extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
         getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager,configFile,messages));
+        getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
         loadListeners();
         menuManager.load();
         voucherManager.loadVouchers();
