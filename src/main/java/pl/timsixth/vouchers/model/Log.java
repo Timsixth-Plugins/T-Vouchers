@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.model.menu.MenuItem;
+import pl.timsixth.vouchers.model.menu.action.custom.impl.NoneClickAction;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ public class Log implements IGenerable {
         MenuItem menuItem =  new MenuItem(slot, Material.MAP, ChatUtil.chatColor("&a"+content),
                 ChatUtil.chatColor(Arrays.asList("&7Player:&a "+ Bukkit.getOfflinePlayer(senderUuid).getName(),
                         "&7Creation date:&a "+formatter.format(creationDate),"&7Process type:&a "+ processType)));
+        menuItem.setAction(new NoneClickAction());
         menuItem.setEnchantments(new HashMap<>());
 
         return menuItem;
