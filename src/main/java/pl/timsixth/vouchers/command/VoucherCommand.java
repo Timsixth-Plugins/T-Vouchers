@@ -11,7 +11,10 @@ import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
+import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.util.ChatUtil;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class VoucherCommand implements CommandExecutor {
@@ -40,7 +43,11 @@ public class VoucherCommand implements CommandExecutor {
             }else if (args[0].equalsIgnoreCase("gui")){
                 if (sender instanceof Player){
                     Player player = (Player) sender;
-                    player.openInventory(menuManager.createMenu(menuManager.getMenuByName("main")));
+                    Optional<Menu> menuOptional = menuManager.getMenuByName("main");
+                    if (!menuOptional.isPresent()){
+                        return true;
+                    }
+                    player.openInventory(menuManager.createMenu(menuOptional.get()));
                 }
             }
         } else if (args.length == 2) {

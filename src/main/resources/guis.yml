@@ -11,7 +11,7 @@ guis:
         displayname: '&aCreate new voucher'
         click_action:
           type: OPEN_MENU
-          run_action:
+          args:
              - 'voucherCreator'
         lore:
           - '&7Right click to open menu'
@@ -20,7 +20,7 @@ guis:
         displayname: '&aLogs'
         click_action:
           type: OPEN_MENU
-          run_action:
+          args:
             - 'logs'
         lore:
           - '&7Right click to open menu'
@@ -29,7 +29,7 @@ guis:
         displayname: '&aList of all vouchers'
         click_action:
           type: OPEN_MENU_AND_GENERATED_ITEMS
-          run_action:
+          args:
             - 'listOfAllVouchers'
             - 'VOUCHERS'
         lore:
@@ -46,7 +46,7 @@ guis:
         displayname: '&aCreate new voucher'
         click_action:
           type: CLOSE_MENU
-          run_action:
+          args:
             - 'open_chat'
         lore:
           - '&7Right click to start creating voucher'
@@ -73,7 +73,7 @@ guis:
         displayname: '&aSet enchants to none'
         click_action:
           type: NONE_ENCHANTS
-          run_action:
+          args:
             - ''
         lore:
           - '&7Right click to set enchants to none'
@@ -90,7 +90,7 @@ guis:
         displayname: '&aSet enchant level 1'
         click_action:
           type: CHOOSE_LEVEL
-          run_action:
+          args:
             - '1'
         lore:
           - '&7Right click to set enchant level'
@@ -100,7 +100,7 @@ guis:
         displayname: '&aSet enchant level 2'
         click_action:
           type: CHOOSE_LEVEL
-          run_action:
+          args:
             - '2'
         lore:
           - '&7Right click to set enchant level'
@@ -110,7 +110,7 @@ guis:
         displayname: '&aSet enchant level 3'
         click_action:
           type: CHOOSE_LEVEL
-          run_action:
+          args:
             - '3'
         lore:
           - '&7Right click to set enchant level'
@@ -120,7 +120,7 @@ guis:
         displayname: '&aSet enchant level 4'
         click_action:
           type: CHOOSE_LEVEL
-          run_action:
+          args:
             - '4'
         lore:
           - '&7Right click to set enchant level'
@@ -130,7 +130,7 @@ guis:
         displayname: '&aSet enchant level 5'
         click_action:
           type: CHOOSE_LEVEL
-          run_action:
+          args:
             - '5'
         lore:
           - '&7Right click to set enchant level'
@@ -140,7 +140,7 @@ guis:
         displayname: '&aReplace voucher'
         click_action:
           type: REPLACE_VOUCHER
-          run_action:
+          args:
             - ''
         lore:
           - '&7Right click to replace voucher'
@@ -150,7 +150,7 @@ guis:
         displayname: '&aCreate voucher'
         click_action:
           type: CREATE_VOUCHER
-          run_action:
+          args:
             - ''
         lore:
           - '&7Right click to create voucher'
@@ -160,7 +160,7 @@ guis:
         displayname: '&aChoose more enchants'
         click_action:
           type: OPEN_MENU
-          run_action:
+          args:
             - 'listOfAllEnchants'
         lore:
           - '&7Right click to choose more enchants'
@@ -177,7 +177,7 @@ guis:
         displayname: '&aDelete voucher'
         click_action:
           type: DELETE_VOUCHER
-          run_action:
+          args:
             - ''
         lore:
           - '&7Right click to delete voucher'
@@ -186,7 +186,7 @@ guis:
         displayname: '&aEdit voucher'
         click_action:
           type: EDIT_VOUCHER
-          run_action:
+          args:
             - 'open_chat'
         lore:
           - '&7Right click to edit voucher'
@@ -203,7 +203,7 @@ guis:
         displayname: '&aShow all logs which created today'
         click_action:
           type: OPEN_MENU_AND_GENERATED_ITEMS
-          run_action:
+          args:
             - 'listOfAllTodayLogs'
             - 'LOGS'
         lore:
@@ -213,7 +213,7 @@ guis:
         displayname: '&aClear all logs which created today'
         click_action:
           type: CLEAR_ALL_TODAY_LOGS
-          run_action:
+          args:
             - ''
         lore:
           - '&7Right click to clear logs'

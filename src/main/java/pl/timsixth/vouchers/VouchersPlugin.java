@@ -1,5 +1,6 @@
 package pl.timsixth.vouchers;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,19 +19,22 @@ import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
+import pl.timsixth.vouchers.manager.registration.ActionRegistration;
+import pl.timsixth.vouchers.manager.registration.ActionRegistrationImpl;
+import pl.timsixth.vouchers.model.menu.action.custom.impl.*;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
 import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
-
+@Getter
 public final class VouchersPlugin extends JavaPlugin {
-
     private MenuManager menuManager;
     private VoucherManager voucherManager;
     private PrepareToProcessManager prepareToProcessManager;
     private IProcessManager<CreationProcess> createVoucherProcessManager;
     private IProcessManager<EditProcess> editVoucherManager;
     private IProcessManager<DeleteProcess> deleteVoucherManager;
+    private ActionRegistration actionRegistration;
     private LogsManager logsManager;
 
     private ConfigFile configFile;
@@ -40,7 +44,8 @@ public final class VouchersPlugin extends JavaPlugin {
     public void onEnable() {
         loadConfig();
         voucherManager = new VoucherManager(configFile);
-        menuManager = new MenuManager(configFile);
+        actionRegistration = new ActionRegistrationImpl();
+        menuManager = new MenuManager(actionRegistration, configFile);
         prepareToProcessManager = new PrepareToProcessManager();
         logsManager = new LogsManager(configFile);
         createVoucherProcessManager = new CreateVoucherProcessManager(configFile, voucherManager, logsManager);
@@ -48,9 +53,10 @@ public final class VouchersPlugin extends JavaPlugin {
         deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, this, logsManager);
         getConfig().options().copyDefaults(true);
         saveConfig();
-        getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager,configFile,messages));
+        getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages));
         getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
         loadListeners();
+        registerActions();
         menuManager.load();
         voucherManager.loadVouchers();
         logsManager.load();
@@ -59,8 +65,8 @@ public final class VouchersPlugin extends JavaPlugin {
     private void loadListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerInteractListener(voucherManager), this);
-        pluginManager.registerEvents(new InventoryClickListener(menuManager, createVoucherProcessManager, deleteVoucherManager, editVoucherManager, voucherManager, prepareToProcessManager,logsManager,messages), this);
-        pluginManager.registerEvents(new PlayerChatListener(createVoucherProcessManager, editVoucherManager, menuManager, voucherManager, this, prepareToProcessManager,messages), this);
+        pluginManager.registerEvents(new InventoryClickListener(menuManager), this);
+        pluginManager.registerEvents(new PlayerChatListener(createVoucherProcessManager, editVoucherManager, menuManager, voucherManager, this, prepareToProcessManager, messages), this);
         pluginManager.registerEvents(new InventoryCloseListener(menuManager, createVoucherProcessManager, editVoucherManager), this);
     }
 
@@ -72,6 +78,21 @@ public final class VouchersPlugin extends JavaPlugin {
     private void loadConfig() {
         configFile = new ConfigFile(this);
         messages = new Messages(this);
+    }
+
+    private void registerActions() {
+        actionRegistration.register(new OpenMenuAction()
+                , new CloseMenuAction()
+                , new NoneEnchantsAction()
+                , new ChooseEnchantAction()
+                , new ChooseLevelAction()
+                , new CreateVoucherAction()
+                , new GenerateItemsAction()
+                , new ManageVoucherAction()
+                , new EditVoucherAction()
+                , new DeleteVoucherAction()
+                , new ReplaceVoucherAction()
+                , new ClearAllToDayLogsAction());
     }
 }
 

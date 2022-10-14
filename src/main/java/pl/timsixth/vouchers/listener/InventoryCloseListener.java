@@ -15,6 +15,7 @@ import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class InventoryCloseListener implements Listener {
@@ -27,8 +28,16 @@ public class InventoryCloseListener implements Listener {
     @EventHandler
     private void onClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
-        List<Menu> menusWhichCancelProcess = Arrays.asList(menuManager.getMenuByName("listOfAllEnchants"),
-                menuManager.getMenuByName("chooseEnchantLevel"));
+        Optional<Menu> menuOptional = menuManager.getMenuByName("chooseEnchantLevel");
+        Optional<Menu> menuOptional1 = menuManager.getMenuByName("listOfAllEnchants");
+
+        if (!menuOptional.isPresent()) {
+            return;
+        }
+        if (!menuOptional1.isPresent()) {
+            return;
+        }
+        List<Menu> menusWhichCancelProcess = Arrays.asList(menuOptional.get(), menuOptional1.get());
         menusWhichCancelProcess.forEach(menu -> {
             if (!event.getView().getTitle().equalsIgnoreCase(ChatUtil.chatColor(menu.getDisplayName()))) {
                 return;

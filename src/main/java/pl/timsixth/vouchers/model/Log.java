@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import pl.timsixth.vouchers.enums.ActionClickType;
 import pl.timsixth.vouchers.enums.ProcessType;
-import pl.timsixth.vouchers.model.menu.ClickAction;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.util.ChatUtil;
 
@@ -31,7 +29,6 @@ public class Log implements IGenerable {
         MenuItem menuItem =  new MenuItem(slot, Material.MAP, ChatUtil.chatColor("&a"+content),
                 ChatUtil.chatColor(Arrays.asList("&7Player:&a "+ Bukkit.getOfflinePlayer(senderUuid).getName(),
                         "&7Creation date:&a "+formatter.format(creationDate),"&7Process type:&a "+ processType)));
-        menuItem.setClickAction(new ClickAction(ActionClickType.NONE, new ArrayList<>()));
         menuItem.setEnchantments(new HashMap<>());
 
         return menuItem;

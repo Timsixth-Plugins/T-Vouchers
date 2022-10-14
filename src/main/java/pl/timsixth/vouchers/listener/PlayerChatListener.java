@@ -11,15 +11,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.config.Messages;
-import pl.timsixth.vouchers.enums.ActionClickType;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.PrepareToProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.model.menu.ClickAction;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
+import pl.timsixth.vouchers.model.menu.action.custom.impl.ChooseEnchantAction;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
 import pl.timsixth.vouchers.model.process.IProcess;
@@ -132,11 +131,13 @@ public class PlayerChatListener implements Listener {
         player.sendMessage(messages.getSetVoucherEnchants());
         Bukkit.getScheduler().runTask(vouchersPlugin, () -> {
             List<Enchantment> allEnchantments = ItemUtil.getAllEnchantments();
-            Menu enchantsMenu = menuManager.getMenuByName("listOfAllEnchants");
+            Optional<Menu> menuOptional = menuManager.getMenuByName("listOfAllEnchants");
+            if (!menuOptional.isPresent()) return;
+            Menu enchantsMenu = menuOptional.get();
             Set<MenuItem> menuItems = enchantsMenu.getItems();
             for (int i = menuItems.size(); i < allEnchantments.size(); i++) {
                 MenuItem menuItem = new MenuItem(i, Material.ENCHANTED_BOOK, ChatUtil.chatColor("&a" + allEnchantments.get(i).getName()), new ArrayList<>());
-                menuItem.setClickAction(new ClickAction(ActionClickType.CHOOSE_ENCHANT, new ArrayList<>()));
+                menuItem.setAction(new ChooseEnchantAction());
                 menuItem.setEnchantments(new HashMap<>());
                 menuItems.add(menuItem);
             }

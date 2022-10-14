@@ -6,12 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import pl.timsixth.vouchers.enums.ActionClickType;
-import pl.timsixth.vouchers.model.menu.ClickAction;
 import pl.timsixth.vouchers.model.menu.MenuItem;
+import pl.timsixth.vouchers.model.menu.action.custom.impl.ManageVoucherAction;
 import pl.timsixth.vouchers.util.ChatUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +36,7 @@ public class Voucher implements IGenerable {
     @Override
     public MenuItem getGeneratedItem(int slot) {
         MenuItem menuItem = new MenuItem(slot, Material.PAPER, ChatUtil.chatColor(displayName), ChatUtil.chatColor(lore));
-        menuItem.setClickAction(new ClickAction(ActionClickType.MANAGE_VOUCHER, new ArrayList<>()));
+        menuItem.setAction(new ManageVoucherAction());
         menuItem.setLocalizedName(name);
         if (enchantments != null) {
             menuItem.setEnchantments(enchantments);
