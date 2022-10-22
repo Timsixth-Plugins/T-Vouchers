@@ -36,7 +36,6 @@ public final class VouchersPlugin extends JavaPlugin {
     private IProcessManager<DeleteProcess> deleteVoucherManager;
     private ActionRegistration actionRegistration;
     private LogsManager logsManager;
-
     private ConfigFile configFile;
     private Messages messages;
 

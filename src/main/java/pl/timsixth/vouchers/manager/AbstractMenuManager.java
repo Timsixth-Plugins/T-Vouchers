@@ -24,7 +24,7 @@ import pl.timsixth.vouchers.util.ItemUtil;
 import java.util.*;
 
 @RequiredArgsConstructor
-public abstract class AbstractMenuManager {
+public abstract class AbstractMenuManager implements Reloadable{
 
     private final ActionRegistration actionRegistration;
 
@@ -200,6 +200,12 @@ public abstract class AbstractMenuManager {
             }
         }
         return inv;
+    }
+
+    @Override
+    public void reload() {
+        menuSet.clear();
+        load();
     }
 
     protected abstract void addActionsWhichIncludingSection(ConfigurationSection clickActionSection);

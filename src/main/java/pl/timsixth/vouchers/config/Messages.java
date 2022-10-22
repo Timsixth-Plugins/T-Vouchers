@@ -1,5 +1,6 @@
 package pl.timsixth.vouchers.config;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.util.ChatUtil;
@@ -7,34 +8,42 @@ import pl.timsixth.vouchers.util.ChatUtil;
 @Getter
 public class Messages {
 
-    private final String noPermission;
-    private final String correctUse;
-    private final String addedVoucher;
-    private final String voucherDoesntExists;
-    private final String offlinePlayer;
-    private final String addedVoucherToOtherPlayer;
-    private final String createdVoucher;
+    private String noPermission;
+    private String correctUse;
+    private String addedVoucher;
+    private String voucherDoesntExists;
+    private String offlinePlayer;
+    private String addedVoucherToOtherPlayer;
+    private String createdVoucher;
 
-    private final String updatedVoucher;
+    private String updatedVoucher;
 
-    private final String deletedVoucher;
+    private String deletedVoucher;
 
-    private final String typeVoucherName;
+    private String typeVoucherName;
 
-    private final String typeVoucherDisplayName;
+    private String typeVoucherDisplayName;
 
-    private final String cancelProcess;
+    private String cancelProcess;
 
-    private final String voucherAlreadyExists;
-    private final String typeVoucherLore;
+    private String voucherAlreadyExists;
+    private String typeVoucherLore;
 
-    private final String typeVoucherCommand;
-    private final String setVoucherEnchants;
+    private String typeVoucherCommand;
+    private String setVoucherEnchants;
 
-    private final String invalidFormatOfName;
-    private final String clearAllTodayLogs;
+    private String invalidFormatOfName;
+    private String clearAllTodayLogs;
+    private String filesReloaded;
+    @Getter(value = AccessLevel.NONE)
+    private final VouchersPlugin vouchersPlugin;
 
     public Messages(VouchersPlugin vouchersPlugin) {
+        this.vouchersPlugin = vouchersPlugin;
+        load();
+    }
+
+    public void load() {
         noPermission = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.no_permission"));
         correctUse = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.correct_use"));
         addedVoucher = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.added_voucher"));
@@ -53,5 +62,6 @@ public class Messages {
         setVoucherEnchants = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.set_voucher_enchants"));
         invalidFormatOfName = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.invalid_name_format"));
         clearAllTodayLogs = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.clear_all_today_logs"));
+        filesReloaded = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.files_reloaded"));
     }
 }

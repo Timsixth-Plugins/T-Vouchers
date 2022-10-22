@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 @RequiredArgsConstructor
-public class VoucherManager {
+public class VoucherManager implements Reloadable{
 
     private final ConfigFile configFile;
     private final List<Voucher> voucherList = new ArrayList<>();
@@ -73,5 +73,11 @@ public class VoucherManager {
             enchants.put(Enchantment.getByName(enchantAndLevel[0]), Integer.parseInt(enchantAndLevel[1]));
         });
         return enchants;
+    }
+
+    @Override
+    public void reload() {
+        voucherList.clear();
+        loadVouchers();
     }
 }

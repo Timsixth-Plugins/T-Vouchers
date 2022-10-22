@@ -4,8 +4,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.timsixth.vouchers.VouchersPlugin;
+import pl.timsixth.vouchers.manager.Reloadable;
 
 import java.io.File;
+import java.util.List;
 
 @Getter
 public class ConfigFile {
@@ -14,9 +16,9 @@ public class ConfigFile {
     private final File vouchersFile;
     private final File guisFile;
     private final File logsFile;
-    private final YamlConfiguration ymlVouchers;
     private final YamlConfiguration ymlLogs;
-
+    private YamlConfiguration ymlVouchers;
+    private YamlConfiguration ymlGuis;
     private String permission;
 
     public ConfigFile(VouchersPlugin vouchersPlugin) {
@@ -29,6 +31,7 @@ public class ConfigFile {
         createFile("logs.yml");
         ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
         ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
+        ymlGuis = YamlConfiguration.loadConfiguration(guisFile);
         loadSettings();
     }
 
@@ -46,4 +49,12 @@ public class ConfigFile {
         }
     }
 
+    public void reloadFiles(List<Reloadable> reloadableList) {
+        ymlGuis = YamlConfiguration.loadConfiguration(guisFile);
+        ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
+        vouchersPlugin.reloadConfig();
+        vouchersPlugin.getMessages().load();
+        loadSettings();
+        reloadableList.forEach(Reloadable::reload);
+    }
 }

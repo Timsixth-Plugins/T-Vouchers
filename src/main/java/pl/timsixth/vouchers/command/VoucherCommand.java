@@ -14,6 +14,7 @@ import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.util.ChatUtil;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -40,15 +41,18 @@ public class VoucherCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("list")) {
                 sender.sendMessage(ChatUtil.chatColor("&eVouchers:&7"));
                 voucherManager.getVoucherList().forEach(voucher -> sender.sendMessage(ChatUtil.chatColor("&7 " + voucher.getName())));
-            }else if (args[0].equalsIgnoreCase("gui")){
-                if (sender instanceof Player){
+            } else if (args[0].equalsIgnoreCase("gui")) {
+                if (sender instanceof Player) {
                     Player player = (Player) sender;
                     Optional<Menu> menuOptional = menuManager.getMenuByName("main");
-                    if (!menuOptional.isPresent()){
+                    if (!menuOptional.isPresent()) {
                         return true;
                     }
                     player.openInventory(menuManager.createMenu(menuOptional.get()));
                 }
+            } else if (args[0].equalsIgnoreCase("reload")) {
+                configFile.reloadFiles(Arrays.asList(menuManager, voucherManager));
+                sender.sendMessage(messages.getFilesReloaded());
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("give")) {
@@ -64,7 +68,7 @@ public class VoucherCommand implements CommandExecutor {
                     sender.sendMessage(messages.getCorrectUse());
                     return true;
                 }
-            }else{
+            } else {
                 Bukkit.getLogger().info("Player only use this command");
             }
         } else if (args.length == 3) {

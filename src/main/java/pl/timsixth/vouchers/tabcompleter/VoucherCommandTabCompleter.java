@@ -25,7 +25,7 @@ public class VoucherCommandTabCompleter implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.addAll(Arrays.asList("list", "give", "gui"));
+            completions.addAll(Arrays.asList("list", "give", "gui","reload"));
         } else if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             completions.addAll(voucherManager.getVoucherList().stream()
                     .map(Voucher::getName)
