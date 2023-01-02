@@ -26,6 +26,8 @@ import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
 import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
+import pl.timsixth.vouchers.version.VersionChecker;
+
 @Getter
 public final class VouchersPlugin extends JavaPlugin {
     private MenuManager menuManager;
@@ -52,6 +54,7 @@ public final class VouchersPlugin extends JavaPlugin {
         deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, this, logsManager);
         getConfig().options().copyDefaults(true);
         saveConfig();
+        new VersionChecker(this).checkVersion();
         getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages));
         getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
         loadListeners();
