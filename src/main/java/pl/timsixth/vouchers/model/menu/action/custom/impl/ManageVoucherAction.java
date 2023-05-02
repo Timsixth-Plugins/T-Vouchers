@@ -1,6 +1,5 @@
 package pl.timsixth.vouchers.model.menu.action.custom.impl;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
@@ -25,7 +24,6 @@ public class ManageVoucherAction extends AbstractAction implements ClickAction {
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
         String voucherName = menuItem.getLocalizedName();
-        Bukkit.getLogger().info(voucherName);
         PrepareToProcess prepareToProcess = new PrepareToProcess(player.getUniqueId(), voucherName);
         vouchersPlugin.getPrepareToProcessManager().addNewLocalizedName(prepareToProcess);
         Optional<Menu> menuOptional = vouchersPlugin.getMenuManager().getMenuByName("manageVouchers");

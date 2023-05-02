@@ -34,6 +34,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
         ConfigurationSection newVoucherSection = vouchersSection.createSection(currentVoucher.getName());
         newVoucherSection.set("command", currentVoucher.getCommand());
         newVoucherSection.set("displayname", currentVoucher.getDisplayName());
+        newVoucherSection.set("material", currentVoucher.getMaterial().name());
         newVoucherSection.set("lore", currentVoucher.getLore());
         if (currentVoucher.getEnchantments() != null) {
             List<String> enchants = new ArrayList<>();

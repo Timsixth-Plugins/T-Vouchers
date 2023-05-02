@@ -85,6 +85,21 @@ public class PlayerChatListener implements Listener {
                 Voucher currentVoucher = creationProcess.getCurrentVoucher();
                 currentVoucher.setDisplayName(event.getMessage());
                 event.setCancelled(true);
+                player.sendMessage(messages.getTypeVoucherMaterial());
+            } else if (creationProcess.getCurrentVoucher().getMaterial() == null) {
+                Voucher currentVoucher = creationProcess.getCurrentVoucher();
+                if (event.getMessage().equalsIgnoreCase("none")) {
+                    setDefaultMaterial(event, player, currentVoucher);
+                    return;
+                }
+
+                if (Material.matchMaterial(event.getMessage().toUpperCase()) == null) {
+                    setDefaultMaterial(event, player, currentVoucher);
+                    return;
+                }
+
+                currentVoucher.setMaterial(Material.matchMaterial(event.getMessage().toUpperCase()));
+                event.setCancelled(true);
                 player.sendMessage(messages.getTypeVoucherCommand());
             } else if (creationProcess.getCurrentVoucher().getCommand() == null) {
                 Voucher currentVoucher = creationProcess.getCurrentVoucher();
@@ -113,6 +128,21 @@ public class PlayerChatListener implements Listener {
                 voucher.setName(editProcess.getCurrentVoucher().getName());
                 editProcess.setCurrentVoucher(voucher);
                 event.setCancelled(true);
+                player.sendMessage(messages.getTypeVoucherMaterial());
+            } else if (editProcess.getCurrentVoucher().getMaterial() == null) {
+                Voucher currentVoucher = editProcess.getCurrentVoucher();
+                if (event.getMessage().equalsIgnoreCase("none")) {
+                    setDefaultMaterial(event, player, currentVoucher);
+                    return;
+                }
+
+                if (Material.matchMaterial(event.getMessage().toUpperCase()) == null) {
+                    setDefaultMaterial(event, player, currentVoucher);
+                    return;
+                }
+
+                currentVoucher.setMaterial(Material.matchMaterial(event.getMessage().toUpperCase()));
+                event.setCancelled(true);
                 player.sendMessage(messages.getTypeVoucherCommand());
             } else if (editProcess.getCurrentVoucher().getCommand() == null) {
                 Voucher currentVoucher = editProcess.getCurrentVoucher();
@@ -122,6 +152,12 @@ public class PlayerChatListener implements Listener {
                 setLore(event, player, currentVoucher);
             }
         }
+    }
+
+    private void setDefaultMaterial(AsyncPlayerChatEvent event, Player player, Voucher currentVoucher) {
+        currentVoucher.setMaterial(Material.PAPER);
+        player.sendMessage(messages.getTypeVoucherCommand());
+        event.setCancelled(true);
     }
 
     private void setLore(AsyncPlayerChatEvent event, Player player, Voucher currentVoucher) {

@@ -27,9 +27,9 @@ public class Log implements IGenerable {
     public MenuItem getGeneratedItem(int slot) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm a", Locale.ENGLISH);
         formatter.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-        MenuItem menuItem =  new MenuItem(slot, Material.MAP, ChatUtil.chatColor("&a"+content),
-                ChatUtil.chatColor(Arrays.asList("&7Player:&a "+ Bukkit.getOfflinePlayer(senderUuid).getName(),
-                        "&7Creation date:&a "+formatter.format(creationDate),"&7Process type:&a "+ processType)));
+        MenuItem menuItem = new MenuItem(slot, Material.MAP, ChatUtil.chatColor("&a" + content),
+                ChatUtil.chatColor(Arrays.asList("&7Player:&a " + Bukkit.getOfflinePlayer(senderUuid).getName(),
+                        "&7Creation date:&a " + formatter.format(creationDate), "&7Process type:&a " + processType)));
         menuItem.setAction(new NoneClickAction());
         menuItem.setEnchantments(new HashMap<>());
 

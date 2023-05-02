@@ -24,18 +24,20 @@ public class Voucher implements IGenerable {
     private String command;
     private List<String> lore;
     private String displayName;
+    private Material material;
     private Map<Enchantment, Integer> enchantments;
 
-    public Voucher(String name, String command, List<String> lore, String displayName) {
+    public Voucher(String name, String command, List<String> lore, String displayName, Material material) {
         this.name = name;
         this.command = command;
         this.lore = lore;
         this.displayName = displayName;
+        this.material = material;
     }
 
     @Override
     public MenuItem getGeneratedItem(int slot) {
-        MenuItem menuItem = new MenuItem(slot, Material.PAPER, ChatUtil.chatColor(displayName), ChatUtil.chatColor(lore));
+        MenuItem menuItem = new MenuItem(slot, material, ChatUtil.chatColor(displayName), ChatUtil.chatColor(lore));
         menuItem.setAction(new ManageVoucherAction());
         menuItem.setLocalizedName(name);
         if (enchantments != null) {

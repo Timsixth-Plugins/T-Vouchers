@@ -32,7 +32,7 @@ public class EditVoucherAction extends AbstractAction implements ClickAction {
         if (actionArgs.equalsIgnoreCase("open_chat")) {
             Voucher voucher = vouchersPlugin.getVoucherManager().getVoucher(vouchersPlugin.getPrepareToProcessManager().getPrepareToProcess(player.getUniqueId()).getLocalizeName());
             EditProcess editProcess = new EditProcess(player.getUniqueId());
-            Voucher currentVoucher = new Voucher(voucher.getName(), null, null, null);
+            Voucher currentVoucher = new Voucher(voucher.getName(), null, null, null,null);
             currentVoucher.setEnchantments(new HashMap<>());
             editProcess.setCurrentVoucher(currentVoucher);
             player.sendMessage(vouchersPlugin.getMessages().getTypeVoucherDisplayName());

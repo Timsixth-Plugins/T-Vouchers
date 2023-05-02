@@ -23,6 +23,7 @@ public class Messages {
     private String typeVoucherName;
 
     private String typeVoucherDisplayName;
+    private String typeVoucherMaterial;
 
     private String cancelProcess;
 
@@ -63,5 +64,6 @@ public class Messages {
         invalidFormatOfName = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.invalid_name_format"));
         clearAllTodayLogs = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.clear_all_today_logs"));
         filesReloaded = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.files_reloaded"));
+        typeVoucherMaterial = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.type_voucher_material"));
     }
 }

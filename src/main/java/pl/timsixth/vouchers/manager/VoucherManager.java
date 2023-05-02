@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @RequiredArgsConstructor
-public class VoucherManager implements Reloadable{
+public class VoucherManager implements Reloadable {
 
     private final ConfigFile configFile;
     private final List<Voucher> voucherList = new ArrayList<>();
@@ -29,7 +30,8 @@ public class VoucherManager implements Reloadable{
                     voucherName,
                     section.getString("command"),
                     section.getStringList("lore"),
-                    section.getString("displayname")
+                    section.getString("displayname"),
+                    Material.matchMaterial(section.getString("material"))
             );
             if (section.getStringList("enchants") != null) {
                 voucher.setEnchantments(getEnchants(section));
@@ -39,7 +41,7 @@ public class VoucherManager implements Reloadable{
     }
 
     public ItemStack getItemVoucher(Voucher voucher) {
-        ItemStack item = new ItemStack(Material.PAPER);
+        ItemStack item = new ItemStack(voucher.getMaterial());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatUtil.chatColor(voucher.getDisplayName()));
         meta.setLore(ChatUtil.chatColor(voucher.getLore()));

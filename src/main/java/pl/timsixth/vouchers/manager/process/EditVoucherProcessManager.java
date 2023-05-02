@@ -39,6 +39,7 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         newVoucherSection.set("command", currentVoucher.getCommand());
         newVoucherSection.set("displayname", currentVoucher.getDisplayName());
         newVoucherSection.set("lore", currentVoucher.getLore());
+        newVoucherSection.set("material", currentVoucher.getMaterial().name());
         if (currentVoucher.getEnchantments() != null) {
             List<String> enchants = new ArrayList<>();
             currentVoucher.getEnchantments().forEach((enchantment, integer) -> enchants.add(enchantment.getName() + ";" + integer));
@@ -60,6 +61,6 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         vouchers.set(index, currentVoucher);
         process.setContinue(false);
         cancelProcess(process);
-        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" has been updated",new Date(), ProcessType.EDIT));
+        getLogsManager().addLog(new Log(process.getUserUuid(), "Voucher of name " + process.getCurrentVoucher().getName() + " has been updated", new Date(), ProcessType.EDIT));
     }
 }
