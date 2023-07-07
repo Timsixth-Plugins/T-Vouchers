@@ -15,6 +15,7 @@ public class Messages {
     private String offlinePlayer;
     private String addedVoucherToOtherPlayer;
     private String createdVoucher;
+    private String addedVoucherEveryone;
 
     private String updatedVoucher;
 
@@ -36,6 +37,7 @@ public class Messages {
     private String invalidFormatOfName;
     private String clearAllTodayLogs;
     private String filesReloaded;
+
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
 
@@ -65,5 +67,6 @@ public class Messages {
         clearAllTodayLogs = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.clear_all_today_logs"));
         filesReloaded = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.files_reloaded"));
         typeVoucherMaterial = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.type_voucher_material"));
+        addedVoucherEveryone = ChatUtil.chatColor(vouchersPlugin.getConfig().getString("messages.added_voucher_to_everyone"));
     }
 }

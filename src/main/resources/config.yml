@@ -1,7 +1,7 @@
 permission: 'timsixth.voucher'
 messages:
   no_permission: '&cYou dont have premission'
-  correct_use: '&cCorrect use: /voucher list|give|gui|reload <name> <player>'
+  correct_use: '&cCorrect use: /voucher list|give|gui|reload|giveall <name> <player>'
   added_voucher: '&aVoucher has added to your inventory'
   doesnt_exists: '&cThis voucher doesn''t exists!'
   offline_player: '&cThis player is offline'
@@ -20,3 +20,4 @@ messages:
   invalid_name_format: '&cIn voucher''s name you can only use letters and numbers'
   clear_all_today_logs: '&aSuccessfully cleared logs which created today'
   files_reloaded: '&aFiles have been reloaded successfully'
+  added_voucher_to_everyone: '&aYou have given voucher everyone'

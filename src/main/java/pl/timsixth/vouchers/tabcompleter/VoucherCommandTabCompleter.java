@@ -25,11 +25,17 @@ public class VoucherCommandTabCompleter implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.addAll(Arrays.asList("list", "give", "gui","reload"));
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-            completions.addAll(voucherManager.getVoucherList().stream()
-                    .map(Voucher::getName)
-                    .collect(Collectors.toList()));
+            completions.addAll(Arrays.asList("list", "give", "gui", "reload", "giveall"));
+        } else if (args.length == 2) {
+            switch (args[0].toLowerCase()) {
+                case "give":
+                case "giveall":
+                    completions.addAll(voucherManager.getVoucherList().stream()
+                            .map(Voucher::getName)
+                            .collect(Collectors.toList()));
+                    break;
+                default:
+            }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
             completions.addAll(Bukkit.getServer().getOnlinePlayers()
                     .stream()

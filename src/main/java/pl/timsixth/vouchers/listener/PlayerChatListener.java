@@ -12,7 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.MenuManager;
-import pl.timsixth.vouchers.manager.PrepareToProcessManager;
+import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.model.Voucher;
@@ -41,7 +41,7 @@ public class PlayerChatListener implements Listener {
 
     private final VouchersPlugin vouchersPlugin;
 
-    private final PrepareToProcessManager prepareToProcessManager;
+    private final PrepareProcessManager prepareToProcessManager;
 
     private final Messages messages;
 

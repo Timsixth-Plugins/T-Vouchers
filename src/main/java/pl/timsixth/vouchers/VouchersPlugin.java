@@ -13,7 +13,7 @@ import pl.timsixth.vouchers.listener.PlayerChatListener;
 import pl.timsixth.vouchers.listener.PlayerInteractListener;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
-import pl.timsixth.vouchers.manager.PrepareToProcessManager;
+import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
@@ -32,7 +32,7 @@ import pl.timsixth.vouchers.version.VersionChecker;
 public final class VouchersPlugin extends JavaPlugin {
     private MenuManager menuManager;
     private VoucherManager voucherManager;
-    private PrepareToProcessManager prepareToProcessManager;
+    private PrepareProcessManager prepareToProcessManager;
     private IProcessManager<CreationProcess> createVoucherProcessManager;
     private IProcessManager<EditProcess> editVoucherManager;
     private IProcessManager<DeleteProcess> deleteVoucherManager;
@@ -47,7 +47,7 @@ public final class VouchersPlugin extends JavaPlugin {
         voucherManager = new VoucherManager(configFile);
         actionRegistration = new ActionRegistrationImpl();
         menuManager = new MenuManager(actionRegistration, configFile);
-        prepareToProcessManager = new PrepareToProcessManager();
+        prepareToProcessManager = new PrepareProcessManager();
         logsManager = new LogsManager(configFile);
         createVoucherProcessManager = new CreateVoucherProcessManager(configFile, voucherManager, logsManager);
         editVoucherManager = new EditVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, logsManager);

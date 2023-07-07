@@ -42,34 +42,47 @@ public class VoucherCommand implements CommandExecutor {
                 sender.sendMessage(ChatUtil.chatColor("&eVouchers:&7"));
                 voucherManager.getVoucherList().forEach(voucher -> sender.sendMessage(ChatUtil.chatColor("&7 " + voucher.getName())));
             } else if (args[0].equalsIgnoreCase("gui")) {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
-                    Optional<Menu> menuOptional = menuManager.getMenuByName("main");
-                    if (!menuOptional.isPresent()) {
-                        return true;
-                    }
-                    player.openInventory(menuManager.createMenu(menuOptional.get()));
+                if (!(sender instanceof Player)) {
+                    Bukkit.getLogger().info("Player only use this command");
+                    return true;
                 }
+                Player player = (Player) sender;
+                Optional<Menu> menuOptional = menuManager.getMenuByName("main");
+                if (!menuOptional.isPresent()) {
+                    return true;
+                }
+                player.openInventory(menuManager.createMenu(menuOptional.get()));
+
             } else if (args[0].equalsIgnoreCase("reload")) {
                 configFile.reloadFiles(Arrays.asList(menuManager, voucherManager));
                 sender.sendMessage(messages.getFilesReloaded());
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("give")) {
-                if (sender instanceof Player) {
-                    if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
-                        Voucher voucher = voucherManager.getVoucher(args[1]);
-                        ((Player) sender).getInventory().addItem(voucherManager.getItemVoucher(voucher));
-                        sender.sendMessage(messages.getAddedVoucher());
-                    } else {
-                        sender.sendMessage(messages.getVoucherDoesntExists());
-                    }
-                } else {
-                    sender.sendMessage(messages.getCorrectUse());
+                if (!(sender instanceof Player)) {
+                    Bukkit.getLogger().info("Player only use this command");
                     return true;
                 }
+                Player player = (Player) sender;
+
+                if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
+                    Voucher voucher = voucherManager.getVoucher(args[1]);
+                    player.getInventory().addItem(voucherManager.getItemVoucher(voucher));
+                    sender.sendMessage(messages.getAddedVoucher());
+                } else {
+                    sender.sendMessage(messages.getVoucherDoesntExists());
+                }
+            } else if (args[0].equalsIgnoreCase("giveall")) {
+                if (!voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
+                    sender.sendMessage(messages.getVoucherDoesntExists());
+                    return true;
+                }
+
+                Voucher voucher = voucherManager.getVoucher(args[1]);
+                Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().addItem(voucherManager.getItemVoucher(voucher)));
+                sender.sendMessage(messages.getAddedVoucherEveryone());
             } else {
-                Bukkit.getLogger().info("Player only use this command");
+                sender.sendMessage(messages.getCorrectUse());
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("give")) {
