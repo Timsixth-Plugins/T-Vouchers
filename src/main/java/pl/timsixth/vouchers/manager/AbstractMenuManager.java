@@ -1,5 +1,6 @@
 package pl.timsixth.vouchers.manager;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,7 +29,8 @@ public abstract class AbstractMenuManager implements Reloadable{
 
     private final ActionRegistration actionRegistration;
 
-    private final Set<Menu> menuSet = new HashSet<>();
+    @Getter
+    private final Set<Menu> menus = new HashSet<>();
 
     public abstract void load();
 
@@ -60,7 +62,7 @@ public abstract class AbstractMenuManager implements Reloadable{
             createMenuItem(menuItemSet, slotNumber, slot);
         }
         menu.setItems(menuItemSet);
-        menuSet.add(menu);
+        menus.add(menu);
     }
 
     private void createMenuItem(Set<MenuItem> menuItemSet, String slotNumber, ConfigurationSection slot) {
@@ -107,11 +109,6 @@ public abstract class AbstractMenuManager implements Reloadable{
             }
 
             clickAction.setArgs(clickActionSection.getStringList("args"));
-
-            if (useActionWhichIncludingSection()) {
-                addActionsWhichIncludingSection(clickActionSection);
-                return;
-            }
 
             menuItem.setAction(clickAction);
         }
@@ -163,7 +160,7 @@ public abstract class AbstractMenuManager implements Reloadable{
     }
 
     public Optional<Menu> getMenuByName(String name) {
-        return menuSet.stream().
+        return menus.stream().
                 filter(menu -> menu.getName().equalsIgnoreCase(name))
                 .findAny();
     }
@@ -185,15 +182,15 @@ public abstract class AbstractMenuManager implements Reloadable{
             }
             if (menuItem.getMaterialDataId() == 0) {
                 inv.setItem(menuItem.getSlot(), new ItemBuilder(new ItemStack(menuItem.getMaterial(), 1))
-                        .setLore(ChatUtil.chatColor(replaceLore))
-                        .setName(ChatUtil.chatColor(menuItem.getDisplayName()))
+                        .setLore(ChatUtil.hexColor(replaceLore))
+                        .setName(ChatUtil.hexColor(menuItem.getDisplayName()))
                         .addEnchantmentsByMeta(menuItem.getEnchantments())
                         .toItemStack()
                 );
             } else {
                 inv.setItem(menuItem.getSlot(), new ItemBuilder(new ItemStack(menuItem.getMaterial(), 1, (short) menuItem.getMaterialDataId()))
-                        .setLore(ChatUtil.chatColor(replaceLore))
-                        .setName(ChatUtil.chatColor(menuItem.getDisplayName()))
+                        .setLore(ChatUtil.hexColor(replaceLore))
+                        .setName(ChatUtil.hexColor(menuItem.getDisplayName()))
                         .addEnchantmentsByMeta(menuItem.getEnchantments())
                         .toItemStack()
                 );
@@ -204,15 +201,7 @@ public abstract class AbstractMenuManager implements Reloadable{
 
     @Override
     public void reload() {
-        menuSet.clear();
+        menus.clear();
         load();
-    }
-
-    protected abstract void addActionsWhichIncludingSection(ConfigurationSection clickActionSection);
-
-    protected abstract boolean useActionWhichIncludingSection();
-
-    public Set<Menu> getMenus() {
-        return menuSet;
     }
 }

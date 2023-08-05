@@ -11,6 +11,7 @@ import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.process.EditProcess;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class EditVoucherAction extends AbstractAction implements ClickAction {
 
@@ -30,7 +31,14 @@ public class EditVoucherAction extends AbstractAction implements ClickAction {
         }
         String actionArgs = getArgs().get(0);
         if (actionArgs.equalsIgnoreCase("open_chat")) {
-            Voucher voucher = vouchersPlugin.getVoucherManager().getVoucher(vouchersPlugin.getPrepareToProcessManager().getPrepareToProcess(player.getUniqueId()).getLocalizeName());
+
+            String voucherName = vouchersPlugin.getPrepareToProcessManager().getPrepareProcess(player.getUniqueId()).getLocalizeName();
+
+            Optional<Voucher> optionalVoucher = vouchersPlugin.getVoucherManager().getVoucher(voucherName);
+            if (!optionalVoucher.isPresent()) return;
+
+            Voucher voucher = optionalVoucher.get();
+
             EditProcess editProcess = new EditProcess(player.getUniqueId());
             Voucher currentVoucher = new Voucher(voucher.getName(), null, null, null,null);
             currentVoucher.setEnchantments(new HashMap<>());

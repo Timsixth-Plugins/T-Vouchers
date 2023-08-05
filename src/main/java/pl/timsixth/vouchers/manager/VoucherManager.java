@@ -1,24 +1,22 @@
 package pl.timsixth.vouchers.manager;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.util.ChatUtil;
+import pl.timsixth.vouchers.util.ItemUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class VoucherManager implements Reloadable {
 
     private final ConfigFile configFile;
+    @Getter
     private final List<Voucher> voucherList = new ArrayList<>();
 
     public void loadVouchers() {
@@ -34,47 +32,17 @@ public class VoucherManager implements Reloadable {
                     Material.matchMaterial(section.getString("material"))
             );
             if (section.getStringList("enchants") != null) {
-                voucher.setEnchantments(getEnchants(section));
+                List<String> enchantsString = section.getStringList("enchants");
+                voucher.setEnchantments(ItemUtil.getEnchantments(enchantsString));
             }
             voucherList.add(voucher);
         }
     }
 
-    public ItemStack getItemVoucher(Voucher voucher) {
-        ItemStack item = new ItemStack(voucher.getMaterial());
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatUtil.chatColor(voucher.getDisplayName()));
-        meta.setLore(ChatUtil.chatColor(voucher.getLore()));
-
-        if (voucher.getEnchantments() != null) {
-            voucher.getEnchantments().forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
-        }
-        meta.setLocalizedName(voucher.getName());
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public boolean voucherExists(Voucher voucher) {
-        return voucherList.contains(voucher);
-    }
-
-    public Voucher getVoucher(String name) {
-        return voucherList.stream().filter(voucher -> voucher.getName().equalsIgnoreCase(name)).findAny().orElse(null);
-    }
-
-    public List<Voucher> getVoucherList() {
-        return voucherList;
-    }
-
-    private Map<Enchantment, Integer> getEnchants(ConfigurationSection section) {
-        List<String> enchantsString = section.getStringList("enchants");
-        Map<Enchantment, Integer> enchants = new HashMap<>();
-        enchantsString.forEach(enchantString -> {
-            String[] enchantAndLevel = enchantString.split(";");
-            enchants.put(Enchantment.getByName(enchantAndLevel[0]), Integer.parseInt(enchantAndLevel[1]));
-        });
-        return enchants;
+    public Optional<Voucher> getVoucher(String name) {
+        return voucherList.stream()
+                .filter(voucher -> voucher.getName().equalsIgnoreCase(name))
+                .findAny();
     }
 
     @Override

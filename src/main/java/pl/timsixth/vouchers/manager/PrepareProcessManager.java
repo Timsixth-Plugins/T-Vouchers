@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class PrepareProcessManager {
-    @Getter
     private final List<PrepareProcess> prepareToProcessList = new ArrayList<>();
 
     public void addNewLocalizedName(PrepareProcess prepareToProcess) {
@@ -19,7 +19,7 @@ public class PrepareProcessManager {
         prepareToProcessList.remove(prepareToProcess);
     }
 
-    public PrepareProcess getPrepareToProcess(UUID uuid) {
+    public PrepareProcess getPrepareProcess(UUID uuid) {
         return prepareToProcessList
                 .stream().filter(prepareToProcess -> prepareToProcess.getPlayerUuid().equals(uuid))
                 .findAny()

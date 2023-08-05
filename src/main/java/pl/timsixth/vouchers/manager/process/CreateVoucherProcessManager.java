@@ -5,13 +5,11 @@ import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
-import pl.timsixth.vouchers.model.Log;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CreateVoucherProcessManager extends AbstractProcessManager<CreationProcess> {
@@ -46,6 +44,6 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
         getVoucherManager().getVoucherList().add(currentVoucher);
         process.setContinue(false);
         cancelProcess(process);
-        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" was created",new Date(), ProcessType.CREATE));
+        getLogsManager().log(process, ProcessType.CREATE);
     }
 }

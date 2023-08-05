@@ -23,7 +23,6 @@ import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
 import pl.timsixth.vouchers.model.process.IProcess;
 import pl.timsixth.vouchers.util.ChatUtil;
-import pl.timsixth.vouchers.util.ItemUtil;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -61,7 +60,8 @@ public class PlayerChatListener implements Listener {
 
             CreationProcess creationProcess = createProcessManager.getProcessByUser(player.getUniqueId());
             if (creationProcess.getCurrentVoucher() == null || creationProcess.getCurrentVoucher().getName() == null) {
-                if (voucherManager.voucherExists(voucherManager.getVoucher(event.getMessage()))) {
+                Optional<Voucher> optionalVoucher = voucherManager.getVoucher(event.getMessage());
+                if (optionalVoucher.isPresent()) {
                     player.sendMessage(messages.getVoucherAlreadyExists());
                     cancelProcess(createProcessManager, player, event);
                     return;
@@ -113,7 +113,7 @@ public class PlayerChatListener implements Listener {
             EditProcess editProcess = editProcessManager.getProcessByUser(player.getUniqueId());
             if (event.getMessage().equalsIgnoreCase("cancel")) {
                 editProcessManager.cancelProcess(editProcess);
-                prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(player.getUniqueId()));
+                prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(player.getUniqueId()));
                 event.setCancelled(true);
                 return;
             }
@@ -166,7 +166,7 @@ public class PlayerChatListener implements Listener {
         event.setCancelled(true);
         player.sendMessage(messages.getSetVoucherEnchants());
         Bukkit.getScheduler().runTask(vouchersPlugin, () -> {
-            List<Enchantment> allEnchantments = ItemUtil.getAllEnchantments();
+            List<Enchantment> allEnchantments = Arrays.asList(Enchantment.values());
             Optional<Menu> menuOptional = menuManager.getMenuByName("listOfAllEnchants");
             if (!menuOptional.isPresent()) return;
             Menu enchantsMenu = menuOptional.get();

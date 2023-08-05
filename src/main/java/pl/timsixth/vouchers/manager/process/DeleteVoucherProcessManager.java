@@ -1,5 +1,6 @@
 package pl.timsixth.vouchers.manager.process;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.timsixth.vouchers.VouchersPlugin;
@@ -8,12 +9,10 @@ import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
-import pl.timsixth.vouchers.model.Log;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class DeleteVoucherProcessManager extends AbstractProcessManager<DeleteProcess> {
 
@@ -32,21 +31,21 @@ public class DeleteVoucherProcessManager extends AbstractProcessManager<DeletePr
         if (process.getCurrentVoucher() == null) return;
         ConfigurationSection vouchersSection = getConfigFile().getYmlVouchers().getConfigurationSection("vouchers");
         Voucher currentVoucher = process.getCurrentVoucher();
-        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(process.getUserUuid()));
+        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUuid()));
         getVoucherManager().getVoucherList().remove(currentVoucher);
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
-                vouchersSection.set(currentVoucher.getName(),null);
+                vouchersSection.set(currentVoucher.getName(), null);
                 try {
                     getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Bukkit.getLogger().severe(e.getMessage());
                 }
             }
-        }.runTaskLater(vouchersPlugin,2*20L);
+        }.runTaskLater(vouchersPlugin, 2 * 20L);
         process.setContinue(false);
         cancelProcess(process);
-        getLogsManager().addLog(new Log(process.getUserUuid(),"Voucher of name "+ process.getCurrentVoucher().getName()+" was deleted",new Date(), ProcessType.DELETE));
+        getLogsManager().log(process, ProcessType.DELETE);
     }
 }

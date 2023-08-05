@@ -29,7 +29,12 @@ public class DeleteVoucherAction extends AbstractAction implements ClickAction {
             return;
         }
         DeleteProcess deleteProcess = new DeleteProcess(player.getUniqueId());
-        Voucher currentVoucher = vouchersPlugin.getVoucherManager().getVoucher(vouchersPlugin.getPrepareToProcessManager().getPrepareToProcess(player.getUniqueId()).getLocalizeName());
+
+        String voucherName = vouchersPlugin.getPrepareToProcessManager().getPrepareProcess(player.getUniqueId()).getLocalizeName();
+
+        Voucher currentVoucher = vouchersPlugin.getVoucherManager().getVoucher(voucherName)
+                .orElse(null);
+
         deleteProcess.setCurrentVoucher(currentVoucher);
         vouchersPlugin.getDeleteVoucherManager().startProcess(deleteProcess);
 

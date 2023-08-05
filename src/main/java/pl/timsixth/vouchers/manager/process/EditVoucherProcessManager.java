@@ -6,14 +6,13 @@ import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
-import pl.timsixth.vouchers.model.Log;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.process.EditProcess;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class EditVoucherProcessManager extends AbstractProcessManager<EditProcess> {
 
@@ -50,10 +49,13 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         }
         getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
         List<Voucher> vouchers = getVoucherManager().getVoucherList();
-        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareToProcess(process.getUserUuid()));
+        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUuid()));
         int index = 0;
         for (int i = 0; i < vouchers.size(); i++) {
-            if (vouchers.get(i).getName().equalsIgnoreCase(getVoucherManager().getVoucher(currentVoucher.getName()).getName())) {
+            Optional<Voucher> optionalVoucher = getVoucherManager().getVoucher(currentVoucher.getName());
+            if (!optionalVoucher.isPresent()) return;
+
+            if (vouchers.get(i).getName().equalsIgnoreCase(optionalVoucher.get().getName())) {
                 index = i;
             }
         }
@@ -61,6 +63,6 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         vouchers.set(index, currentVoucher);
         process.setContinue(false);
         cancelProcess(process);
-        getLogsManager().addLog(new Log(process.getUserUuid(), "Voucher of name " + process.getCurrentVoucher().getName() + " has been updated", new Date(), ProcessType.EDIT));
+        getLogsManager().log(process, ProcessType.EDIT);
     }
 }

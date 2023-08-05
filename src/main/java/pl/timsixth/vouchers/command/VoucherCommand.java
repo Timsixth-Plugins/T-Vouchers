@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.MenuManager;
@@ -17,14 +18,14 @@ import pl.timsixth.vouchers.util.ChatUtil;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static pl.timsixth.vouchers.util.PlaceholderUtil.replacePlaceholders;
+
 @RequiredArgsConstructor
 public class VoucherCommand implements CommandExecutor {
 
     private final VoucherManager voucherManager;
     private final MenuManager menuManager;
-
     private final ConfigFile configFile;
-
     private final Messages messages;
 
     @Override
@@ -65,32 +66,38 @@ public class VoucherCommand implements CommandExecutor {
                 }
                 Player player = (Player) sender;
 
-                if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
-                    Voucher voucher = voucherManager.getVoucher(args[1]);
-                    player.getInventory().addItem(voucherManager.getItemVoucher(voucher));
+                Optional<Voucher> optionalVoucher = voucherManager.getVoucher(args[1]);
+                if (optionalVoucher.isPresent()) {
+                    Voucher voucher = optionalVoucher.get();
+
+                    ItemStack item = replacePlaceholders(player, voucher.toItemStack());
+
+                    player.getInventory().addItem(item);
                     sender.sendMessage(messages.getAddedVoucher());
                 } else {
                     sender.sendMessage(messages.getVoucherDoesntExists());
                 }
             } else if (args[0].equalsIgnoreCase("giveall")) {
-                if (!voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
+                Optional<Voucher> optionalVoucher = voucherManager.getVoucher(args[1]);
+                if (!optionalVoucher.isPresent()) {
                     sender.sendMessage(messages.getVoucherDoesntExists());
                     return true;
                 }
 
-                Voucher voucher = voucherManager.getVoucher(args[1]);
-                Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().addItem(voucherManager.getItemVoucher(voucher)));
+                Voucher voucher = optionalVoucher.get();
+                Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().addItem(replacePlaceholders(player, voucher.toItemStack())));
                 sender.sendMessage(messages.getAddedVoucherEveryone());
             } else {
                 sender.sendMessage(messages.getCorrectUse());
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("give")) {
-                if (voucherManager.voucherExists(voucherManager.getVoucher(args[1]))) {
+                Optional<Voucher> optionalVoucher = voucherManager.getVoucher(args[1]);
+                if (optionalVoucher.isPresent()) {
                     Player other = Bukkit.getPlayer(args[2]);
                     if (other != null) {
-                        Voucher voucher = voucherManager.getVoucher(args[1]);
-                        other.getInventory().addItem(voucherManager.getItemVoucher(voucher));
+                        Voucher voucher = optionalVoucher.get();
+                        other.getInventory().addItem(replacePlaceholders(other, voucher.toItemStack()));
                         other.sendMessage(messages.getAddedVoucher());
                         String message = messages.getAddedVoucherToOtherPlayer()
                                 .replace("{PLAYER_NAME}", sender.getName());

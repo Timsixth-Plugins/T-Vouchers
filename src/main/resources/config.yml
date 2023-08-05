@@ -21,3 +21,4 @@ messages:
   clear_all_today_logs: '&aSuccessfully cleared logs which created today'
   files_reloaded: '&aFiles have been reloaded successfully'
   added_voucher_to_everyone: '&aYou have given voucher everyone'
+  used_voucher: '&aYou have redeemed {VOUCHER_DISPLAY_NAME} &avoucher'
