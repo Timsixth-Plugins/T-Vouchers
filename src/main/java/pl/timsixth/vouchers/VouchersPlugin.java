@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import pl.timsixth.vouchers.bstats.Metrics;
 import pl.timsixth.vouchers.command.VoucherCommand;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
@@ -63,6 +64,8 @@ public final class VouchersPlugin extends JavaPlugin {
         saveConfig();
 
         new VersionChecker(this).checkVersion();
+
+        new Metrics(this, 19403);
 
         getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages));
         getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
