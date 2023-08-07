@@ -46,8 +46,8 @@ public class PlayerInteractListener implements Listener {
         player.getInventory().getItemInMainHand().setAmount(amount);
 
         if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null)
-            player.sendMessage(messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.chatColor(voucher.getDisplayName())));
+            player.sendMessage(messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName())));
         else
-            player.sendMessage(PlaceholderAPI.setPlaceholders(player, messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.chatColor(voucher.getDisplayName()))));
+            player.sendMessage(PlaceholderAPI.setPlaceholders(player, messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName()))));
     }
 }
