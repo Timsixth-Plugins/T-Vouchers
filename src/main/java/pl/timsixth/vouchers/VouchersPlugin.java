@@ -19,7 +19,7 @@ import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.manager.registration.ActionRegistration;
 import pl.timsixth.vouchers.manager.registration.ActionRegistrationImpl;
-import pl.timsixth.vouchers.model.menu.action.custom.impl.*;
+import pl.timsixth.vouchers.model.menu.action.custom.*;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;

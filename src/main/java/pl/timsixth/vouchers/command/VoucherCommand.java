@@ -69,8 +69,10 @@ public class VoucherCommand implements CommandExecutor {
                 Optional<Voucher> optionalVoucher = voucherManager.getVoucher(args[1]);
                 if (optionalVoucher.isPresent()) {
                     Voucher voucher = optionalVoucher.get();
+                    ItemStack voucherItem = voucher.toItemStack();
+                    if (voucher.isSkullItem()) voucherItem = voucher.toSkullItem();
 
-                    ItemStack item = replacePlaceholders(player, voucher.toItemStack());
+                    ItemStack item = replacePlaceholders(player, voucherItem);
 
                     player.getInventory().addItem(item);
                     sender.sendMessage(messages.getAddedVoucher());
@@ -85,7 +87,12 @@ public class VoucherCommand implements CommandExecutor {
                 }
 
                 Voucher voucher = optionalVoucher.get();
-                Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().addItem(replacePlaceholders(player, voucher.toItemStack())));
+                ItemStack itemStack = voucher.toItemStack();
+                if (voucher.isSkullItem()) itemStack = voucher.toSkullItem();
+
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    onlinePlayer.getInventory().addItem(replacePlaceholders(onlinePlayer, itemStack));
+                }
                 sender.sendMessage(messages.getAddedVoucherEveryone());
             } else {
                 sender.sendMessage(messages.getCorrectUse());
@@ -97,7 +104,10 @@ public class VoucherCommand implements CommandExecutor {
                     Player other = Bukkit.getPlayer(args[2]);
                     if (other != null) {
                         Voucher voucher = optionalVoucher.get();
-                        other.getInventory().addItem(replacePlaceholders(other, voucher.toItemStack()));
+                        ItemStack itemStack = voucher.toItemStack();
+                        if (voucher.isSkullItem()) itemStack = voucher.toSkullItem();
+
+                        other.getInventory().addItem(replacePlaceholders(other, itemStack));
                         other.sendMessage(messages.getAddedVoucher());
                         String message = messages.getAddedVoucherToOtherPlayer()
                                 .replace("{PLAYER_NAME}", sender.getName());

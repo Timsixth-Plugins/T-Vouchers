@@ -30,7 +30,7 @@ public class CreateVoucherProcessManager extends AbstractProcessManager<Creation
             return;
         }
         ConfigurationSection newVoucherSection = vouchersSection.createSection(currentVoucher.getName());
-        newVoucherSection.set("command", currentVoucher.getCommand());
+        newVoucherSection.set("commands", currentVoucher.getCommands());
         newVoucherSection.set("displayname", currentVoucher.getDisplayName());
         newVoucherSection.set("material", currentVoucher.getMaterial().name());
         newVoucherSection.set("lore", currentVoucher.getLore());

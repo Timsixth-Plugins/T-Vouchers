@@ -15,9 +15,7 @@ import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.Action;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
-import pl.timsixth.vouchers.model.menu.action.custom.GiveItemsAction;
-import pl.timsixth.vouchers.model.menu.action.custom.impl.GiveItemsActionImpl;
-import pl.timsixth.vouchers.model.menu.action.custom.impl.NoneClickAction;
+import pl.timsixth.vouchers.model.menu.action.custom.NoneClickAction;
 import pl.timsixth.vouchers.util.ChatUtil;
 import pl.timsixth.vouchers.util.ItemBuilder;
 import pl.timsixth.vouchers.util.ItemUtil;
@@ -25,7 +23,7 @@ import pl.timsixth.vouchers.util.ItemUtil;
 import java.util.*;
 
 @RequiredArgsConstructor
-public abstract class AbstractMenuManager implements Reloadable{
+public abstract class AbstractMenuManager implements Reloadable {
 
     private final ActionRegistration actionRegistration;
 
@@ -95,12 +93,6 @@ public abstract class AbstractMenuManager implements Reloadable{
 
             ClickAction action = (ClickAction) actionOptional.get();
 
-            if (action instanceof GiveItemsAction) {
-                ClickAction giveItemsClickAction = setItemsToGive(clickActionSection);
-                menuItem.setAction(giveItemsClickAction);
-                return;
-            }
-
             ClickAction clickAction;
             try {
                 clickAction = action.getClass().newInstance();
@@ -112,32 +104,6 @@ public abstract class AbstractMenuManager implements Reloadable{
 
             menuItem.setAction(clickAction);
         }
-    }
-
-    private ClickAction setItemsToGive(ConfigurationSection clickActionSection) {
-        if (clickActionSection.getConfigurationSection("items") == null) {
-            return new NoneClickAction();
-        }
-        GiveItemsAction giveItemsAction = new GiveItemsActionImpl();
-        ConfigurationSection itemsSection = clickActionSection.getConfigurationSection("items");
-        List<ItemStack> items = new ArrayList<>();
-        for (String materialName : itemsSection.getKeys(false)) {
-            ConfigurationSection materialSection = itemsSection.getConfigurationSection(materialName);
-            ItemStack item = new ItemBuilder(new ItemStack(Material.getMaterial(materialName), materialSection.getInt("amount"))).toItemStack();
-
-            if (materialSection.getInt("id") != 0) {
-                item = new ItemBuilder(new ItemStack(Material.getMaterial(materialName), materialSection.getInt("amount"), (short) materialSection.getInt("id"))).toItemStack();
-            }
-            if (materialSection.getStringList("enchants") != null) {
-                Map<Enchantment, Integer> enchantments = ItemUtil.getEnchantments(materialSection.getStringList("enchants"));
-                item = new ItemBuilder(new ItemStack(Material.getMaterial(materialName), materialSection.getInt("amount"), (short) materialSection.getInt("id")))
-                        .addEnchantments(enchantments)
-                        .toItemStack();
-            }
-            items.add(item);
-        }
-        giveItemsAction.setItems(items);
-        return giveItemsAction;
     }
 
     private void setPrice(ConfigurationSection slot, MenuItem menuItem) {
@@ -175,18 +141,21 @@ public abstract class AbstractMenuManager implements Reloadable{
         }
 
         for (MenuItem menuItem : menu.getItems()) {
-            List<String> lore = menuItem.getLore();
+
+
             List<String> replaceLore = new ArrayList<>();
-            for (String line : lore) {
+            for (String line : menuItem.getLore()) {
                 replaceLore.add(line.replace("{PRICE}", String.valueOf(menuItem.getPrice())));
             }
+
             if (menuItem.getMaterialDataId() == 0) {
-                inv.setItem(menuItem.getSlot(), new ItemBuilder(new ItemStack(menuItem.getMaterial(), 1))
-                        .setLore(ChatUtil.hexColor(replaceLore))
-                        .setName(ChatUtil.hexColor(menuItem.getDisplayName()))
-                        .addEnchantmentsByMeta(menuItem.getEnchantments())
-                        .toItemStack()
-                );
+                ItemStack itemStack = menuItem.toItemStack();
+                if (itemStack != null) inv.setItem(menuItem.getSlot(), itemStack);
+
+                if (menuItem.getItemStack() != null) {
+                    inv.setItem(menuItem.getSlot(), menuItem.getItemStack());
+                }
+
             } else {
                 inv.setItem(menuItem.getSlot(), new ItemBuilder(new ItemStack(menuItem.getMaterial(), 1, (short) menuItem.getMaterialDataId()))
                         .setLore(ChatUtil.hexColor(replaceLore))

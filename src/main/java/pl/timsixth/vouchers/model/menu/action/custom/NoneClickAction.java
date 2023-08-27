@@ -1,4 +1,4 @@
-package pl.timsixth.vouchers.model.menu.action.custom.impl;
+package pl.timsixth.vouchers.model.menu.action.custom;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import pl.timsixth.vouchers.model.menu.MenuItem;

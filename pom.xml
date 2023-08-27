@@ -6,7 +6,7 @@
 
     <groupId>pl.timsixth</groupId>
     <artifactId>T-Vouchers</artifactId>
-    <version>1.8.1</version>
+    <version>1.9.0</version>
 
     <repositories>
         <repository>
@@ -16,6 +16,10 @@
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>minecraft-repo</id>
+            <url>https://libraries.minecraft.net/</url>
         </repository>
     </repositories>
 
@@ -36,6 +40,12 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.22</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

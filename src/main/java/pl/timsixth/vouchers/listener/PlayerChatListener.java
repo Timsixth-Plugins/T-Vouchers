@@ -18,7 +18,7 @@ import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.menu.action.custom.impl.ChooseEnchantAction;
+import pl.timsixth.vouchers.model.menu.action.custom.ChooseEnchantAction;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
 import pl.timsixth.vouchers.model.process.IProcess;
@@ -101,7 +101,7 @@ public class PlayerChatListener implements Listener {
                 currentVoucher.setMaterial(Material.matchMaterial(event.getMessage().toUpperCase()));
                 event.setCancelled(true);
                 player.sendMessage(messages.getTypeVoucherCommand());
-            } else if (creationProcess.getCurrentVoucher().getCommand() == null) {
+            } else if (creationProcess.getCurrentVoucher().getCommands() == null) {
                 Voucher currentVoucher = creationProcess.getCurrentVoucher();
                 setCommand(event, player, currentVoucher);
             } else if (creationProcess.getCurrentVoucher().getLore() == null) {
@@ -144,7 +144,7 @@ public class PlayerChatListener implements Listener {
                 currentVoucher.setMaterial(Material.matchMaterial(event.getMessage().toUpperCase()));
                 event.setCancelled(true);
                 player.sendMessage(messages.getTypeVoucherCommand());
-            } else if (editProcess.getCurrentVoucher().getCommand() == null) {
+            } else if (editProcess.getCurrentVoucher().getCommands() == null) {
                 Voucher currentVoucher = editProcess.getCurrentVoucher();
                 setCommand(event, player, currentVoucher);
             } else if (editProcess.getCurrentVoucher().getLore() == null) {
@@ -183,7 +183,9 @@ public class PlayerChatListener implements Listener {
     }
 
     private void setCommand(AsyncPlayerChatEvent event, Player player, Voucher currentVoucher) {
-        currentVoucher.setCommand(event.getMessage());
+        String[] commands = event.getMessage().split("\\|");
+
+        currentVoucher.setCommands(Arrays.asList(commands));
         event.setCancelled(true);
         player.sendMessage(messages.getTypeVoucherLore());
     }

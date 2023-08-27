@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.menu.action.custom.impl.NoneClickAction;
+import pl.timsixth.vouchers.model.menu.action.custom.NoneClickAction;
 import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.text.SimpleDateFormat;

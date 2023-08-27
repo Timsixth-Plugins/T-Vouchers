@@ -11,7 +11,7 @@ messages:
   deleted_voucher: '&aSuccessfully deleted voucher'
   type_voucher_name: '&eType voucher''s name (Name is id of your voucher)'
   type_voucher_display_name: '&eType voucher''s display name (You can use colored messages).'
-  type_voucher_command: '&eType voucher''s command. You can use {NICK} as user nickname'
+  type_voucher_command: '&eType voucher''s command. You can use {NICK} as user nickname, Type "|" if do you want more than one command'
   type_voucher_lore: '&eType voucher''s lore. Type "|" if do you want new line in lore. (You can use colored messages)'
   type_voucher_material: '&eType voucher material, default material is paper. Materials must be written uppercase. Type "none" to continue with default material'
   set_voucher_enchants: '&eSet voucher''s enchants'

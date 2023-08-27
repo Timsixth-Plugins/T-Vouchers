@@ -1,9 +1,6 @@
 package pl.timsixth.vouchers.manager.registration;
 
-
-
 import pl.timsixth.vouchers.model.menu.action.Action;
-import pl.timsixth.vouchers.model.menu.action.exception.ActionException;
 
 import java.util.*;
 
@@ -24,7 +21,7 @@ public class ActionRegistrationImpl implements ActionRegistration {
     @Override
     public void register(Action... actions) {
         if (actions.length == 0) {
-            throw new ActionException("You must add at least one action");
+            throw new IllegalArgumentException("You must add at least one action");
         }
 
         for (Action action : actions) {

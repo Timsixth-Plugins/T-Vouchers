@@ -24,9 +24,17 @@ public class VoucherManager implements Reloadable {
 
         for (String voucherName : vouchers.getKeys(false)) {
             ConfigurationSection section = vouchers.getConfigurationSection(voucherName);
+            List<String> commands = new ArrayList<>();
+
+            String command = section.getString("command");
+
+            if (command != null) commands.add(command);
+
+            if (section.getStringList("commands") != null) commands = section.getStringList("commands");
+
             Voucher voucher = new Voucher(
                     voucherName,
-                    section.getString("command"),
+                    commands,
                     section.getStringList("lore"),
                     section.getString("displayname"),
                     Material.matchMaterial(section.getString("material"))
@@ -35,6 +43,9 @@ public class VoucherManager implements Reloadable {
                 List<String> enchantsString = section.getStringList("enchants");
                 voucher.setEnchantments(ItemUtil.getEnchantments(enchantsString));
             }
+
+            if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
+
             voucherList.add(voucher);
         }
     }

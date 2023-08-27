@@ -3,6 +3,7 @@ package pl.timsixth.vouchers.listener;
 import lombok.RequiredArgsConstructor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,12 +37,13 @@ public class PlayerInteractListener implements Listener {
 
         Voucher voucher = optionalVoucher.get();
 
-        if (player.getInventory().getItemInMainHand().getType() != voucher.getMaterial()) return;
 
-        String command = voucher.getCommand();
-        command = command.replace("{NICK}", player.getName());
+        if (player.getInventory().getItemInMainHand().getType() != voucher.getMaterial()) {
+            if (player.getInventory().getItemInMainHand().getType() != Material.SKULL_ITEM) return;
+        }
 
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{PLAYER}", player.getName())));
+
         int amount = player.getInventory().getItemInMainHand().getAmount() - 1;
         player.getInventory().getItemInMainHand().setAmount(amount);
 

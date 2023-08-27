@@ -1,4 +1,4 @@
-package pl.timsixth.vouchers.model.menu.action.custom.impl;
+package pl.timsixth.vouchers.model.menu.action.custom;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

@@ -35,7 +35,7 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         }
 
         ConfigurationSection newVoucherSection = vouchersSection.getConfigurationSection(currentVoucher.getName());
-        newVoucherSection.set("command", currentVoucher.getCommand());
+        newVoucherSection.set("command", currentVoucher.getCommands());
         newVoucherSection.set("displayname", currentVoucher.getDisplayName());
         newVoucherSection.set("lore", currentVoucher.getLore());
         newVoucherSection.set("material", currentVoucher.getMaterial().name());
