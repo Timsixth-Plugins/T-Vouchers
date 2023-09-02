@@ -42,7 +42,7 @@ public class PlayerInteractListener implements Listener {
             if (player.getInventory().getItemInMainHand().getType() != Material.SKULL_ITEM) return;
         }
 
-        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{PLAYER}", player.getName())));
+        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{NICK}", player.getName())));
 
         int amount = player.getInventory().getItemInMainHand().getAmount() - 1;
         player.getInventory().getItemInMainHand().setAmount(amount);
