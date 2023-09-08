@@ -42,7 +42,7 @@ public class PlayerInteractListener implements Listener {
             if (player.getInventory().getItemInMainHand().getType() != Material.SKULL_ITEM) return;
         }
 
-        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{NICK}", player.getName())));
+        replacePlaceholderInCommand(player, voucher);
 
         int amount = player.getInventory().getItemInMainHand().getAmount() - 1;
         player.getInventory().getItemInMainHand().setAmount(amount);
@@ -51,5 +51,14 @@ public class PlayerInteractListener implements Listener {
             player.sendMessage(messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName())));
         else
             player.sendMessage(PlaceholderAPI.setPlaceholders(player, messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName()))));
+    }
+
+    private void replacePlaceholderInCommand(Player player, Voucher voucher) {
+        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderAPI.setPlaceholders(player, command.replace("{NICK}", player.getName()))));
+
+            return;
+        }
+        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{NICK}", player.getName())));
     }
 }
