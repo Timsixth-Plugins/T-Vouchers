@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -71,7 +70,7 @@ public class Voucher implements IGenerable {
     }
 
     public ItemStack toSkullItem() {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (byte) SkullType.PLAYER.ordinal());
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         setVoucherDetails(meta);
 

@@ -39,7 +39,7 @@ public class PlayerInteractListener implements Listener {
 
 
         if (player.getInventory().getItemInMainHand().getType() != voucher.getMaterial()) {
-            if (player.getInventory().getItemInMainHand().getType() != Material.SKULL_ITEM) return;
+            if (player.getInventory().getItemInMainHand().getType() != Material.PLAYER_HEAD) return;
         }
 
         replacePlaceholderInCommand(player, voucher);
