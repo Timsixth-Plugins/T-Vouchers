@@ -1,7 +1,6 @@
 name: T-Vouchers
 main: pl.timsixth.vouchers.VouchersPlugin
-version: '1.11.0'
-api-version: 1.13
+version: '1.11.1'
 author: timsixth
 softdepend:
   - PlaceholderAPI
