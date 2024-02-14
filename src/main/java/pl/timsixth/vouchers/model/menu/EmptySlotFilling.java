@@ -7,8 +7,6 @@ import org.bukkit.Material;
 @RequiredArgsConstructor
 @Getter
 public class EmptySlotFilling {
-
-    private final int emptySlotId;
     private final Material emptySlotMaterial;
 
 }

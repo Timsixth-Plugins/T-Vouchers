@@ -17,10 +17,12 @@ import pl.timsixth.vouchers.model.menu.action.Action;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.menu.action.custom.NoneClickAction;
 import pl.timsixth.vouchers.util.ChatUtil;
-import pl.timsixth.vouchers.util.ItemBuilder;
 import pl.timsixth.vouchers.util.ItemUtil;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public abstract class AbstractMenuManager implements Reloadable {
@@ -43,7 +45,6 @@ public abstract class AbstractMenuManager implements Reloadable {
                 ConfigurationSection emptySlots = guiSection.getConfigurationSection("empty_slots");
                 Menu menu = new Menu(guiSection.getInt("size"), guiName, guiSection.getString("displayname"),
                         new EmptySlotFilling(
-                                emptySlots.getInt("id"),
                                 Material.getMaterial(emptySlots.getString("material"))
                         ));
                 createMenu(guiSection, menu);
@@ -72,7 +73,6 @@ public abstract class AbstractMenuManager implements Reloadable {
         );
         setPrice(slot, menuItem);
         setEnchants(slot, menuItem);
-        setMaterialDataId(slot, menuItem);
         setAction(slot, menuItem);
 
         menuItemSet.add(menuItem);
@@ -119,12 +119,6 @@ public abstract class AbstractMenuManager implements Reloadable {
         }
     }
 
-    private void setMaterialDataId(ConfigurationSection slot, MenuItem menuItem) {
-        if (slot.getInt("id") != 0) {
-            menuItem.setMaterialDataId(slot.getInt("id"));
-        }
-    }
-
     public Optional<Menu> getMenuByName(String name) {
         return menus.stream().
                 filter(menu -> menu.getName().equalsIgnoreCase(name))
@@ -136,35 +130,14 @@ public abstract class AbstractMenuManager implements Reloadable {
 
         if (menu.getEmptySlotFilling() != null) {
             for (int i = 0; i < menu.getSize(); i++) {
-                inv.setItem(i, new ItemStack(menu.getEmptySlotFilling().getEmptySlotMaterial(), 1, (short) menu.getEmptySlotFilling().getEmptySlotId()));
+                inv.setItem(i, new ItemStack(menu.getEmptySlotFilling().getEmptySlotMaterial(), 1));
             }
         }
 
         for (MenuItem menuItem : menu.getItems()) {
-
-
-            List<String> replaceLore = new ArrayList<>();
-            for (String line : menuItem.getLore()) {
-                replaceLore.add(line.replace("{PRICE}", String.valueOf(menuItem.getPrice())));
-            }
-
-            if (menuItem.getMaterialDataId() == 0) {
-                ItemStack itemStack = menuItem.toItemStack();
-                if (itemStack != null) inv.setItem(menuItem.getSlot(), itemStack);
-
-                if (menuItem.getItemStack() != null) {
-                    inv.setItem(menuItem.getSlot(), menuItem.getItemStack());
-                }
-
-            } else {
-                inv.setItem(menuItem.getSlot(), new ItemBuilder(new ItemStack(menuItem.getMaterial(), 1, (short) menuItem.getMaterialDataId()))
-                        .setLore(ChatUtil.hexColor(replaceLore))
-                        .setName(ChatUtil.hexColor(menuItem.getDisplayName()))
-                        .addEnchantmentsByMeta(menuItem.getEnchantments())
-                        .toItemStack()
-                );
-            }
+            inv.setItem(menuItem.getSlot(), menuItem.toItemStack());
         }
+
         return inv;
     }
 

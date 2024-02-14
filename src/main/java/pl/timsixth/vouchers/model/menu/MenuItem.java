@@ -26,7 +26,6 @@ public class MenuItem {
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private Action action;
     private int price;
-    private int materialDataId;
     private String localizedName;
     private ItemStack itemStack;
 
@@ -43,7 +42,7 @@ public class MenuItem {
     }
 
     public ItemStack toItemStack() {
-        if (material == null) return null;
+        if (material == null) return itemStack;
 
         List<String> replaceLore = lore.stream().map(line -> line.replace("{PRICE}", String.valueOf(price)))
                 .collect(Collectors.toList());

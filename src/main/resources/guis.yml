@@ -3,11 +3,10 @@ guis:
     displayname: '&a&lVoucher manager in gui'
     size: 27
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       11:
-        material: WORKBENCH
+        material: CRAFTING_TABLE
         displayname: '&aCreate new voucher'
         click_action:
           type: OPEN_MENU
@@ -38,8 +37,7 @@ guis:
     displayname: '&a&lVoucher creator'
     size: 27
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       13:
         material: ANVIL
@@ -54,19 +52,16 @@ guis:
     displayname: '&a&lList of all vouchers'
     size: 54
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       22:
-        material: WOOL
-        id: 14
+        material: RED_WOOL
         displayname: '&cList is empty'
   listOfAllEnchants:
     displayname: '&a&lChoose enchants'
     size: 54
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       0:
         material: BARRIER
@@ -81,12 +76,10 @@ guis:
     displayname: '&a&lChoose enchant level'
     size: 27
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       0:
-        material: STAINED_CLAY
-        id: 5
+        material: LIME_TERRACOTTA
         displayname: '&aSet enchant level 1'
         click_action:
           type: CHOOSE_LEVEL
@@ -95,8 +88,7 @@ guis:
         lore:
           - '&7Right click to set enchant level'
       1:
-        material: STAINED_CLAY
-        id: 5
+        material: LIME_TERRACOTTA
         displayname: '&aSet enchant level 2'
         click_action:
           type: CHOOSE_LEVEL
@@ -105,8 +97,7 @@ guis:
         lore:
           - '&7Right click to set enchant level'
       2:
-        material: STAINED_CLAY
-        id: 5
+        material: LIME_TERRACOTTA
         displayname: '&aSet enchant level 3'
         click_action:
           type: CHOOSE_LEVEL
@@ -115,8 +106,7 @@ guis:
         lore:
           - '&7Right click to set enchant level'
       3:
-        material: STAINED_CLAY
-        id: 5
+        material: LIME_TERRACOTTA
         displayname: '&aSet enchant level 4'
         click_action:
           type: CHOOSE_LEVEL
@@ -125,8 +115,7 @@ guis:
         lore:
           - '&7Right click to set enchant level'
       4:
-        material: STAINED_CLAY
-        id: 5
+        material: LIME_TERRACOTTA
         displayname: '&aSet enchant level 5'
         click_action:
           type: CHOOSE_LEVEL
@@ -135,8 +124,7 @@ guis:
         lore:
           - '&7Right click to set enchant level'
       24:
-        material: WOOL
-        id: 5
+        material: LIME_WOOL
         displayname: '&aReplace voucher'
         click_action:
           type: REPLACE_VOUCHER
@@ -145,8 +133,7 @@ guis:
         lore:
           - '&7Right click to replace voucher'
       25:
-        material: WOOL
-        id: 5
+        material: LIME_WOOL
         displayname: '&aCreate voucher'
         click_action:
           type: CREATE_VOUCHER
@@ -155,8 +142,7 @@ guis:
         lore:
           - '&7Right click to create voucher'
       26:
-        material: WOOL
-        id: 11
+        material: BLUE_WOOL
         displayname: '&aChoose more enchants'
         click_action:
           type: OPEN_MENU
@@ -168,11 +154,10 @@ guis:
     displayname: '&a&lManage vouchers'
     size: 27
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       12:
-        material: WOOL
+        material: RED_WOOL
         id: 14
         displayname: '&aDelete voucher'
         click_action:
@@ -194,8 +179,7 @@ guis:
     displayname: '&a&lManage logs'
     size: 27
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       12:
         material: PAPER
@@ -221,10 +205,9 @@ guis:
     displayname: '&a&lToday''s logs'
     size: 54
     empty_slots:
-      id: 7
-      material: STAINED_GLASS_PANE
+      material: GRAY_STAINED_GLASS_PANE
     slots:
       22:
-        material: WOOL
+        material: RED_WOOL
         id: 14
         displayname: '&cList is empty'
