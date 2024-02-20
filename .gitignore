@@ -1,3 +1,6 @@
 # Project exclude paths
 /out/
 /T-Vouchers.iml
+/target/
+/.idea/
+/src/main/java/META-INF/MANIFEST.MF
