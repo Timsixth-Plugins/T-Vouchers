@@ -11,13 +11,7 @@ import java.util.List;
 public abstract class AbstractAction implements Action {
 
     private final String name;
-    private final ActionType actionType;
     private List<String> args;
-
-    @Override
-    public ActionType getActionType() {
-        return actionType;
-    }
 
     @Override
     public String getName() {

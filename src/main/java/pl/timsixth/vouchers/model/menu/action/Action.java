@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface Action {
 
-    ActionType getActionType();
-
     String getName();
 
     List<String> getArgs();

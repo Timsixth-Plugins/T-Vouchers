@@ -5,7 +5,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 
@@ -14,7 +13,7 @@ public class CloseMenuAction extends AbstractAction implements ClickAction {
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
 
     public CloseMenuAction() {
-        super("CLOSE_MENU", ActionType.CLICK);
+        super("CLOSE_MENU");
     }
 
     @Override

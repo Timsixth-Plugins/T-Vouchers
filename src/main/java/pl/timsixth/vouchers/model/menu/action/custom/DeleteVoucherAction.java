@@ -6,7 +6,6 @@ import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.process.DeleteProcess;
 
@@ -17,7 +16,7 @@ public class DeleteVoucherAction extends AbstractAction implements ClickAction {
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
 
     public DeleteVoucherAction() {
-        super("DELETE_VOUCHER", ActionType.CLICK);
+        super("DELETE_VOUCHER");
     }
 
     @Override

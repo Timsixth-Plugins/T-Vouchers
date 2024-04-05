@@ -6,7 +6,6 @@ import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.manager.process.IProcessManager;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.process.CreationProcess;
 import pl.timsixth.vouchers.model.process.EditProcess;
@@ -17,8 +16,9 @@ import java.io.IOException;
 public class NoneEnchantsAction extends AbstractAction implements ClickAction {
 
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
+
     public NoneEnchantsAction() {
-        super("NONE_ENCHANTS", ActionType.CLICK);
+        super("NONE_ENCHANTS");
     }
 
     @Override

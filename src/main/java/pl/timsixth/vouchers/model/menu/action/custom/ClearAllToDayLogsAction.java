@@ -5,7 +5,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 
 import java.text.ParseException;
@@ -13,8 +12,9 @@ import java.text.ParseException;
 public class ClearAllToDayLogsAction extends AbstractAction implements ClickAction {
 
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
+
     public ClearAllToDayLogsAction() {
-        super("CLEAR_ALL_TODAY_LOGS", ActionType.CLICK);
+        super("CLEAR_ALL_TODAY_LOGS");
     }
 
     @Override

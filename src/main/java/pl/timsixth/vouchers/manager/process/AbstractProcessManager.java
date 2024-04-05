@@ -34,11 +34,6 @@ public abstract class AbstractProcessManager<T extends IProcess> implements IPro
     }
 
     @Override
-    public List<T> getCurrentProcesses() {
-        return processes;
-    }
-
-    @Override
     public T getProcessByUser(UUID userUUID) {
         return processes.stream()
                 .filter(process -> process.getUserUuid().equals(userUUID))

@@ -7,7 +7,6 @@ import pl.timsixth.vouchers.model.PrepareProcess;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ public class ManageVoucherAction extends AbstractAction implements ClickAction {
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
 
     public ManageVoucherAction() {
-        super("MANAGE_VOUCHER", ActionType.CLICK);
+        super("MANAGE_VOUCHER");
     }
 
     @Override

@@ -10,7 +10,6 @@ import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.menu.Menu;
 import pl.timsixth.vouchers.model.menu.MenuItem;
 import pl.timsixth.vouchers.model.menu.action.AbstractAction;
-import pl.timsixth.vouchers.model.menu.action.ActionType;
 import pl.timsixth.vouchers.model.menu.action.click.ClickAction;
 import pl.timsixth.vouchers.model.process.IProcess;
 
@@ -23,7 +22,7 @@ public class ChooseEnchantAction extends AbstractAction implements ClickAction {
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
 
     public ChooseEnchantAction() {
-        super("CHOOSE_ENCHANT", ActionType.CLICK);
+        super("CHOOSE_ENCHANT");
     }
 
     @Override
