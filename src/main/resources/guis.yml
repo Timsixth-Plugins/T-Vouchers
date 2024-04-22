@@ -11,7 +11,7 @@ guis:
         click_action:
           type: OPEN_MENU
           args:
-             - 'voucherCreator'
+            - 'voucherCreator'
         lore:
           - '&7Right click to open menu'
       13:
@@ -27,10 +27,8 @@ guis:
         material: PAPER
         displayname: '&aList of all vouchers'
         click_action:
-          type: OPEN_MENU_AND_GENERATED_ITEMS
-          args:
-            - 'listOfAllVouchers'
-            - 'VOUCHERS'
+          type: OPEN_VOUCHERS_MENU
+          args: [ ]
         lore:
           - '&7Right click to open menu'
   voucherCreator:
@@ -45,18 +43,9 @@ guis:
         click_action:
           type: CLOSE_MENU
           args:
-            - 'open_chat'
+            - 'start_creation_process'
         lore:
           - '&7Right click to start creating voucher'
-  listOfAllVouchers:
-    displayname: '&a&lList of all vouchers'
-    size: 54
-    empty_slots:
-      material: GRAY_STAINED_GLASS_PANE
-    slots:
-      22:
-        material: RED_WOOL
-        displayname: '&cList is empty'
   listOfAllEnchants:
     displayname: '&a&lChoose enchants'
     size: 54
@@ -186,10 +175,8 @@ guis:
         id: 14
         displayname: '&aShow all logs which created today'
         click_action:
-          type: OPEN_MENU_AND_GENERATED_ITEMS
-          args:
-            - 'listOfAllTodayLogs'
-            - 'LOGS'
+          type: OPEN_LOGS_MENU
+          args: [ ]
         lore:
           - '&7Right click to show menu'
       14:
@@ -201,13 +188,3 @@ guis:
             - ''
         lore:
           - '&7Right click to clear logs'
-  listOfAllTodayLogs:
-    displayname: '&a&lToday''s logs'
-    size: 54
-    empty_slots:
-      material: GRAY_STAINED_GLASS_PANE
-    slots:
-      22:
-        material: RED_WOOL
-        id: 14
-        displayname: '&cList is empty'

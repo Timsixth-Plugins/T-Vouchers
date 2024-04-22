@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import pl.timsixth.guilibrary.core.model.Generable;
+import pl.timsixth.guilibrary.core.model.MenuItem;
+import pl.timsixth.guilibrary.core.model.action.custom.NoneClickAction;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.enums.ProcessType;
-import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.menu.action.custom.NoneClickAction;
-import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,7 +17,7 @@ import java.util.*;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class Log implements IGenerable {
+public class Log implements Generable {
 
     private final UUID senderUuid;
     private final String content;

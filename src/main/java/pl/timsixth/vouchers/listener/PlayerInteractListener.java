@@ -9,10 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.util.Optional;
 

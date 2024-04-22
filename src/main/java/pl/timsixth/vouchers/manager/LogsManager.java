@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.model.Log;
-import pl.timsixth.vouchers.model.process.IProcess;
+import pl.timsixth.vouchers.model.Process;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -107,16 +107,9 @@ public class LogsManager {
                 .findAny();
     }
 
-    public List<Log> getLogsToShowInGui() {
-        return logs.stream()
-                .limit(53)
-                .collect(Collectors.toList());
-
-    }
-
-    public void log(IProcess process, ProcessType processType) {
-        String message = String.format(Log.LogMessages.matchMessage(processType), process.getCurrentVoucher().getName());
-        Log log = new Log(process.getUserUuid(), message, processType);
+    public void log(Process process) {
+        String message = String.format(Log.LogMessages.matchMessage(process.getType()), process.getCurrentVoucher().getName());
+        Log log = new Log(process.getUserUUID(), message, process.getType());
 
         saveLog(log);
     }

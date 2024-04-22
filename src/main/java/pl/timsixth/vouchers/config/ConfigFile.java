@@ -11,6 +11,7 @@ import java.util.List;
 
 @Getter
 public class ConfigFile {
+
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
     private final File vouchersFile;
@@ -23,12 +24,10 @@ public class ConfigFile {
 
     public ConfigFile(VouchersPlugin vouchersPlugin) {
         this.vouchersPlugin = vouchersPlugin;
-        vouchersFile = new File(vouchersPlugin.getDataFolder(), "vouchers.yml");
-        guisFile = new File(vouchersPlugin.getDataFolder(), "guis.yml");
-        logsFile = new File(vouchersPlugin.getDataFolder(), "logs.yml");
-        createFile("vouchers.yml");
-        createFile("guis.yml");
-        createFile("logs.yml");
+        vouchersFile = createFile("vouchers.yml");
+        guisFile = createFile("guis.yml");
+        logsFile =  createFile("logs.yml");
+
         ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
         ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
         ymlGuis = YamlConfiguration.loadConfiguration(guisFile);
@@ -39,7 +38,7 @@ public class ConfigFile {
         permission = vouchersPlugin.getConfig().getString("permission");
     }
 
-    private void createFile(String name) {
+    private File createFile(String name) {
         if (!vouchersPlugin.getDataFolder().exists()) {
             vouchersPlugin.getDataFolder().mkdir();
         }
@@ -47,6 +46,8 @@ public class ConfigFile {
         if (!file.exists()) {
             vouchersPlugin.saveResource(name, true);
         }
+
+        return file;
     }
 
     public void reloadFiles(List<Reloadable> reloadableList) {

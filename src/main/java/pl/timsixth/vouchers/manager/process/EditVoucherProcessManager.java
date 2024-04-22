@@ -2,19 +2,17 @@ package pl.timsixth.vouchers.manager.process;
 
 import org.bukkit.configuration.ConfigurationSection;
 import pl.timsixth.vouchers.config.ConfigFile;
-import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
+import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.model.process.EditProcess;
+import pl.timsixth.vouchers.util.ItemUtil;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EditVoucherProcessManager extends AbstractProcessManager<EditProcess> {
+public class EditVoucherProcessManager extends ProcessManager {
 
     private final PrepareProcessManager prepareToProcessManager;
 
@@ -24,32 +22,27 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
     }
 
     @Override
-    public void saveProcess(EditProcess process) throws IOException {
-        if (process.getCurrentVoucher() == null) {
-            return;
-        }
+    public void saveProcess(Process process) {
+        if (process.getCurrentVoucher() == null) return;
+
         ConfigurationSection vouchersSection = getConfigFile().getYmlVouchers().getConfigurationSection("vouchers");
+
         Voucher currentVoucher = process.getCurrentVoucher();
-        if (vouchersSection.getConfigurationSection(currentVoucher.getName()) == null) {
-            return;
-        }
+
+        if (vouchersSection.getConfigurationSection(currentVoucher.getName()) == null) return;
 
         ConfigurationSection newVoucherSection = vouchersSection.getConfigurationSection(currentVoucher.getName());
-        newVoucherSection.set("command", currentVoucher.getCommands());
+        newVoucherSection.set("commands", currentVoucher.getCommands());
         newVoucherSection.set("displayname", currentVoucher.getDisplayName());
         newVoucherSection.set("lore", currentVoucher.getLore());
         newVoucherSection.set("material", currentVoucher.getMaterial().name());
-        if (currentVoucher.getEnchantments() != null) {
-            List<String> enchants = new ArrayList<>();
-            currentVoucher.getEnchantments().forEach((enchantment, integer) -> enchants.add(enchantment.getName() + ";" + integer));
+        newVoucherSection.set("enchants", ItemUtil.getEnchantments(currentVoucher.getEnchantments()));
+        saveVouchersFile();
 
-            newVoucherSection.set("enchants", enchants);
-        } else {
-            newVoucherSection.set("enchants", null);
-        }
-        getConfigFile().getYmlVouchers().save(getConfigFile().getVouchersFile());
-        List<Voucher> vouchers = getVoucherManager().getVoucherList();
-        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUuid()));
+        List<Voucher> vouchers = getVoucherManager().getVouchers();
+
+        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUUID()));
+
         int index = 0;
         for (int i = 0; i < vouchers.size(); i++) {
             Optional<Voucher> optionalVoucher = getVoucherManager().getVoucher(currentVoucher.getName());
@@ -61,8 +54,10 @@ public class EditVoucherProcessManager extends AbstractProcessManager<EditProces
         }
 
         vouchers.set(index, currentVoucher);
-        process.setContinue(false);
+
+        process.setProcessContinue(false);
         cancelProcess(process);
-        getLogsManager().log(process, ProcessType.EDIT);
+
+        getLogsManager().log(process);
     }
 }
