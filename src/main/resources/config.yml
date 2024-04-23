@@ -1,4 +1,12 @@
 permission: 'timsixth.voucher'
+items_par_page: 40
+gui_size: 54
+vouchers_gui_name: "&aVouchers"
+logs_gui_name: "&aLogs"
+inputs_names:
+  name: "&aType voucher name"
+  display_name: "&aType voucher display name"
+  material: "&aType voucher material"
 messages:
   no_permission: '&cYou dont have premission'
   correct_use: '&cCorrect use: /voucher list|give|gui|reload|giveall <name> <player>'

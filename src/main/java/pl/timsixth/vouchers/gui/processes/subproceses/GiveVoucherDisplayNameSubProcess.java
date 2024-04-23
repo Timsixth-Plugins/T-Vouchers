@@ -3,11 +3,11 @@ package pl.timsixth.vouchers.gui.processes.subproceses;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.guilibrary.processes.manager.ProcessRunner;
 import pl.timsixth.guilibrary.processes.model.impl.AbstractSubGuiProcess;
 import pl.timsixth.guilibrary.processes.model.input.WriteableInput;
 import pl.timsixth.vouchers.VouchersPlugin;
+import pl.timsixth.vouchers.config.ConfigFile;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,15 +15,17 @@ import java.util.Collections;
 public class GiveVoucherDisplayNameSubProcess extends AbstractSubGuiProcess implements WriteableInput {
 
     private final VouchersPlugin vouchersPlugin;
+    private final ConfigFile configFile;
 
     public GiveVoucherDisplayNameSubProcess(VouchersPlugin vouchersPlugin) {
         super("GIVE_VOUCHER_DISPLAY_NAME");
         this.vouchersPlugin = vouchersPlugin;
+        this.configFile = vouchersPlugin.getConfigFile();
     }
 
     @Override
     public String getInventoryDisplayName() {
-        return ChatUtil.chatColor("&a&lType display name");
+        return configFile.getVoucherDisplayNameInputName();
     }
 
     @Override

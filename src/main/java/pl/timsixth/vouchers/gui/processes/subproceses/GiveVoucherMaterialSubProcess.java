@@ -4,10 +4,10 @@ import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.guilibrary.processes.model.impl.AbstractSubGuiProcess;
 import pl.timsixth.guilibrary.processes.model.input.WriteableInput;
 import pl.timsixth.vouchers.VouchersPlugin;
+import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.process.ProcessManager;
 import pl.timsixth.vouchers.model.Process;
@@ -22,17 +22,19 @@ public class GiveVoucherMaterialSubProcess extends AbstractSubGuiProcess impleme
     private final VouchersPlugin vouchersPlugin;
     private final Messages messages;
     private final ProcessManager processManager;
+    private final ConfigFile configFile;
 
     public GiveVoucherMaterialSubProcess(VouchersPlugin vouchersPlugin, Messages messages, ProcessManager processManager) {
         super("GIVE_VOUCHER_MATERIAL");
         this.vouchersPlugin = vouchersPlugin;
         this.messages = messages;
         this.processManager = processManager;
+        this.configFile = vouchersPlugin.getConfigFile();
     }
 
     @Override
     public String getInventoryDisplayName() {
-        return ChatUtil.chatColor("&a&lType material");
+        return configFile.getVoucherMaterialInputName();
     }
 
     @Override

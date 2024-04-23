@@ -15,7 +15,10 @@ import pl.timsixth.vouchers.command.VoucherCommand;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.gui.actions.*;
-import pl.timsixth.vouchers.listener.*;
+import pl.timsixth.vouchers.listener.AsyncPlayerChatListener;
+import pl.timsixth.vouchers.listener.InventoryCloseListener;
+import pl.timsixth.vouchers.listener.InventoryOpenListener;
+import pl.timsixth.vouchers.listener.PlayerInteractListener;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.PrepareProcessManager;
@@ -134,8 +137,8 @@ public final class VouchersPlugin extends JavaPlugin {
     }
 
     public void setupPaginatedMenu(String name, String displayName) {
-        PaginatedMenu paginatedMenu = new PaginatedMenu(54, name, displayName);
-        paginatedMenu.setItemsPerPage(40);
+        PaginatedMenu paginatedMenu = new PaginatedMenu(configFile.getGuiSize(), name, displayName);
+        paginatedMenu.setItemsPerPage(configFile.getItemsPerPage());
 
         MenuItem defaultPreviousPageItem = PaginatedMenu.DEFAULT_PREVIOUS_PAGE_ITEM;
         MenuItem defaultNextPageItem = PaginatedMenu.DEFAULT_NEXT_PAGE_ITEM;
@@ -152,8 +155,8 @@ public final class VouchersPlugin extends JavaPlugin {
     }
 
     private void setupPaginatedMenus() {
-        setupPaginatedMenu("logsList", "Logs");
-        setupPaginatedMenu("vouchersList", "Vouchers");
+        setupPaginatedMenu("logsList", configFile.getLogsGuiName());
+        setupPaginatedMenu("vouchersList", configFile.getVouchersGuiName());
     }
 }
 
