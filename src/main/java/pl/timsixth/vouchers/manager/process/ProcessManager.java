@@ -33,7 +33,7 @@ public abstract class ProcessManager {
         processes.add(process);
     }
 
-    public Optional<Process> getProcessByUser(UUID userUUID) {
+    public Optional<Process> getProcess(UUID userUUID) {
         return processes.stream()
                 .filter(process -> process.getUserUUID().equals(userUUID))
                 .findAny();

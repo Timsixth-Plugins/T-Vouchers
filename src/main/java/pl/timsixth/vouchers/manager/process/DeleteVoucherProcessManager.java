@@ -5,20 +5,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.manager.LogsManager;
-import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
 
 public class DeleteVoucherProcessManager extends ProcessManager {
 
-    private final PrepareProcessManager prepareToProcessManager;
-
     private final VouchersPlugin vouchersPlugin;
 
-    public DeleteVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, PrepareProcessManager prepareToProcessManager, VouchersPlugin vouchersPlugin, LogsManager logsManager) {
+    public DeleteVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, VouchersPlugin vouchersPlugin, LogsManager logsManager) {
         super(configFile, voucherManager, logsManager);
-        this.prepareToProcessManager = prepareToProcessManager;
         this.vouchersPlugin = vouchersPlugin;
     }
 
@@ -29,7 +25,6 @@ public class DeleteVoucherProcessManager extends ProcessManager {
         ConfigurationSection vouchersSection = getConfigFile().getYmlVouchers().getConfigurationSection("vouchers");
 
         Voucher currentVoucher = process.getCurrentVoucher();
-        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUUID()));
 
         getVoucherManager().removeVoucher(currentVoucher);
 

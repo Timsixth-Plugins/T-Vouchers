@@ -37,16 +37,16 @@ public class InventoryCloseListener implements Listener {
         menusWhichCancelProcess.forEach(menu -> {
             if (!event.getView().getTitle().equalsIgnoreCase(ChatUtil.chatColor(menu.getDisplayName()))) return;
 
-            if (createProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+            if (createProcessManager.getProcess(player.getUniqueId()).isPresent()) {
                 cancelProcess(player, createProcessManager);
-            } else if (editProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+            } else if (editProcessManager.getProcess(player.getUniqueId()).isPresent()) {
                 cancelProcess(player, editProcessManager);
             }
         });
     }
 
     private void cancelProcess(Player player, ProcessManager processManager) {
-        Optional<Process> processOptional = processManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = processManager.getProcess(player.getUniqueId());
 
         if (!processOptional.isPresent()) return;
 

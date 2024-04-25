@@ -14,6 +14,7 @@ import pl.timsixth.vouchers.bstats.Metrics;
 import pl.timsixth.vouchers.command.VoucherCommand;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.gui.actions.*;
 import pl.timsixth.vouchers.listener.AsyncPlayerChatListener;
 import pl.timsixth.vouchers.listener.InventoryCloseListener;
@@ -21,7 +22,6 @@ import pl.timsixth.vouchers.listener.InventoryOpenListener;
 import pl.timsixth.vouchers.listener.PlayerInteractListener;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
-import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
@@ -30,16 +30,12 @@ import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
 import pl.timsixth.vouchers.version.VersionChecker;
 
 import java.util.Arrays;
-import java.util.TimeZone;
-
-import static pl.timsixth.vouchers.model.Log.LOG_DATE_TIME_FORMATTER;
 
 @Getter
 public final class VouchersPlugin extends JavaPlugin {
 
     private MenuManager menuManager;
     private VoucherManager voucherManager;
-    private PrepareProcessManager prepareToProcessManager;
     private CreateVoucherProcessManager createVoucherProcessManager;
     private EditVoucherProcessManager editVoucherManager;
     private DeleteVoucherProcessManager deleteVoucherManager;
@@ -47,10 +43,7 @@ public final class VouchersPlugin extends JavaPlugin {
     private LogsManager logsManager;
     private ConfigFile configFile;
     private Messages messages;
-
-    static {
-        LOG_DATE_TIME_FORMATTER.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-    }
+    private Settings settings;
 
     @Override
     public void onEnable() {
@@ -61,11 +54,10 @@ public final class VouchersPlugin extends JavaPlugin {
 
         voucherManager = new VoucherManager(configFile);
         menuManager = new MenuManager(actionRegistration, configFile);
-        prepareToProcessManager = new PrepareProcessManager();
         logsManager = new LogsManager(configFile);
         createVoucherProcessManager = new CreateVoucherProcessManager(configFile, voucherManager, logsManager);
-        editVoucherManager = new EditVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, logsManager);
-        deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, prepareToProcessManager, this, logsManager);
+        editVoucherManager = new EditVoucherProcessManager(configFile, voucherManager, logsManager);
+        deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, this, logsManager);
 
         guiApi.setMenuManager(menuManager);
 
@@ -76,7 +68,7 @@ public final class VouchersPlugin extends JavaPlugin {
 
         new Metrics(this, 19403);
 
-        getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages));
+        getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages, settings));
         getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
 
         registerListeners();
@@ -111,6 +103,7 @@ public final class VouchersPlugin extends JavaPlugin {
     private void loadConfig() {
         configFile = new ConfigFile(this);
         messages = new Messages(this);
+        settings = new Settings(this);
     }
 
     private void registerActions() {
@@ -137,8 +130,8 @@ public final class VouchersPlugin extends JavaPlugin {
     }
 
     public void setupPaginatedMenu(String name, String displayName) {
-        PaginatedMenu paginatedMenu = new PaginatedMenu(configFile.getGuiSize(), name, displayName);
-        paginatedMenu.setItemsPerPage(configFile.getItemsPerPage());
+        PaginatedMenu paginatedMenu = new PaginatedMenu(settings.getGuiSize(), name, displayName);
+        paginatedMenu.setItemsPerPage(settings.getItemsPerPage());
 
         MenuItem defaultPreviousPageItem = PaginatedMenu.DEFAULT_PREVIOUS_PAGE_ITEM;
         MenuItem defaultNextPageItem = PaginatedMenu.DEFAULT_NEXT_PAGE_ITEM;
@@ -155,8 +148,8 @@ public final class VouchersPlugin extends JavaPlugin {
     }
 
     private void setupPaginatedMenus() {
-        setupPaginatedMenu("logsList", configFile.getLogsGuiName());
-        setupPaginatedMenu("vouchersList", configFile.getVouchersGuiName());
+        setupPaginatedMenu("logsList", settings.getLogsGuiName());
+        setupPaginatedMenu("vouchersList", settings.getVouchersGuiName());
     }
 }
 

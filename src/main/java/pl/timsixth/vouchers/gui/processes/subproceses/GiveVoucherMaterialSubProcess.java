@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import pl.timsixth.guilibrary.processes.model.impl.AbstractSubGuiProcess;
 import pl.timsixth.guilibrary.processes.model.input.WriteableInput;
 import pl.timsixth.vouchers.VouchersPlugin;
-import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.manager.process.ProcessManager;
 import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
@@ -22,19 +22,19 @@ public class GiveVoucherMaterialSubProcess extends AbstractSubGuiProcess impleme
     private final VouchersPlugin vouchersPlugin;
     private final Messages messages;
     private final ProcessManager processManager;
-    private final ConfigFile configFile;
+    private final Settings settings;
 
     public GiveVoucherMaterialSubProcess(VouchersPlugin vouchersPlugin, Messages messages, ProcessManager processManager) {
         super("GIVE_VOUCHER_MATERIAL");
         this.vouchersPlugin = vouchersPlugin;
         this.messages = messages;
         this.processManager = processManager;
-        this.configFile = vouchersPlugin.getConfigFile();
+        this.settings = vouchersPlugin.getSettings();
     }
 
     @Override
     public String getInventoryDisplayName() {
-        return configFile.getVoucherMaterialInputName();
+        return settings.getVoucherMaterialInputName();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GiveVoucherMaterialSubProcess extends AbstractSubGuiProcess impleme
                                 AnvilGUI.ResponseAction.close(),
                                 AnvilGUI.ResponseAction.run(() -> {
                                     Player player = stateSnapshot.getPlayer();
-                                    Optional<Process> processOptional = processManager.getProcessByUser(player.getUniqueId());
+                                    Optional<Process> processOptional = processManager.getProcess(player.getUniqueId());
 
                                     if (!processOptional.isPresent()) return;
 
@@ -78,7 +78,10 @@ public class GiveVoucherMaterialSubProcess extends AbstractSubGuiProcess impleme
     private Voucher getOrCreateVoucher(Process process) {
         Voucher currentVoucher = process.getCurrentVoucher();
 
-        if (currentVoucher == null) process.setCurrentVoucher(new Voucher());
+        if (currentVoucher == null) {
+            currentVoucher = new Voucher();
+            process.setCurrentVoucher(currentVoucher);
+        }
 
         return currentVoucher;
     }

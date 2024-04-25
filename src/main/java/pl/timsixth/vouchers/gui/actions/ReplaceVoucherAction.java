@@ -25,7 +25,7 @@ public class ReplaceVoucherAction extends AbstractAction implements ClickAction 
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
 
-        Optional<Process> processOptional = editVoucherProcessManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = editVoucherProcessManager.getProcess(player.getUniqueId());
         if (!processOptional.isPresent()) {
             event.setCancelled(true);
             return;

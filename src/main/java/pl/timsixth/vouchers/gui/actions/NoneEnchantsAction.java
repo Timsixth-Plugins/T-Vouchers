@@ -31,9 +31,9 @@ public class NoneEnchantsAction extends AbstractAction implements ClickAction {
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
 
-        if (createVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        if (createVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             setNoneEnchants(player, createVoucherProcessManager);
-        } else if (editVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        } else if (editVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             setNoneEnchants(player, editVoucherProcessManager);
         }
 
@@ -41,7 +41,7 @@ public class NoneEnchantsAction extends AbstractAction implements ClickAction {
     }
 
     private void setNoneEnchants(Player player, ProcessManager processManager) {
-        Optional<Process> processOptional = processManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = processManager.getProcess(player.getUniqueId());
 
         if (!processOptional.isPresent()) return;
         Process process = processOptional.get();

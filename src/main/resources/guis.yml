@@ -160,8 +160,7 @@ guis:
         displayname: '&aEdit voucher'
         click_action:
           type: EDIT_VOUCHER
-          args:
-            - 'open_chat'
+          args: [ ]
         lore:
           - '&7Right click to edit voucher'
   logs:

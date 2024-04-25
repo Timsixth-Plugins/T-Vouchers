@@ -7,7 +7,7 @@ import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.VouchersPlugin;
 
 @Getter
-public class Messages {
+public final class Messages {
 
     private String noPermission;
     private String correctUse;

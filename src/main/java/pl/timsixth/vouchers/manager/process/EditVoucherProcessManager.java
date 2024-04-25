@@ -3,7 +3,6 @@ package pl.timsixth.vouchers.manager.process;
 import org.bukkit.configuration.ConfigurationSection;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.manager.LogsManager;
-import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
@@ -14,11 +13,9 @@ import java.util.Optional;
 
 public class EditVoucherProcessManager extends ProcessManager {
 
-    private final PrepareProcessManager prepareToProcessManager;
 
-    public EditVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, PrepareProcessManager prepareToProcessManager, LogsManager logsManager) {
+    public EditVoucherProcessManager(ConfigFile configFile, VoucherManager voucherManager, LogsManager logsManager) {
         super(configFile, voucherManager, logsManager);
-        this.prepareToProcessManager = prepareToProcessManager;
     }
 
     @Override
@@ -41,17 +38,9 @@ public class EditVoucherProcessManager extends ProcessManager {
 
         List<Voucher> vouchers = getVoucherManager().getVouchers();
 
-        prepareToProcessManager.removeLocalizedName(prepareToProcessManager.getPrepareProcess(process.getUserUUID()));
+        int index = getVoucherIndex(vouchers, currentVoucher);
 
-        int index = 0;
-        for (int i = 0; i < vouchers.size(); i++) {
-            Optional<Voucher> optionalVoucher = getVoucherManager().getVoucher(currentVoucher.getName());
-            if (!optionalVoucher.isPresent()) return;
-
-            if (vouchers.get(i).getName().equalsIgnoreCase(optionalVoucher.get().getName())) {
-                index = i;
-            }
-        }
+        if (index == -1) return;
 
         vouchers.set(index, currentVoucher);
 
@@ -59,5 +48,20 @@ public class EditVoucherProcessManager extends ProcessManager {
         cancelProcess(process);
 
         getLogsManager().log(process);
+    }
+
+    private int getVoucherIndex(List<Voucher> vouchers, Voucher currentVoucher) {
+        int index = -1;
+
+        for (int i = 0; i < vouchers.size(); i++) {
+            Optional<Voucher> optionalVoucher = getVoucherManager().getVoucher(currentVoucher.getName());
+            if (!optionalVoucher.isPresent()) return index;
+
+            if (vouchers.get(i).equals(optionalVoucher.get())) {
+                index = i;
+            }
+        }
+
+        return index;
     }
 }

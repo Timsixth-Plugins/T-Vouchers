@@ -13,6 +13,7 @@ import pl.timsixth.vouchers.gui.processes.VoucherEditionProcess;
 import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
 import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
+import pl.timsixth.vouchers.util.PrepareProcessUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +33,12 @@ public class EditVoucherAction extends AbstractAction implements ClickAction {
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
 
-        if (editVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        if (editVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             event.setCancelled(true);
             return;
         }
 
-        String voucherName = vouchersPlugin.getPrepareToProcessManager().getPrepareProcess(player.getUniqueId()).getLocalizeName();
+        String voucherName = PrepareProcessUtil.getVoucherLocalizeName(player);
 
         Optional<Voucher> optionalVoucher = vouchersPlugin.getVoucherManager().getVoucher(voucherName);
         if (!optionalVoucher.isPresent()) return;

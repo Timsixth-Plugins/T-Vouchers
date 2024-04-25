@@ -8,8 +8,8 @@ import pl.timsixth.guilibrary.processes.manager.ProcessRunner;
 import pl.timsixth.guilibrary.processes.model.impl.AbstractSubGuiProcess;
 import pl.timsixth.guilibrary.processes.model.input.WriteableInput;
 import pl.timsixth.vouchers.VouchersPlugin;
-import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 
@@ -23,19 +23,19 @@ public class GiveVoucherNameSubProcess extends AbstractSubGuiProcess implements 
     private final VouchersPlugin vouchersPlugin;
     private final VoucherManager voucherManager;
     private final Messages messages;
-    private final ConfigFile configFile;
+    private final Settings settings;
 
     public GiveVoucherNameSubProcess(VouchersPlugin vouchersPlugin, VoucherManager voucherManager, Messages messages) {
         super("GIVE_VOUCHER_NAME");
         this.vouchersPlugin = vouchersPlugin;
         this.voucherManager = voucherManager;
         this.messages = messages;
-        this.configFile = vouchersPlugin.getConfigFile();
+        this.settings = vouchersPlugin.getSettings();
     }
 
     @Override
     public String getInventoryDisplayName() {
-        return configFile.getVoucherNameInputName();
+        return settings.getVoucherNameInputName();
     }
 
     @Override

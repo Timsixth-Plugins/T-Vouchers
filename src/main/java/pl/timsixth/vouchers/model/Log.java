@@ -11,7 +11,8 @@ import pl.timsixth.guilibrary.core.model.action.custom.NoneClickAction;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.enums.ProcessType;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Getter
@@ -21,15 +22,16 @@ public class Log implements Generable {
 
     private final UUID senderUuid;
     private final String content;
-    private final Date creationDate;
+    private final LocalDateTime creationDate;
     private final ProcessType processType;
 
-    public static final SimpleDateFormat LOG_DATE_TIME_FORMATTER = new SimpleDateFormat("dd-M-yyyy hh:mm a", Locale.ENGLISH);
+    public static final DateTimeFormatter LOG_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-M-yyyy hh:mm a", Locale.ENGLISH);
+    public static final DateTimeFormatter LOG_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-M-yyyy", Locale.ENGLISH);
 
     public Log(UUID senderUuid, String content, ProcessType processType) {
         this.senderUuid = senderUuid;
         this.content = content;
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now();
         this.processType = processType;
     }
 

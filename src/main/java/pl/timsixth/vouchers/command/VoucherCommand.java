@@ -12,6 +12,7 @@ import pl.timsixth.guilibrary.core.model.Menu;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
@@ -28,10 +29,11 @@ public class VoucherCommand implements CommandExecutor {
     private final MenuManager menuManager;
     private final ConfigFile configFile;
     private final Messages messages;
+    private final Settings settings;
 
     @Override
     public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!sender.hasPermission(configFile.getPermission())) {
+        if (!sender.hasPermission(settings.getPermission())) {
             sender.sendMessage(messages.getNoPermission());
             return true;
         }

@@ -6,8 +6,11 @@ import pl.timsixth.guilibrary.core.model.Menu;
 import pl.timsixth.guilibrary.core.model.MenuItem;
 import pl.timsixth.guilibrary.core.model.action.AbstractAction;
 import pl.timsixth.guilibrary.core.model.action.click.ClickAction;
+import pl.timsixth.guilibrary.processes.manager.ProcessRunner;
+import pl.timsixth.guilibrary.processes.model.MainGuiProcess;
+import pl.timsixth.guilibrary.processes.model.SubGuiProcess;
 import pl.timsixth.vouchers.VouchersPlugin;
-import pl.timsixth.vouchers.model.PrepareProcess;
+import pl.timsixth.vouchers.gui.processes.VoucherPrepareProcess;
 
 import java.util.Optional;
 
@@ -24,8 +27,12 @@ public class ManageVoucherAction extends AbstractAction implements ClickAction {
         Player player = (Player) event.getWhoClicked();
         String voucherName = menuItem.getLocalizedName();
 
-        PrepareProcess prepareToProcess = new PrepareProcess(player.getUniqueId(), voucherName);
-        vouchersPlugin.getPrepareToProcessManager().addNewLocalizedName(prepareToProcess);
+        MainGuiProcess mainGuiProcess = new VoucherPrepareProcess(vouchersPlugin);
+        SubGuiProcess subGuiProcess = mainGuiProcess.getSubGuiProcess("GIVE_VOUCHER_LOCALIZE_NAME");
+
+        subGuiProcess.transformedData().put("voucherName", voucherName);
+
+        ProcessRunner.runProcess(player, mainGuiProcess);
 
         Optional<Menu> menuOptional = vouchersPlugin.getMenuManager().getMenuByName("manageVouchers");
         if (!menuOptional.isPresent()) {

@@ -1,5 +1,5 @@
 permission: 'timsixth.voucher'
-items_par_page: 40
+items_per_page: 40
 gui_size: 54
 vouchers_gui_name: "&aVouchers"
 logs_gui_name: "&aLogs"

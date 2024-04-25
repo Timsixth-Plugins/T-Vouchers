@@ -7,10 +7,10 @@ import pl.timsixth.guilibrary.core.model.action.AbstractAction;
 import pl.timsixth.guilibrary.core.model.action.click.ClickAction;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.factory.ProcessFactory;
-import pl.timsixth.vouchers.manager.PrepareProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
 import pl.timsixth.vouchers.model.Process;
 import pl.timsixth.vouchers.model.Voucher;
+import pl.timsixth.vouchers.util.PrepareProcessUtil;
 
 import java.util.Optional;
 
@@ -18,26 +18,24 @@ public class DeleteVoucherAction extends AbstractAction implements ClickAction {
 
     private final VouchersPlugin vouchersPlugin = VouchersPlugin.getPlugin(VouchersPlugin.class);
     private final DeleteVoucherProcessManager deleteVoucherProcessManager;
-    private final PrepareProcessManager prepareProcessManager;
 
     public DeleteVoucherAction() {
         super("DELETE_VOUCHER");
         this.deleteVoucherProcessManager = vouchersPlugin.getDeleteVoucherManager();
-        this.prepareProcessManager = vouchersPlugin.getPrepareToProcessManager();
     }
 
     @Override
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
 
-        if (deleteVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        if (deleteVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             event.setCancelled(true);
             return;
         }
 
         Process deleteProcess = ProcessFactory.createDelationProcess(player.getUniqueId());
 
-        String voucherName = prepareProcessManager.getPrepareProcess(player.getUniqueId()).getLocalizeName();
+        String voucherName = PrepareProcessUtil.getVoucherLocalizeName(player);
 
         Optional<Voucher> voucherOptional = vouchersPlugin.getVoucherManager().getVoucher(voucherName);
 

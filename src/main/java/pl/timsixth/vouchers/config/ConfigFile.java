@@ -2,17 +2,18 @@ package pl.timsixth.vouchers.config;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.manager.Reloadable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Getter
-public class ConfigFile {
+public final class ConfigFile {
 
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
@@ -22,14 +23,6 @@ public class ConfigFile {
     private final YamlConfiguration ymlLogs;
     private YamlConfiguration ymlVouchers;
     private YamlConfiguration ymlGuis;
-    private String permission;
-    private int itemsPerPage;
-    private int guiSize;
-    private String vouchersGuiName;
-    private String logsGuiName;
-    private String voucherNameInputName;
-    private String voucherDisplayNameInputName;
-    private String voucherMaterialInputName;
 
     public ConfigFile(VouchersPlugin vouchersPlugin) {
         this.vouchersPlugin = vouchersPlugin;
@@ -40,19 +33,7 @@ public class ConfigFile {
         ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
         ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
         ymlGuis = YamlConfiguration.loadConfiguration(guisFile);
-        loadSettings();
-    }
-
-    private void loadSettings() {
-        FileConfiguration config = vouchersPlugin.getConfig();
-        permission = config.getString("permission");
-        itemsPerPage = config.getInt("items_par_page");
-        guiSize = config.getInt("gui_size");
-        vouchersGuiName = ChatUtil.chatColor(config.getString("vouchers_gui_name"));
-        logsGuiName = ChatUtil.chatColor(config.getString("logs_gui_name"));
-        voucherNameInputName = ChatUtil.chatColor(config.getString("inputs_names.name"));
-        voucherDisplayNameInputName = ChatUtil.chatColor(config.getString("inputs_names.display_name"));
-        voucherMaterialInputName = ChatUtil.chatColor(config.getString("inputs_names.material"));
+        migrateGuisFile();
     }
 
     private File createFile(String name) {
@@ -72,7 +53,39 @@ public class ConfigFile {
         ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
         vouchersPlugin.reloadConfig();
         vouchersPlugin.getMessages().load();
-        loadSettings();
+        vouchersPlugin.getSettings().loadSettings();
         reloadableList.forEach(Reloadable::reload);
+    }
+
+    private void migrateGuisFile() {
+        boolean migrated = false;
+        ConfigurationSection clickActionOfVoucherCreatorGuiSection = ymlGuis.getConfigurationSection("guis.voucherCreator.slots.13.click_action");
+        ConfigurationSection clickActionOfMainGuiSection = ymlGuis.getConfigurationSection("guis.main.slots.15.click_action");
+        ConfigurationSection clickActionOfLogsGuiSection = ymlGuis.getConfigurationSection("guis.logs.slots.12.click_action");
+
+        List<String> args = clickActionOfVoucherCreatorGuiSection.getStringList("args");
+        if (args.contains("open_chat")) {
+            args.set(0, "start_creation_process");
+            clickActionOfVoucherCreatorGuiSection.set("args", args);
+        }
+
+        if (clickActionOfMainGuiSection.getString("type").equalsIgnoreCase("OPEN_MENU_AND_GENERATED_ITEMS")) {
+            clickActionOfMainGuiSection.set("type", "OPEN_VOUCHERS_MENU");
+        }
+
+        if (clickActionOfLogsGuiSection.getString("type").equalsIgnoreCase("OPEN_MENU_AND_GENERATED_ITEMS")) {
+            clickActionOfLogsGuiSection.set("type", "OPEN_LOGS_MENU");
+            migrated = true;
+        }
+
+        if (!migrated) return;
+
+        try {
+            ymlGuis.save(guisFile);
+            Bukkit.getLogger().info("Migrated guis.yml to v2.0 standard");
+        } catch (IOException e) {
+            Bukkit.getLogger().severe("Can not migrate guis.yml to v2.0 standard: Error: " + e.getMessage());
+        }
+
     }
 }

@@ -32,16 +32,16 @@ public class ChooseEnchantAction extends AbstractAction implements ClickAction {
     @Override
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
-        if (createVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        if (createVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             chooseEnchant(player, menuItem, createVoucherProcessManager);
-        } else if (editVoucherProcessManager.getProcessByUser(player.getUniqueId()).isPresent()) {
+        } else if (editVoucherProcessManager.getProcess(player.getUniqueId()).isPresent()) {
             chooseEnchant(player, menuItem, editVoucherProcessManager);
         }
         event.setCancelled(true);
     }
 
     private void chooseEnchant(Player player, MenuItem menuItem, ProcessManager processManager) {
-        Optional<Process> processOptional = processManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = processManager.getProcess(player.getUniqueId());
 
         if (!processOptional.isPresent()) return;
         Process process = processOptional.get();

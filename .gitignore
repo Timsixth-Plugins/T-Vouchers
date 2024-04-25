@@ -4,3 +4,4 @@
 /target/
 /.idea/
 /src/main/java/META-INF/MANIFEST.MF
+/dependency-reduced-pom.xml

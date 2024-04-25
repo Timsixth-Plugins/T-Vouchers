@@ -24,7 +24,7 @@ public class CreateVoucherAction extends AbstractAction implements ClickAction {
     public void handleClickEvent(InventoryClickEvent event, MenuItem menuItem) {
         Player player = (Player) event.getWhoClicked();
 
-        Optional<Process> processOptional = createVoucherProcessManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = createVoucherProcessManager.getProcess(player.getUniqueId());
         if (!processOptional.isPresent()) {
             event.setCancelled(true);
             return;

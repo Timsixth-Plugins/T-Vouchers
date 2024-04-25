@@ -33,7 +33,7 @@ public class AsyncPlayerChatListener implements Listener {
     private void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        Optional<Process> processOptional = processManager.getProcessByUser(player.getUniqueId());
+        Optional<Process> processOptional = processManager.getProcess(player.getUniqueId());
 
         if (!processOptional.isPresent()) {
             event.setCancelled(true);
