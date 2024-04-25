@@ -12,29 +12,30 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import pl.timsixth.vouchers.model.menu.MenuItem;
-import pl.timsixth.vouchers.model.menu.action.custom.ManageVoucherAction;
-import pl.timsixth.vouchers.util.ChatUtil;
+import pl.timsixth.guilibrary.core.model.Generable;
+import pl.timsixth.guilibrary.core.model.MenuItem;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
+import pl.timsixth.vouchers.gui.actions.ManageVoucherAction;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Voucher implements IGenerable {
+public class Voucher implements Generable {
 
     private String name;
-    private List<String> commands;
-    private List<String> lore;
+    private List<String> commands = new ArrayList<>();
+    private List<String> lore = new ArrayList<>();
     private String displayName;
     private Material material;
-    private Map<Enchantment, Integer> enchantments;
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private String textures; //this is important to build custom head
+
+    public static final Pattern VOUCHER_NAME_PATTERN = Pattern.compile("[a-zA-Z\\d]{2,30}");
 
     public Voucher(String name, List<String> commands, List<String> lore, String displayName, Material material) {
         this.name = name;

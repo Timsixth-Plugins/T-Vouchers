@@ -7,14 +7,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.enums.ProcessType;
 import pl.timsixth.vouchers.model.Log;
-import pl.timsixth.vouchers.model.process.IProcess;
+import pl.timsixth.vouchers.model.Process;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static pl.timsixth.vouchers.model.Log.LOG_DATE_FORMATTER;
 import static pl.timsixth.vouchers.model.Log.LOG_DATE_TIME_FORMATTER;
 
 @Getter
@@ -24,31 +25,25 @@ public class LogsManager {
     private final List<Log> logs = new ArrayList<>();
 
     private final ConfigFile configFile;
-    private final SimpleDateFormat logDateFormatter = new SimpleDateFormat("dd-M-yyyy", Locale.ENGLISH);
 
     public void load() {
         List<String> savedLogs = configFile.getYmlLogs().getStringList("logs");
-        if (savedLogs.isEmpty()) {
-            return;
-        }
+
         savedLogs.forEach(savedLog -> {
             String[] logFromText = savedLog.split(";");
-            try {
-                Log log = new Log(UUID.fromString(logFromText[0]), logFromText[1], LOG_DATE_TIME_FORMATTER.parse(logFromText[2]), ProcessType.valueOf(logFromText[3]));
-                logs.add(log);
-            } catch (ParseException e) {
-                Bukkit.getLogger().severe(e.getMessage());
-            }
+            Log log = new Log(UUID.fromString(logFromText[0]), logFromText[1], LocalDateTime.parse(logFromText[2], LOG_DATE_TIME_FORMATTER), ProcessType.valueOf(logFromText[3]));
+            logs.add(log);
         });
     }
 
     private void saveLog(Log log) {
         YamlConfiguration ymlLogs = configFile.getYmlLogs();
-        List<String> logsFromConfig = ymlLogs.getStringList("logs");
-        logsFromConfig.add(log.toText());
-        ymlLogs.set("logs", logsFromConfig);
+        List<String> logsAsString = ymlLogs.getStringList("logs");
+
+        logsAsString.add(log.toText());
         logs.add(log);
-        saveFile(ymlLogs);
+
+        setLogs(ymlLogs, logsAsString);
     }
 
     private void saveFile(YamlConfiguration ymlLogs) {
@@ -59,64 +54,45 @@ public class LogsManager {
         }
     }
 
-    public void clearAllLogsByCurrentDate() throws ParseException {
+    public void clearAllTodayLogs() {
         YamlConfiguration ymlLogs = configFile.getYmlLogs();
-        List<String> logsFromConfig = ymlLogs.getStringList("logs");
-        List<Date> dates = getCurrentLogsDates();
-        if (dates.isEmpty()) {
-            return;
-        }
+        List<String> logsAsString = ymlLogs.getStringList("logs");
+        List<LocalDate> dates = getCurrentLogsDates();
+
         dates.forEach(date -> {
-            Optional<Log> optionalLog = getLogByDate(date);
-            if (!optionalLog.isPresent()) {
-                return;
-            }
+            Optional<Log> optionalLog = getLog(date);
+            if (!optionalLog.isPresent()) return;
+
             Log log = optionalLog.get();
-            String textToRemove = log.toText();
-            logsFromConfig.remove(textToRemove);
+
+            logsAsString.remove(log.toText());
             logs.remove(log);
-            ymlLogs.set("logs", logsFromConfig);
-            saveFile(ymlLogs);
+
+            setLogs(ymlLogs, logsAsString);
         });
     }
 
-    private List<Date> getCurrentLogsDates() throws ParseException {
-        Date currentDate = logDateFormatter.parse(logDateFormatter.format(new Date()));
+    private void setLogs(YamlConfiguration ymlLogs, List<String> logs) {
+        ymlLogs.set("logs", logs);
+        saveFile(ymlLogs);
+    }
+
+    private List<LocalDate> getCurrentLogsDates() {
         return logs.stream()
-                .map(log -> {
-                    try {
-                        return logDateFormatter.parse(logDateFormatter.format(log.getCreationDate()));
-                    } catch (ParseException e) {
-                        Bukkit.getLogger().severe(e.getMessage());
-                    }
-                    return new Date();
-                }).filter(date -> date.equals(currentDate))
+                .map(log -> LocalDate.parse(log.getCreationDate().toLocalDate().format(Log.LOG_DATE_FORMATTER), LOG_DATE_FORMATTER))
+                .filter(date -> date.equals(LocalDate.parse(LocalDate.now().format(Log.LOG_DATE_FORMATTER), LOG_DATE_FORMATTER)))
                 .collect(Collectors.toList());
     }
 
-    private Optional<Log> getLogByDate(Date date) {
+    private Optional<Log> getLog(LocalDate date) {
         return logs.stream()
-                .filter(log -> {
-                    try {
-                        return logDateFormatter.parse(logDateFormatter.format(log.getCreationDate())).equals(date);
-                    } catch (ParseException e) {
-                        Bukkit.getLogger().severe(e.getMessage());
-                    }
-                    return false;
-                })
+                .filter(log -> log.getCreationDate().toLocalDate().isEqual(date))
                 .findAny();
     }
 
-    public List<Log> getLogsToShowInGui() {
-        return logs.stream()
-                .limit(53)
-                .collect(Collectors.toList());
-
-    }
-
-    public void log(IProcess process, ProcessType processType) {
-        String message = String.format(Log.LogMessages.matchMessage(processType), process.getCurrentVoucher().getName());
-        Log log = new Log(process.getUserUuid(), message, processType);
+    public void log(Process process) {
+        String message = String.format(Log.LogMessages.matchMessage(process.getType()), process.getCurrentVoucher().getName());
+        Log log = new Log(process.getUserUUID(), message, process.getType());
 
         saveLog(log);
     }

@@ -7,13 +7,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import pl.timsixth.guilibrary.core.model.Menu;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.model.menu.Menu;
-import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -27,10 +29,11 @@ public class VoucherCommand implements CommandExecutor {
     private final MenuManager menuManager;
     private final ConfigFile configFile;
     private final Messages messages;
+    private final Settings settings;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission(configFile.getPermission())) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!sender.hasPermission(settings.getPermission())) {
             sender.sendMessage(messages.getNoPermission());
             return true;
         }
@@ -41,7 +44,7 @@ public class VoucherCommand implements CommandExecutor {
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
                 sender.sendMessage(ChatUtil.chatColor("&eVouchers:&7"));
-                voucherManager.getVoucherList().forEach(voucher -> sender.sendMessage(ChatUtil.chatColor("&7 " + voucher.getName())));
+                voucherManager.getVouchers().forEach(voucher -> sender.sendMessage(ChatUtil.chatColor("&7 " + voucher.getName())));
             } else if (args[0].equalsIgnoreCase("gui")) {
                 if (!(sender instanceof Player)) {
                     Bukkit.getLogger().info("Player only use this command");

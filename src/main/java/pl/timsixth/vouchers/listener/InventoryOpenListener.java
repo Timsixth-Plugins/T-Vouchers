@@ -7,9 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import pl.timsixth.guilibrary.core.model.pagination.PaginatedMenu;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.manager.MenuManager;
-import pl.timsixth.vouchers.model.menu.Menu;
-import pl.timsixth.vouchers.util.ChatUtil;
 
 import java.util.Optional;
 
@@ -22,11 +22,11 @@ public class InventoryOpenListener implements Listener {
 
     @EventHandler
     private void onOpen(InventoryOpenEvent event) {
-        Optional<Menu> menuOptional = menuManager.getMenuByName("listOfAllVouchers");
+        Optional<PaginatedMenu> menuOptional = menuManager.getPaginatedMenu("vouchersList");
 
         if (!menuOptional.isPresent()) return;
 
-        Menu menu = menuOptional.get();
+        PaginatedMenu menu = menuOptional.get();
 
         if (!event.getView().getTitle().equalsIgnoreCase(ChatUtil.hexColor(menu.getDisplayName()))) return;
 

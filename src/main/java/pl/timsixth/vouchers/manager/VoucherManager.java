@@ -17,13 +17,13 @@ public class VoucherManager implements Reloadable {
 
     private final ConfigFile configFile;
     @Getter
-    private final List<Voucher> voucherList = new ArrayList<>();
+    private final List<Voucher> vouchers = new ArrayList<>();
 
     public void loadVouchers() {
-        ConfigurationSection vouchers = configFile.getYmlVouchers().getConfigurationSection("vouchers");
+        ConfigurationSection vouchersSection = configFile.getYmlVouchers().getConfigurationSection("vouchers");
 
-        for (String voucherName : vouchers.getKeys(false)) {
-            ConfigurationSection section = vouchers.getConfigurationSection(voucherName);
+        for (String voucherName : vouchersSection.getKeys(false)) {
+            ConfigurationSection section = vouchersSection.getConfigurationSection(voucherName);
             List<String> commands = new ArrayList<>();
 
             String command = section.getString("command");
@@ -46,19 +46,27 @@ public class VoucherManager implements Reloadable {
 
             if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
 
-            voucherList.add(voucher);
+            vouchers.add(voucher);
         }
     }
 
     public Optional<Voucher> getVoucher(String name) {
-        return voucherList.stream()
+        return vouchers.stream()
                 .filter(voucher -> voucher.getName().equalsIgnoreCase(name))
                 .findAny();
     }
 
     @Override
     public void reload() {
-        voucherList.clear();
+        vouchers.clear();
         loadVouchers();
+    }
+
+    public void addVoucher(Voucher voucher) {
+        vouchers.add(voucher);
+    }
+
+    public void removeVoucher(Voucher voucher) {
+        vouchers.remove(voucher);
     }
 }
