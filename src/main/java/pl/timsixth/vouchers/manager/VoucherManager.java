@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ItemUtil;
@@ -68,5 +70,18 @@ public class VoucherManager implements Reloadable {
 
     public void removeVoucher(Voucher voucher) {
         vouchers.remove(voucher);
+    }
+
+    public boolean isVoucher(ItemStack item) {
+        for (Voucher voucher : vouchers) {
+            if (!item.hasItemMeta()) return false;
+
+            ItemMeta itemMeta = item.getItemMeta();
+
+            if (!itemMeta.hasLocalizedName()) return false;
+            if (itemMeta.getLocalizedName().equalsIgnoreCase(voucher.getName())) return true;
+        }
+
+        return false;
     }
 }

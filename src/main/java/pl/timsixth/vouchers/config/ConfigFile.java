@@ -37,8 +37,8 @@ public final class ConfigFile {
     }
 
     private File createFile(String name) {
-        if (!vouchersPlugin.getDataFolder().exists()) {
-            vouchersPlugin.getDataFolder().mkdir();
+        if (!vouchersPlugin.getDataFolder().mkdir()) {
+            vouchersPlugin.getDataFolder().mkdirs();
         }
         File file = new File(vouchersPlugin.getDataFolder(), name);
         if (!file.exists()) {

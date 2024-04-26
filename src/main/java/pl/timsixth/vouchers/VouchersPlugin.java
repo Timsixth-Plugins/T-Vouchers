@@ -16,10 +16,7 @@ import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.gui.actions.*;
-import pl.timsixth.vouchers.listener.AsyncPlayerChatListener;
-import pl.timsixth.vouchers.listener.InventoryCloseListener;
-import pl.timsixth.vouchers.listener.InventoryOpenListener;
-import pl.timsixth.vouchers.listener.PlayerInteractListener;
+import pl.timsixth.vouchers.listener.*;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
@@ -93,6 +90,7 @@ public final class VouchersPlugin extends JavaPlugin {
         pluginManager.registerEvents(new InventoryOpenListener(menuManager), this);
         pluginManager.registerEvents(new AsyncPlayerChatListener(createVoucherProcessManager, this, messages, menuManager), this);
         pluginManager.registerEvents(new AsyncPlayerChatListener(editVoucherManager, this, messages, menuManager), this);
+        pluginManager.registerEvents(new BlockPlaceListener(voucherManager), this);
     }
 
     @Override

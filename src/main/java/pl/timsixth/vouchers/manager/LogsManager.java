@@ -29,6 +29,8 @@ public class LogsManager {
     public void load() {
         List<String> savedLogs = configFile.getYmlLogs().getStringList("logs");
 
+        if (savedLogs.isEmpty()) return;
+
         savedLogs.forEach(savedLog -> {
             String[] logFromText = savedLog.split(";");
             Log log = new Log(UUID.fromString(logFromText[0]), logFromText[1], LocalDateTime.parse(logFromText[2], LOG_DATE_TIME_FORMATTER), ProcessType.valueOf(logFromText[3]));
