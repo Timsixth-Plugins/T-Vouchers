@@ -75,7 +75,7 @@ public class Voucher implements Generable {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         setVoucherDetails(meta);
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "123"); //name can not be null
         profile.getProperties().put("textures", new Property("textures", textures));
         Field field;
         try {
