@@ -16,6 +16,7 @@ import pl.timsixth.guilibrary.core.model.Generable;
 import pl.timsixth.guilibrary.core.model.MenuItem;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.gui.actions.ManageVoucherAction;
+import pl.timsixth.vouchers.util.UniversalItemMeta;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -34,6 +35,7 @@ public class Voucher implements Generable {
     private Material material;
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private String textures; //this is important to build custom head
+    private String permission;
 
     public static final Pattern VOUCHER_NAME_PATTERN = Pattern.compile("[a-zA-Z\\d]{2,30}");
 
@@ -64,7 +66,7 @@ public class Voucher implements Generable {
     public ItemStack toItemStack() {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        setVoucherDetails(meta);
+        meta = setVoucherDetails(meta);
         item.setItemMeta(meta);
 
         return item;
@@ -73,7 +75,7 @@ public class Voucher implements Generable {
     public ItemStack toSkullItem() {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        setVoucherDetails(meta);
+        meta = (SkullMeta) setVoucherDetails(meta);
 
         GameProfile profile = new GameProfile(UUID.randomUUID(), "123"); //name can not be null
         profile.getProperties().put("textures", new Property("textures", textures));
@@ -89,17 +91,25 @@ public class Voucher implements Generable {
         return item;
     }
 
-    private void setVoucherDetails(ItemMeta meta) {
+    private ItemMeta setVoucherDetails(ItemMeta meta) {
         meta.setDisplayName(ChatUtil.hexColor(displayName));
         meta.setLore(ChatUtil.hexColor(lore));
 
         if (enchantments != null) {
             enchantments.forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
         }
-        meta.setLocalizedName(name);
+
+        UniversalItemMeta universalItemMeta = new UniversalItemMeta(meta);
+        universalItemMeta.setLocalizedName(name);
+
+        return universalItemMeta.toItemMeta();
     }
 
     public boolean isSkullItem() {
         return textures != null;
+    }
+
+    public boolean hasPermission() {
+        return permission != null;
     }
 }

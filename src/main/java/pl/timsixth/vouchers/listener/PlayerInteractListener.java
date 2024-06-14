@@ -13,6 +13,7 @@ import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
+import pl.timsixth.vouchers.util.UniversalItemMeta;
 
 import java.util.Optional;
 
@@ -24,22 +25,30 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     private void onInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Player player = event.getPlayer();
 
         if (!player.getInventory().getItemInMainHand().hasItemMeta()) return;
 
-        if (!player.getInventory().getItemInMainHand().getItemMeta().hasLocalizedName()) return;
+        UniversalItemMeta universalItemMeta = new UniversalItemMeta(player.getInventory().getItemInMainHand().getItemMeta());
+        if (!universalItemMeta.hasLocalizedName()) return;
 
-        Optional<Voucher> optionalVoucher = voucherManager.getVoucher(player.getInventory().getItemInMainHand().getItemMeta().getLocalizedName());
+        Optional<Voucher> optionalVoucher = voucherManager.getVoucher(universalItemMeta.getLocalizedName());
 
         if (!optionalVoucher.isPresent()) return;
 
         Voucher voucher = optionalVoucher.get();
 
-
         if (player.getInventory().getItemInMainHand().getType() != voucher.getMaterial()) {
             if (player.getInventory().getItemInMainHand().getType() != Material.PLAYER_HEAD) return;
+        }
+
+        if (voucher.hasPermission()) {
+            if (!player.hasPermission(voucher.getPermission())) {
+                player.sendMessage(messages.getNoPermission());
+                event.setCancelled(true);
+                return;
+            }
         }
 
         replacePlaceholderInCommand(player, voucher);

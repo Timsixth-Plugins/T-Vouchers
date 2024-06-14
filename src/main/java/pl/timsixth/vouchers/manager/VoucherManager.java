@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ItemUtil;
+import pl.timsixth.vouchers.util.UniversalItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class VoucherManager implements Reloadable {
             }
 
             if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
+            if (section.getString("permission") != null) voucher.setPermission(section.getString("permission"));
 
             vouchers.add(voucher);
         }
@@ -76,7 +78,7 @@ public class VoucherManager implements Reloadable {
         for (Voucher voucher : vouchers) {
             if (!item.hasItemMeta()) return false;
 
-            ItemMeta itemMeta = item.getItemMeta();
+            UniversalItemMeta itemMeta = new UniversalItemMeta(item.getItemMeta());
 
             if (!itemMeta.hasLocalizedName()) return false;
             if (itemMeta.getLocalizedName().equalsIgnoreCase(voucher.getName())) return true;

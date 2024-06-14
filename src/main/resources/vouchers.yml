@@ -4,6 +4,7 @@ vouchers:
       - 'pex user {NICK} group set vip'
     displayname: '&a&lTEST'
     material: 'PAPER'
+    permission: 'vouchers.test'
     enchants:
       - 'DURABILITY;10'
     lore:
