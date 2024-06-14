@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ItemUtil;
