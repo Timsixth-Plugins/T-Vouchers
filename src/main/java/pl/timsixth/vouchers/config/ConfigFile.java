@@ -10,7 +10,11 @@ import pl.timsixth.vouchers.manager.Reloadable;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 public final class ConfigFile {
@@ -30,9 +34,9 @@ public final class ConfigFile {
         guisFile = createFile("guis.yml");
         logsFile = createFile("logs.yml");
 
-        ymlVouchers = YamlConfiguration.loadConfiguration(vouchersFile);
-        ymlLogs = YamlConfiguration.loadConfiguration(logsFile);
-        ymlGuis = YamlConfiguration.loadConfiguration(guisFile);
+        ymlVouchers = loadYaml(vouchersFile);
+        ymlLogs = loadYaml(logsFile);
+        ymlGuis = loadYaml(guisFile);
         migrateGuisFile();
     }
 
@@ -86,6 +90,28 @@ public final class ConfigFile {
         } catch (IOException e) {
             Bukkit.getLogger().severe("Can not migrate guis.yml to v2.0 standard: Error: " + e.getMessage());
         }
+    }
 
+    private YamlConfiguration loadYaml(File file) {
+        YamlConfiguration ymlFile = YamlConfiguration.loadConfiguration(file);
+
+        Reader reader = new InputStreamReader(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(file.getName())), StandardCharsets.UTF_8);
+
+        YamlConfiguration defaultYamlFile = YamlConfiguration.loadConfiguration(reader);
+        ymlFile.setDefaults(defaultYamlFile);
+
+        ymlFile.options().copyDefaults(true);
+
+        save(ymlFile, file);
+
+        return ymlFile;
+    }
+
+    private void save(YamlConfiguration yamlConfiguration, File file){
+        try {
+            yamlConfiguration.save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
