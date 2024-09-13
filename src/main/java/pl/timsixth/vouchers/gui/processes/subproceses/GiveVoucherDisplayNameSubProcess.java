@@ -24,15 +24,10 @@ public class GiveVoucherDisplayNameSubProcess extends AbstractSubGuiProcess impl
     }
 
     @Override
-    public String getInventoryDisplayName() {
-        return settings.getVoucherDisplayNameInputName();
-    }
-
-    @Override
     public AnvilGUI.Builder getAnvilInput() {
         return new AnvilGUI.Builder()
                 .itemLeft(new ItemStack(Material.PAPER))
-                .title(getInventoryDisplayName())
+                .title(settings.getVoucherDisplayNameInputName())
                 .itemOutput(new ItemStack(Material.PAPER))
                 .onClick((slot, stateSnapshot) -> {
                     if (slot != AnvilGUI.Slot.OUTPUT) {
