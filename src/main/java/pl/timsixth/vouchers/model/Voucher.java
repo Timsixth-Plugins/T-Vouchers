@@ -18,7 +18,10 @@ import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.gui.actions.ManageVoucherAction;
 import pl.timsixth.vouchers.util.UniversalItemMeta;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -77,7 +80,7 @@ public class Voucher implements Generable {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta = (SkullMeta) setVoucherDetails(meta);
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "123"); //name can not be null
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         profile.getProperties().put("textures", new Property("textures", textures));
         Field field;
         try {
@@ -85,9 +88,24 @@ public class Voucher implements Generable {
             field.setAccessible(true);
             field.set(meta, profile);
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            Bukkit.getLogger().severe(e.getMessage());
+            try {
+                //This code is inspired by DecentHolograms, I got some code that I needed
+                Class<?> resolvableProfileClass = Class.forName("net.minecraft.world.item.component.ResolvableProfile");
+
+                Constructor<?> constructor = resolvableProfileClass.getConstructor(GameProfile.class);
+
+                Method method = meta.getClass().getDeclaredMethod("setProfile", constructor.getDeclaringClass());
+                method.setAccessible(true);
+
+                method.invoke(meta, constructor.newInstance(profile));
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+                     ClassNotFoundException | InstantiationException ex) {
+                Bukkit.getLogger().severe(ex.getMessage());
+            }
         }
+
         item.setItemMeta(meta);
+
         return item;
     }
 
