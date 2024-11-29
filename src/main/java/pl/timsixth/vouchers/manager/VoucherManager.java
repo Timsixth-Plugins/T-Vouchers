@@ -4,15 +4,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import pl.timsixth.guilibrary.core.util.UniversalItemMeta;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.ItemUtil;
-import pl.timsixth.vouchers.util.UniversalItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class VoucherManager implements Reloadable {
@@ -32,7 +34,8 @@ public class VoucherManager implements Reloadable {
 
             if (command != null) commands.add(command);
 
-            if (section.getStringList("commands") != null) commands = section.getStringList("commands");
+            if (!section.getStringList("commands").isEmpty())
+                commands = section.getStringList("commands");
 
             Voucher voucher = new Voucher(
                     voucherName,
@@ -41,13 +44,23 @@ public class VoucherManager implements Reloadable {
                     section.getString("displayname"),
                     Material.matchMaterial(section.getString("material"))
             );
-            if (section.getStringList("enchants") != null) {
+            if (!section.getStringList("enchants").isEmpty()) {
                 List<String> enchantsString = section.getStringList("enchants");
                 voucher.setEnchantments(ItemUtil.getEnchantments(enchantsString));
             }
 
             if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
             if (section.getString("permission") != null) voucher.setPermission(section.getString("permission"));
+
+            List<String> itemFlagsAsStrings = section.getStringList("item_flags");
+            if (!itemFlagsAsStrings.isEmpty()) {
+
+                List<ItemFlag> itemFlags = itemFlagsAsStrings.stream()
+                        .map(ItemFlag::valueOf)
+                        .collect(Collectors.toList());
+
+                voucher.setItemFlags(itemFlags);
+            }
 
             vouchers.add(voucher);
         }

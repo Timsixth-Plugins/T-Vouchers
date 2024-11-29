@@ -3,13 +3,13 @@ items_per_page: 40
 gui_size: 54
 vouchers_gui_name: "&aVouchers"
 logs_gui_name: "&aLogs"
+use_confirmation_menu: false #If this option is true, when you want to use voucher you have to confirm redeem
 inputs_names:
   name: "&aType voucher name"
   display_name: "&aType voucher display name"
   material: "&aType voucher material"
 messages:
   no_permission: '&cYou dont have premission'
-  correct_use: '&cCorrect use: /voucher list|give|gui|reload|giveall <name> <player>'
   added_voucher: '&aVoucher has added to your inventory'
   doesnt_exists: '&cThis voucher doesn''t exists!'
   offline_player: '&cThis player is offline'
@@ -30,3 +30,12 @@ messages:
   files_reloaded: '&aFiles have been reloaded successfully'
   added_voucher_to_everyone: '&aYou have given voucher everyone'
   used_voucher: '&aYou have redeemed {VOUCHER_DISPLAY_NAME} &avoucher'
+  not_number: '&cThis is not a number'
+  voucher_redeem_rejected: '&cYou have rejected voucher redeem'
+  commands_list:
+    - '&7---------] &aVouchers &7[---------'
+    - '&7/&avoucher reload &8- &7Reloads configuration files'
+    - '&7/&avoucher list &8- &7List of all vouchers'
+    - '&7/&avoucher gui &8- &7Opens gui manager for vouchers'
+    - '&7/&avoucher give <voucher> <player|amount> <amount> &8- &7Gives voucher'
+    - '&7/&avoucher giveall <voucher> <amount> &8- &7Gives voucher for everyone'

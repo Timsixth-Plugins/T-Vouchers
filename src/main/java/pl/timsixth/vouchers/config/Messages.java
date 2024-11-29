@@ -6,11 +6,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.VouchersPlugin;
 
+import java.util.List;
+
 @Getter
 public final class Messages {
 
     private String noPermission;
-    private String correctUse;
     private String addedVoucher;
     private String voucherDoesntExists;
     private String offlinePlayer;
@@ -40,6 +41,9 @@ public final class Messages {
     private String filesReloaded;
 
     private String usedVoucher;
+    private String notNumber;
+    private String voucherRedeemRejected;
+    private List<String> commandsList;
 
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
@@ -52,7 +56,6 @@ public final class Messages {
     public void load() {
         FileConfiguration config = vouchersPlugin.getConfig();
         noPermission = ChatUtil.hexColor(config.getString("messages.no_permission"));
-        correctUse = ChatUtil.hexColor(config.getString("messages.correct_use"));
         addedVoucher = ChatUtil.hexColor(config.getString("messages.added_voucher"));
         voucherDoesntExists = ChatUtil.hexColor(config.getString("messages.doesnt_exists"));
         offlinePlayer = ChatUtil.hexColor(config.getString("messages.offline_player"));
@@ -73,5 +76,8 @@ public final class Messages {
         typeVoucherMaterial = ChatUtil.hexColor(config.getString("messages.type_voucher_material"));
         addedVoucherEveryone = ChatUtil.hexColor(config.getString("messages.added_voucher_to_everyone"));
         usedVoucher = ChatUtil.hexColor(config.getString("messages.used_voucher"));
+        notNumber = ChatUtil.hexColor(config.getString("messages.not_number"));
+        voucherRedeemRejected = ChatUtil.hexColor(config.getString("messages.voucher_redeem_rejected"));
+        commandsList = ChatUtil.hexColor(config.getStringList("messages.commands_list"));
     }
 }

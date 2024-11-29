@@ -19,6 +19,7 @@ public final class Settings {
     private String voucherNameInputName;
     private String voucherDisplayNameInputName;
     private String voucherMaterialInputName;
+    private boolean useConfirmationMenu;
 
     public Settings(VouchersPlugin vouchersPlugin) {
         this.vouchersPlugin = vouchersPlugin;
@@ -35,5 +36,6 @@ public final class Settings {
         voucherNameInputName = ChatUtil.chatColor(config.getString("inputs_names.name"));
         voucherDisplayNameInputName = ChatUtil.chatColor(config.getString("inputs_names.display_name"));
         voucherMaterialInputName = ChatUtil.chatColor(config.getString("inputs_names.material"));
+        useConfirmationMenu = config.getBoolean("use_confirmation_menu");
     }
 }

@@ -187,3 +187,26 @@ guis:
             - ''
         lore:
           - '&7Right click to clear logs'
+  voucherConfirmation:
+    displayname: '&a&lVoucher redeem confirmation'
+    size: 27
+    empty_slots:
+      material: GRAY_STAINED_GLASS_PANE
+    slots:
+      12:
+        material: LIME_DYE
+        displayname: '&aAccept voucher redeem'
+        click_action:
+          type: ACCEPT_VOUCHER_REDEEM
+          args: [ ]
+        lore:
+          - '&7Right click to redeem voucher'
+      14:
+        material: RED_DYE
+        displayname: '&aReject voucher redeem'
+        click_action:
+          type: REJECT_VOUCHER_REDEEM
+          args:
+            - ''
+        lore:
+          - '&7Right click to reject voucher redeem'

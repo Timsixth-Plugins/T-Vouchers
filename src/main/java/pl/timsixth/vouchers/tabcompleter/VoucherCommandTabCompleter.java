@@ -1,49 +1,42 @@
 package pl.timsixth.vouchers.tabcompleter;
 
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.HumanEntity;
-import org.jetbrains.annotations.NotNull;
+import pl.timsixth.vouchers.command.api.ParentCommand;
+import pl.timsixth.vouchers.command.api.tabcompleter.BaseTabCompleter;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class VoucherCommandTabCompleter implements TabCompleter {
+public class VoucherCommandTabCompleter extends BaseTabCompleter {
 
-    private final VoucherManager voucherManager;
+    public VoucherCommandTabCompleter(ParentCommand parentCommand, VoucherManager voucherManager) {
+        super(parentCommand);
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
+        addConditions((sender, args) -> {
+            List<String> completions = new ArrayList<>();
 
-        List<String> completions = new ArrayList<>();
-
-        if (args.length == 1) {
-            completions.addAll(Arrays.asList("list", "give", "gui", "reload", "giveall"));
-        } else if (args.length == 2) {
-            switch (args[0].toLowerCase()) {
-                case "give":
-                case "giveall":
-                    completions.addAll(voucherManager.getVouchers().stream()
-                            .map(Voucher::getName)
-                            .collect(Collectors.toList()));
-                    break;
-                default:
+            if (args.length == 2) {
+                switch (args[0].toLowerCase()) {
+                    case "give":
+                    case "giveall":
+                        completions.addAll(voucherManager.getVouchers().stream()
+                                .map(Voucher::getName)
+                                .collect(Collectors.toList()));
+                        break;
+                    default:
+                }
+            } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+                completions.addAll(Bukkit.getServer().getOnlinePlayers()
+                        .stream()
+                        .map(HumanEntity::getName)
+                        .collect(Collectors.toList()));
             }
-        } else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
-            completions.addAll(Bukkit.getServer().getOnlinePlayers()
-                    .stream()
-                    .map(HumanEntity::getName)
-                    .collect(Collectors.toList()));
-        }
 
-        return completions;
+            return completions;
+        });
     }
 }

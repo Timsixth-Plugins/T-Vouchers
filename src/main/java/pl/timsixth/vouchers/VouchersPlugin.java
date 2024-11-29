@@ -12,6 +12,7 @@ import pl.timsixth.guilibrary.core.model.action.custom.PreviousPageAction;
 import pl.timsixth.guilibrary.core.model.pagination.PaginatedMenu;
 import pl.timsixth.vouchers.bstats.Metrics;
 import pl.timsixth.vouchers.command.VoucherCommand;
+import pl.timsixth.vouchers.command.api.CommandRegistration;
 import pl.timsixth.vouchers.config.ConfigFile;
 import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.config.Settings;
@@ -23,7 +24,6 @@ import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
-import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
 import pl.timsixth.vouchers.version.VersionChecker;
 
 import java.util.Arrays;
@@ -65,8 +65,7 @@ public final class VouchersPlugin extends JavaPlugin {
 
         new Metrics(this, 19403);
 
-        getCommand("voucher").setExecutor(new VoucherCommand(voucherManager, menuManager, configFile, messages, settings));
-        getCommand("voucher").setTabCompleter(new VoucherCommandTabCompleter(voucherManager));
+        registerCommands();
 
         registerListeners();
         guiApi.registerMenuListener();
@@ -85,7 +84,7 @@ public final class VouchersPlugin extends JavaPlugin {
 
     private void registerListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new PlayerInteractListener(voucherManager, messages), this);
+        pluginManager.registerEvents(new PlayerInteractListener(voucherManager, menuManager, messages, settings), this);
         pluginManager.registerEvents(new InventoryCloseListener(menuManager, createVoucherProcessManager, editVoucherManager), this);
         pluginManager.registerEvents(new InventoryOpenListener(menuManager), this);
         pluginManager.registerEvents(new AsyncPlayerChatListener(createVoucherProcessManager, this, messages, menuManager), this);
@@ -120,6 +119,8 @@ public final class VouchersPlugin extends JavaPlugin {
                 , new OpenVouchersMenuAction()
                 , new NextPageAction()
                 , new PreviousPageAction()
+                , new AcceptVoucherRedeemAction()
+                , new RejectVoucherRedeemAction()
         );
     }
 
@@ -148,6 +149,12 @@ public final class VouchersPlugin extends JavaPlugin {
     private void setupPaginatedMenus() {
         setupPaginatedMenu("logsList", settings.getLogsGuiName());
         setupPaginatedMenu("vouchersList", settings.getVouchersGuiName());
+    }
+
+    private void registerCommands() {
+        CommandRegistration commandRegistration = new CommandRegistration(this);
+
+        commandRegistration.registerCommandWithTabCompleter(new VoucherCommand(voucherManager, menuManager, configFile, messages, settings));
     }
 }
 

@@ -1,19 +1,22 @@
 package pl.timsixth.vouchers.listener;
 
 import lombok.RequiredArgsConstructor;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import pl.timsixth.guilibrary.core.util.ChatUtil;
+import pl.timsixth.guilibrary.core.util.UniversalItemMeta;
+import pl.timsixth.guilibrary.processes.manager.ProcessRunner;
+import pl.timsixth.guilibrary.processes.model.SubGuiProcess;
 import pl.timsixth.vouchers.config.Messages;
+import pl.timsixth.vouchers.config.Settings;
+import pl.timsixth.vouchers.gui.processes.VoucherConfirmationProcess;
+import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
-import pl.timsixth.vouchers.util.UniversalItemMeta;
+import pl.timsixth.vouchers.util.VoucherUtil;
 
 import java.util.Optional;
 
@@ -21,7 +24,9 @@ import java.util.Optional;
 public class PlayerInteractListener implements Listener {
 
     private final VoucherManager voucherManager;
+    private final MenuManager menuManager;
     private final Messages messages;
+    private final Settings settings;
 
     @EventHandler
     private void onInteract(PlayerInteractEvent event) {
@@ -51,23 +56,21 @@ public class PlayerInteractListener implements Listener {
             }
         }
 
-        replacePlaceholderInCommand(player, voucher);
+        if (settings.isUseConfirmationMenu()) {
+            VoucherConfirmationProcess process = new VoucherConfirmationProcess(menuManager);
+            ProcessRunner.runProcess(player, process);
 
-        int amount = player.getInventory().getItemInMainHand().getAmount() - 1;
-        player.getInventory().getItemInMainHand().setAmount(amount);
+            Optional<SubGuiProcess> subGuiProcessOptional = process.currentProcess();
 
-        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null)
-            player.sendMessage(messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName())));
-        else
-            player.sendMessage(PlaceholderAPI.setPlaceholders(player, messages.getUsedVoucher().replace("{VOUCHER_DISPLAY_NAME}", ChatUtil.hexColor(voucher.getDisplayName()))));
-    }
+            if (!subGuiProcessOptional.isPresent()) return;
 
-    private void replacePlaceholderInCommand(Player player, Voucher voucher) {
-        if (Bukkit.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderAPI.setPlaceholders(player, command.replace("{NICK}", player.getName()))));
+            SubGuiProcess subGuiProcess = subGuiProcessOptional.get();
+
+            subGuiProcess.transformedData().put("voucher", voucher);
 
             return;
         }
-        voucher.getCommands().forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{NICK}", player.getName())));
+
+        VoucherUtil.redeemVoucher(player, voucher);
     }
 }

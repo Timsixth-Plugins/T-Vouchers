@@ -9,14 +9,16 @@ import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import pl.timsixth.guilibrary.core.model.Generable;
 import pl.timsixth.guilibrary.core.model.MenuItem;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
+import pl.timsixth.guilibrary.core.util.UniversalItemMeta;
 import pl.timsixth.vouchers.gui.actions.ManageVoucherAction;
-import pl.timsixth.vouchers.util.UniversalItemMeta;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -24,6 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static pl.timsixth.vouchers.util.PlaceholderUtil.replacePlaceholders;
 
 @Getter
 @Setter
@@ -39,6 +43,7 @@ public class Voucher implements Generable {
     private Map<Enchantment, Integer> enchantments = new HashMap<>();
     private String textures; //this is important to build custom head
     private String permission;
+    private List<ItemFlag> itemFlags;
 
     public static final Pattern VOUCHER_NAME_PATTERN = Pattern.compile("[a-zA-Z\\d]{2,30}");
 
@@ -76,7 +81,7 @@ public class Voucher implements Generable {
     }
 
     public ItemStack toSkullItem() {
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta = (SkullMeta) setVoucherDetails(meta);
 
@@ -117,6 +122,10 @@ public class Voucher implements Generable {
             enchantments.forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
         }
 
+        if (itemFlags != null) {
+            meta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
+        }
+
         UniversalItemMeta universalItemMeta = new UniversalItemMeta(meta);
         universalItemMeta.setLocalizedName(name);
 
@@ -129,5 +138,12 @@ public class Voucher implements Generable {
 
     public boolean hasPermission() {
         return permission != null;
+    }
+
+    public void give(Player player, int amount) {
+        ItemStack item = isSkullItem() ? toSkullItem() : toItemStack();
+        item.setAmount(amount);
+
+        player.getInventory().addItem(replacePlaceholders(player, item));
     }
 }
