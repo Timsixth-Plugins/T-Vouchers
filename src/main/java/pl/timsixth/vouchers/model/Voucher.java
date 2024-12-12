@@ -73,6 +73,7 @@ public class Voucher implements Generable {
 
     public ItemStack toItemStack() {
         ItemStack item = new ItemStack(material);
+        item.setDurability((short) 0);
         ItemMeta meta = item.getItemMeta();
         meta = setVoucherDetails(meta);
         item.setItemMeta(meta);
@@ -82,10 +83,11 @@ public class Voucher implements Generable {
 
     public ItemStack toSkullItem() {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        item.setDurability((short) 0);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta = (SkullMeta) setVoucherDetails(meta);
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+        GameProfile profile = new GameProfile(UUID.fromString("6790e033-1da2-4e1b-9b2d-ffcb57b4b3b1"), "");
         profile.getProperties().put("textures", new Property("textures", textures));
         Field field;
         try {
