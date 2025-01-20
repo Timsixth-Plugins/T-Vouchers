@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import pl.timsixth.guilibrary.core.util.UniversalItemMeta;
 import pl.timsixth.guilibrary.processes.manager.ProcessRunner;
 import pl.timsixth.guilibrary.processes.model.SubGuiProcess;
@@ -30,7 +31,10 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     private void onInteract(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) return;
+
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
         Player player = event.getPlayer();
 
         if (!player.getInventory().getItemInMainHand().hasItemMeta()) return;

@@ -38,7 +38,7 @@ public class GiveSubCommand implements SubCommand {
             Player other = Bukkit.getPlayer(args[2]);
 
             if (other == null) {
-                Integer amount = getAmount(sender, args);
+                Integer amount = getAmount(sender, args, 2);
 
                 if (amount == null) return true;
 
@@ -56,7 +56,7 @@ public class GiveSubCommand implements SubCommand {
             sender.sendMessage(messages.getAddedVoucherToOtherPlayer().replace("{PLAYER_NAME}", sender.getName()));
         } else if (args.length == 4) {
 
-            Integer amount = getAmount(sender, args);
+            Integer amount = getAmount(sender, args, 3);
             if (amount == null) return true;
 
             Optional<Voucher> optionalVoucher = getVoucher(sender, args);
@@ -89,8 +89,8 @@ public class GiveSubCommand implements SubCommand {
         return false;
     }
 
-    private @Nullable Integer getAmount(CommandSender sender, String[] args) {
-        NumberUtil.ParseResult<Integer> result = NumberUtil.isInt(args[3]);
+    private @Nullable Integer getAmount(CommandSender sender, String[] args, int index) {
+        NumberUtil.ParseResult<Integer> result = NumberUtil.isInt(args[index]);
 
         if (!result.isSuccessful()) {
             sender.sendMessage(messages.getNotNumber());
