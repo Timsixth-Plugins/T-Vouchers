@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.timsixth.guilibrary.core.model.Menu;
 import pl.timsixth.vouchers.command.api.SubCommand;
+import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.MenuManager;
 
 import java.util.Optional;
@@ -13,12 +14,13 @@ import java.util.Optional;
 public class GuiSubCommand implements SubCommand {
 
     private final MenuManager menuManager;
+    private final Messages messages;
 
     @Override
     public boolean executeCommand(CommandSender sender, String[] args) {
         if (args.length == 1) {
             if (!(sender instanceof Player)) {
-                Bukkit.getLogger().info("Player only use this command");
+                Bukkit.getLogger().info(this.messages.getOnlyPlayersCanUseThisCommand());
                 return true;
             }
 

@@ -18,12 +18,12 @@ public class VoucherCommand extends ParentCommand implements CommandExecutor {
     private final VoucherManager voucherManager;
 
     public VoucherCommand(VoucherManager voucherManager, MenuManager menuManager, ConfigFile configFile, Messages messages, Settings settings) {
-        super(settings.getPermission(), true, false, true);
+        super(settings.getPermission(), true, false, true, messages);
         this.messages = messages;
         this.voucherManager = voucherManager;
 
         addSubCommand(new ListSubCommand(voucherManager));
-        addSubCommand(new GuiSubCommand(menuManager));
+        addSubCommand(new GuiSubCommand(menuManager, messages));
         addSubCommand(new ReloadSubCommand(menuManager, voucherManager, configFile, messages));
         addSubCommand(new GiveSubCommand(voucherManager, messages));
         addSubCommand(new GiveAllSubCommand(voucherManager, messages));

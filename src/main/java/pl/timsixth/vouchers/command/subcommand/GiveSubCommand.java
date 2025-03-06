@@ -53,7 +53,7 @@ public class GiveSubCommand implements SubCommand {
 
             giveVoucher(other, optionalVoucher.get());
 
-            sender.sendMessage(messages.getAddedVoucherToOtherPlayer().replace("{PLAYER_NAME}", sender.getName()));
+            sender.sendMessage(messages.getAddedVoucherToOtherPlayer().replace("{PLAYER_NAME}", other.getName()));
         } else if (args.length == 4) {
 
             Integer amount = getAmount(sender, args, 3);
@@ -68,7 +68,7 @@ public class GiveSubCommand implements SubCommand {
 
             giveVoucher(other, optionalVoucher.get(), amount);
 
-            sender.sendMessage(messages.getAddedVoucherToOtherPlayer().replace("{PLAYER_NAME}", sender.getName()));
+            sender.sendMessage(messages.getAddedVoucherToOtherPlayer().replace("{PLAYER_NAME}", other.getName()));
         } else {
             messages.getCommandsList().forEach(sender::sendMessage);
             return true;
@@ -83,7 +83,7 @@ public class GiveSubCommand implements SubCommand {
 
     private boolean isConsole(CommandSender sender) {
         if (!(sender instanceof Player)) {
-            Bukkit.getLogger().info("Player only use this command");
+            Bukkit.getLogger().info(this.messages.getOnlyPlayersCanUseThisCommand());
             return true;
         }
         return false;

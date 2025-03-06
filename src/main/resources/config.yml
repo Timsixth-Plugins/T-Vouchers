@@ -10,6 +10,7 @@ inputs_names:
   material: "&aType voucher material"
 messages:
   no_permission: '&cYou dont have premission'
+  only_players_can_use_this_command: 'Only players can use this command'
   added_voucher: '&aVoucher has added to your inventory'
   doesnt_exists: '&cThis voucher doesn''t exists!'
   offline_player: '&cThis player is offline'

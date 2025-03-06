@@ -2,6 +2,7 @@ package pl.timsixth.vouchers.command.api;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,35 +23,38 @@ public abstract class ParentCommand implements CommandExecutor {
     private final boolean hasArguments;
     private final boolean onlyPlayers;
     private final boolean usePermission;
+    private final CommandMessages commandMessages;
 
 
     /**
      * All args constructor
      *
-     * @param permission           command permission
-     * @param hasArguments         true if command has sub commands otherwise false
-     * @param onlyPlayers          true if command can be used by only players otherwise false
-     * @param usePermission        true if command has permission otherwise false
+     * @param permission    command permission
+     * @param hasArguments  true if command has sub commands otherwise false
+     * @param onlyPlayers   true if command can be used by only players otherwise false
+     * @param usePermission true if command has permission otherwise false
      */
-    public ParentCommand(String permission, boolean hasArguments, boolean onlyPlayers, boolean usePermission) {
+    public ParentCommand(String permission, boolean hasArguments, boolean onlyPlayers, boolean usePermission, CommandMessages commandMessages) {
         this.permission = permission;
         this.hasArguments = hasArguments;
         this.onlyPlayers = onlyPlayers;
         this.usePermission = usePermission;
+        this.commandMessages = commandMessages;
         this.subCommands = new ArrayList<>();
     }
 
     /**
      * Constructor to command which doesn't have sub commands
      *
-     * @param permission           command permission
-     * @param onlyPlayers          true if command can be used by only players otherwise false
-     * @param usePermission        true if command has permission otherwise false
+     * @param permission    command permission
+     * @param onlyPlayers   true if command can be used by only players otherwise false
+     * @param usePermission true if command has permission otherwise false
      */
-    public ParentCommand(String permission, boolean onlyPlayers, boolean usePermission) {
+    public ParentCommand(String permission, boolean onlyPlayers, boolean usePermission, CommandMessages commandMessages) {
         this.permission = permission;
         this.onlyPlayers = onlyPlayers;
         this.usePermission = usePermission;
+        this.commandMessages = commandMessages;
         this.hasArguments = false;
     }
 
@@ -58,7 +62,7 @@ public abstract class ParentCommand implements CommandExecutor {
      * Constructor without params, everything is set to default value like false, empty string and for configuration null
      */
     public ParentCommand() {
-        this("", false, false, false);
+        this("", false, false, false, null);
     }
 
     /**
@@ -74,14 +78,14 @@ public abstract class ParentCommand implements CommandExecutor {
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String[] args) {
         if (onlyPlayers) {
             if (!(sender instanceof Player)) {
-                Bukkit.getLogger().info("");
+                Bukkit.getLogger().info(commandMessages == null ? "Only players can use this command" : commandMessages.getOnlyPlayersMessage());
                 return true;
             }
         }
 
         if (usePermission) {
             if (!sender.hasPermission(permission)) {
-                sender.sendMessage("");
+                sender.sendMessage(commandMessages == null ? ChatColor.RED + "You don't have permission" : commandMessages.getNoPermissionMessage());
                 return true;
             }
         }

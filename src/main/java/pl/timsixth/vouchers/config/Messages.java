@@ -5,11 +5,12 @@ import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.VouchersPlugin;
+import pl.timsixth.vouchers.command.api.CommandMessages;
 
 import java.util.List;
 
 @Getter
-public final class Messages {
+public final class Messages implements CommandMessages {
 
     private String noPermission;
     private String addedVoucher;
@@ -45,6 +46,8 @@ public final class Messages {
     private String voucherRedeemRejected;
     private List<String> commandsList;
 
+    private String onlyPlayersCanUseThisCommand;
+
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
 
@@ -78,6 +81,17 @@ public final class Messages {
         usedVoucher = ChatUtil.hexColor(config.getString("messages.used_voucher"));
         notNumber = ChatUtil.hexColor(config.getString("messages.not_number"));
         voucherRedeemRejected = ChatUtil.hexColor(config.getString("messages.voucher_redeem_rejected"));
+        onlyPlayersCanUseThisCommand = config.getString("messages.only_players_can_use_this_command");
         commandsList = ChatUtil.hexColor(config.getStringList("messages.commands_list"));
+    }
+
+    @Override
+    public String getNoPermissionMessage() {
+        return this.noPermission;
+    }
+
+    @Override
+    public String getOnlyPlayersMessage() {
+        return this.onlyPlayersCanUseThisCommand;
     }
 }
