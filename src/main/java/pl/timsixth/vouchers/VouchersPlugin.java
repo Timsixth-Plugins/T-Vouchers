@@ -10,6 +10,7 @@ import pl.timsixth.guilibrary.core.model.MenuItem;
 import pl.timsixth.guilibrary.core.model.action.custom.NextPageAction;
 import pl.timsixth.guilibrary.core.model.action.custom.PreviousPageAction;
 import pl.timsixth.guilibrary.core.model.pagination.PaginatedMenu;
+import pl.timsixth.versionchecker.VersionChecker;
 import pl.timsixth.vouchers.bstats.Metrics;
 import pl.timsixth.vouchers.command.VoucherCommand;
 import pl.timsixth.vouchers.command.api.CommandRegistration;
@@ -24,7 +25,6 @@ import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
-import pl.timsixth.vouchers.version.VersionChecker;
 
 import java.util.Arrays;
 
@@ -61,7 +61,7 @@ public final class VouchersPlugin extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        new VersionChecker(this).checkVersion();
+        new VersionChecker(this, messages).checkVersion();
 
         new Metrics(this, 19403);
 

@@ -4,13 +4,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import pl.timsixth.guilibrary.core.util.ChatUtil;
+import pl.timsixth.versionchecker.VersionCheckerMessages;
 import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.command.api.CommandMessages;
 
 import java.util.List;
 
 @Getter
-public final class Messages implements CommandMessages {
+public final class Messages implements CommandMessages, VersionCheckerMessages {
 
     private String noPermission;
     private String addedVoucher;
@@ -47,6 +48,11 @@ public final class Messages implements CommandMessages {
     private List<String> commandsList;
 
     private String onlyPlayersCanUseThisCommand;
+    private String serviceUnavailable;
+    private String pleaseUpdatePlugin;
+    private String pluginVersionOnTheServer;
+    private String currentPluginVersion;
+    private String pluginUpToDate;
 
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
@@ -83,6 +89,11 @@ public final class Messages implements CommandMessages {
         voucherRedeemRejected = ChatUtil.hexColor(config.getString("messages.voucher_redeem_rejected"));
         onlyPlayersCanUseThisCommand = config.getString("messages.only_players_can_use_this_command");
         commandsList = ChatUtil.hexColor(config.getStringList("messages.commands_list"));
+        serviceUnavailable = ChatUtil.hexColor(config.getString("messages.service_unavailable"));
+        pleaseUpdatePlugin = ChatUtil.hexColor(config.getString("messages.please_update_plugin"));
+        pluginVersionOnTheServer = ChatUtil.hexColor(config.getString("messages.plugin_version_on_the_server"));
+        currentPluginVersion = ChatUtil.hexColor(config.getString("messages.current_plugin_version"));
+        pluginUpToDate = ChatUtil.hexColor(config.getString("messages.plugin_up_to_date"));
     }
 
     @Override
@@ -93,5 +104,30 @@ public final class Messages implements CommandMessages {
     @Override
     public String getOnlyPlayersMessage() {
         return this.onlyPlayersCanUseThisCommand;
+    }
+
+    @Override
+    public String getServiceUnavailableMessage() {
+        return this.serviceUnavailable;
+    }
+
+    @Override
+    public String getPleaseUpdatePluginMessage() {
+        return this.pleaseUpdatePlugin;
+    }
+
+    @Override
+    public String getPluginVersionOnTheServerMessage() {
+        return this.pluginVersionOnTheServer;
+    }
+
+    @Override
+    public String getCurrentPluginVersionMessage() {
+        return this.currentPluginVersion;
+    }
+
+    @Override
+    public String getPluginUpToDateMessage() {
+        return this.pluginUpToDate;
     }
 }

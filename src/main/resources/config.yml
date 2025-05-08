@@ -33,6 +33,11 @@ messages:
   used_voucher: '&aYou have redeemed {VOUCHER_DISPLAY_NAME} &avoucher'
   not_number: '&cThis is not a number'
   voucher_redeem_rejected: '&cYou have rejected voucher redeem'
+  service_unavailable: '&cThe version checker service is unavailable'
+  please_update_plugin: '&c[{PLUGIN_NAME}] Please update plugin to newest version.'
+  plugin_version_on_the_server: '&ePlugin version on your server: {PLUGIN_VERSION}'
+  current_plugin_version: '&eCurrent plugin version: {PLUGIN_CURRENT_VERSION}'
+  plugin_up_to_date: '&a[{PLUGIN_NAME}] is up to date'
   commands_list:
     - '&7---------] &aVouchers &7[---------'
     - '&7/&avoucher reload &8- &7Reloads configuration files'
