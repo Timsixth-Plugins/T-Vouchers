@@ -5,3 +5,6 @@
 /.idea/
 /src/main/java/META-INF/MANIFEST.MF
 /dependency-reduced-pom.xml
+/vouchers-plugin/dependency-reduced-pom.xml
+/vouchers-plugin/target/
+/vouchers-plugin/vouchers-plugin.iml

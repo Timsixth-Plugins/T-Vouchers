@@ -81,8 +81,8 @@ public class LogsManager {
 
     private List<LocalDate> getCurrentLogsDates() {
         return logs.stream()
-                .map(log -> LocalDate.parse(log.getCreationDate().toLocalDate().format(Log.LOG_DATE_FORMATTER), LOG_DATE_FORMATTER))
-                .filter(date -> date.equals(LocalDate.parse(LocalDate.now().format(Log.LOG_DATE_FORMATTER), LOG_DATE_FORMATTER)))
+                .map(log -> LocalDate.parse(log.getCreationDate().toLocalDate().format(LOG_DATE_FORMATTER), LOG_DATE_FORMATTER))
+                .filter(date -> date.equals(LocalDate.parse(LocalDate.now().format(LOG_DATE_FORMATTER), LOG_DATE_FORMATTER)))
                 .collect(Collectors.toList());
     }
 

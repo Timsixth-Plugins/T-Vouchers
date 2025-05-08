@@ -1,6 +1,5 @@
 package pl.timsixth.vouchers.command;
 
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import pl.timsixth.vouchers.command.api.ParentCommand;
 import pl.timsixth.vouchers.command.api.tabcompleter.BaseTabCompleter;
@@ -12,7 +11,7 @@ import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.tabcompleter.VoucherCommandTabCompleter;
 
-public class VoucherCommand extends ParentCommand implements CommandExecutor {
+public class VoucherCommand extends ParentCommand {
 
     private final Messages messages;
     private final VoucherManager voucherManager;
