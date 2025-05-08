@@ -71,7 +71,7 @@ public class Voucher implements Generable {
         return menuItem;
     }
 
-    public ItemStack toItemStack() {
+    private ItemStack toItemStack() {
         ItemStack item = new ItemStack(material);
         item.setDurability((short) 0);
         ItemMeta meta = item.getItemMeta();
@@ -81,7 +81,7 @@ public class Voucher implements Generable {
         return item;
     }
 
-    public ItemStack toSkullItem() {
+    private ItemStack toSkullItem() {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         item.setDurability((short) 0);
         SkullMeta meta = (SkullMeta) item.getItemMeta();

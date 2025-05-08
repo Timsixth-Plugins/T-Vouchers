@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class VoucherManager implements Reloadable {
+public class VoucherManager implements Reloadable{
 
     private final ConfigFile configFile;
     @Getter
