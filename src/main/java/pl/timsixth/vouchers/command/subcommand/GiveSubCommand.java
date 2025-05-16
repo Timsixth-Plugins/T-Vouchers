@@ -11,6 +11,7 @@ import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.NumberUtil;
+import pl.timsixth.vouchers.util.ParseResult;
 
 import java.util.Optional;
 
@@ -90,14 +91,14 @@ public class GiveSubCommand implements SubCommand {
     }
 
     private @Nullable Integer getAmount(CommandSender sender, String[] args, int index) {
-        NumberUtil.ParseResult<Integer> result = NumberUtil.isInt(args[index]);
+        ParseResult<Integer> result = NumberUtil.isInt(args[index]);
 
         if (!result.isSuccessful()) {
             sender.sendMessage(messages.getNotNumber());
             return null;
         }
 
-        return result.getNumber();
+        return result.getValue();
     }
 
     private @Nullable Player getPlayer(CommandSender sender, String[] args) {

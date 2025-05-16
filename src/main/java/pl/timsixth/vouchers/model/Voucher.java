@@ -44,6 +44,7 @@ public class Voucher implements Generable {
     private String textures; //this is important to build custom head
     private String permission;
     private List<ItemFlag> itemFlags;
+    private boolean discordNotification;
 
     public static final Pattern VOUCHER_NAME_PATTERN = Pattern.compile("[a-zA-Z\\d]{2,30}");
 

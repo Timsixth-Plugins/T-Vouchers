@@ -8,6 +8,7 @@ import pl.timsixth.vouchers.config.Messages;
 import pl.timsixth.vouchers.manager.VoucherManager;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.NumberUtil;
+import pl.timsixth.vouchers.util.ParseResult;
 
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class GiveAllSubCommand implements SubCommand {
             return giveVoucher(sender, args[1], 1);
         } else if (args.length == 3) {
 
-            NumberUtil.ParseResult<Integer> result = NumberUtil.isInt(args[2]);
+            ParseResult<Integer> result = NumberUtil.isInt(args[2]);
 
             if (!result.isSuccessful()) {
                 sender.sendMessage(messages.getNotNumber());
@@ -31,7 +32,7 @@ public class GiveAllSubCommand implements SubCommand {
             }
 
 
-            return giveVoucher(sender, args[1], result.getNumber());
+            return giveVoucher(sender, args[1], result.getValue());
         }
 
         return false;

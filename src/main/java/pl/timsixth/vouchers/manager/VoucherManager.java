@@ -51,6 +51,7 @@ public class VoucherManager implements Reloadable{
 
             if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
             if (section.getString("permission") != null) voucher.setPermission(section.getString("permission"));
+            if (section.getBoolean("discord_notification")) voucher.setDiscordNotification(true);
 
             List<String> itemFlagsAsStrings = section.getStringList("item_flags");
             if (!itemFlagsAsStrings.isEmpty()) {
