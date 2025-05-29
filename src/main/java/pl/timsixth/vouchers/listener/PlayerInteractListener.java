@@ -16,6 +16,7 @@ import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.gui.processes.VoucherConfirmationProcess;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
+import pl.timsixth.vouchers.manager.WebhookManager;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.util.VoucherUtil;
 
@@ -28,6 +29,7 @@ public class PlayerInteractListener implements Listener {
     private final MenuManager menuManager;
     private final Messages messages;
     private final Settings settings;
+    private final WebhookManager webhookManager;
 
     @EventHandler
     private void onInteract(PlayerInteractEvent event) {
@@ -76,5 +78,8 @@ public class PlayerInteractListener implements Listener {
         }
 
         VoucherUtil.redeemVoucher(player, voucher);
+
+        if (voucher.isDiscordNotification())
+            webhookManager.notifyVoucherRedeem(player, voucher);
     }
 }

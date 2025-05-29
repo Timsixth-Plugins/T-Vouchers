@@ -98,7 +98,7 @@ public final class HttpClient {
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader reader;
 
-        if (connection.getResponseCode() == 200) {
+        if (String.valueOf(connection.getResponseCode()).startsWith("2")) {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         } else {
             reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -147,6 +147,15 @@ public final class HttpClient {
 
         public JsonArray getAsJsonArray() {
             return jsonElement.getAsJsonArray();
+        }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "status=" + status +
+                    ", content='" + content + '\'' +
+                    ", jsonElement=" + jsonElement +
+                    '}';
         }
     }
 

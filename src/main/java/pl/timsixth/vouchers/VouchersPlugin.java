@@ -22,6 +22,7 @@ import pl.timsixth.vouchers.listener.*;
 import pl.timsixth.vouchers.manager.LogsManager;
 import pl.timsixth.vouchers.manager.MenuManager;
 import pl.timsixth.vouchers.manager.VoucherManager;
+import pl.timsixth.vouchers.manager.WebhookManager;
 import pl.timsixth.vouchers.manager.process.CreateVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.DeleteVoucherProcessManager;
 import pl.timsixth.vouchers.manager.process.EditVoucherProcessManager;
@@ -38,6 +39,8 @@ public final class VouchersPlugin extends JavaPlugin {
     private DeleteVoucherProcessManager deleteVoucherManager;
     private ActionRegistration actionRegistration;
     private LogsManager logsManager;
+    private WebhookManager webhookManager;
+
     private ConfigFile configFile;
     private Messages messages;
     private Settings settings;
@@ -55,11 +58,9 @@ public final class VouchersPlugin extends JavaPlugin {
         createVoucherProcessManager = new CreateVoucherProcessManager(configFile, voucherManager, logsManager);
         editVoucherManager = new EditVoucherProcessManager(configFile, voucherManager, logsManager);
         deleteVoucherManager = new DeleteVoucherProcessManager(configFile, voucherManager, this, logsManager);
+        webhookManager = new WebhookManager(settings);
 
         guiApi.setMenuManager(menuManager);
-
-        getConfig().options().copyDefaults(true);
-        saveConfig();
 
         new VersionChecker(this, messages).checkVersion();
 
@@ -84,7 +85,7 @@ public final class VouchersPlugin extends JavaPlugin {
 
     private void registerListeners() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new PlayerInteractListener(voucherManager, menuManager, messages, settings), this);
+        pluginManager.registerEvents(new PlayerInteractListener(voucherManager, menuManager, messages, settings, webhookManager), this);
         pluginManager.registerEvents(new InventoryCloseListener(menuManager, createVoucherProcessManager, editVoucherManager), this);
         pluginManager.registerEvents(new InventoryOpenListener(menuManager), this);
         pluginManager.registerEvents(new AsyncPlayerChatListener(createVoucherProcessManager, this, messages, menuManager), this);
@@ -98,6 +99,9 @@ public final class VouchersPlugin extends JavaPlugin {
     }
 
     private void loadConfig() {
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+
         configFile = new ConfigFile(this);
         messages = new Messages(this);
         settings = new Settings(this);

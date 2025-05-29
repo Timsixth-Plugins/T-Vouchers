@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import pl.timsixth.guilibrary.core.util.ChatUtil;
 import pl.timsixth.vouchers.config.Settings;
 import pl.timsixth.vouchers.model.Voucher;
 import pl.timsixth.vouchers.model.discord.Embed;
@@ -17,6 +18,7 @@ import pl.timsixth.vouchers.util.placeholders.Placeholders;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,6 +30,10 @@ public class WebhookManager {
     public void notifyVoucherRedeem(Player player, Voucher voucher) {
         Webhook webhook = settings.getWebhook();
 
+        if (webhook.getUrl() == null) {
+            throw new IllegalStateException("Can not send message by webhook, because webhook url is null");
+        }
+
         if (webhook.getName().isEmpty()) {
             throw new IllegalStateException("Webhook name can not be empty");
         }
@@ -35,8 +41,13 @@ public class WebhookManager {
         JsonObject jsonObject = createJsonObject(settings, player, voucher);
 
         try {
-            HttpClient.Response response = HttpClient.create(settings.getWebhook().getUrl())
+            HttpClient.Response response = HttpClient.create(webhook.getUrl())
+                    .headers(Collections.singletonMap("Content-Type", "application/json"))
                     .post(jsonObject);
+
+            if (response.getStatus() >= 300 && response.getStatus() <= 400) {
+                Bukkit.getLogger().warning("Redirection or client error: " + " Status: " + response.getStatus() + " Content: " + response.getContent());
+            }
 
             if (response.getStatus() == 204) {
                 Bukkit.getLogger().info("Webhook notification has been sent successfully");
@@ -71,7 +82,7 @@ public class WebhookManager {
         jsonObject.addProperty("content", Placeholders.applyDynamicPlaceholders(webhookMessage, () -> {
             Map<DynamicPlaceholder, String> placeholders = new LinkedHashMap<>();
 
-            placeholders.put(Placeholders.VOUCHER_DISPLAY_NAME_WITH_STRIPED_COLORS, ChatColor.stripColor(voucher.getDisplayName()));
+            placeholders.put(Placeholders.VOUCHER_DISPLAY_NAME_WITH_STRIPED_COLORS, stripColor(voucher.getDisplayName()));
             placeholders.put(Placeholders.PLAYER_NAME, player.getName());
 
             return placeholders;
@@ -112,7 +123,7 @@ public class WebhookManager {
         jsonEmbed.addProperty("description", Placeholders.applyDynamicPlaceholders(embed.getDescription(), () -> {
             Map<DynamicPlaceholder, String> placeholders = new LinkedHashMap<>();
 
-            placeholders.put(Placeholders.VOUCHER_DISPLAY_NAME_WITH_STRIPED_COLORS, ChatColor.stripColor(voucher.getDisplayName()));
+            placeholders.put(Placeholders.VOUCHER_DISPLAY_NAME_WITH_STRIPED_COLORS, stripColor(voucher.getDisplayName()));
             placeholders.put(Placeholders.PLAYER_NAME, player.getName());
 
             return placeholders;
@@ -122,5 +133,9 @@ public class WebhookManager {
         jsonEmbed.addProperty("timestamp", embed.getTimestamp().toString());
 
         return jsonEmbed;
+    }
+
+    private String stripColor(String text) {
+        return ChatColor.stripColor(ChatUtil.hexColor(text));
     }
 }

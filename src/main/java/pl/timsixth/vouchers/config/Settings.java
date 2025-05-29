@@ -8,10 +8,8 @@ import pl.timsixth.vouchers.VouchersPlugin;
 import pl.timsixth.vouchers.model.discord.Embed;
 import pl.timsixth.vouchers.model.discord.EmbedAuthor;
 import pl.timsixth.vouchers.model.discord.Webhook;
-import pl.timsixth.vouchers.util.ParseResult;
 import pl.timsixth.vouchers.util.URLUtil;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -78,14 +76,8 @@ public final class Settings {
     private Webhook createWebhook(FileConfiguration config) {
         String path = "discord.webhook.";
 
-        ParseResult<URL> urlParseResult = URLUtil.parseURL(config.getString(path + "url"));
-
-        if (!urlParseResult.isSuccessful()) {
-            throw new IllegalStateException("Can not parse URL: " + path + "url");
-        }
-
         return new Webhook(
-                urlParseResult.getValue(),
+                URLUtil.parseURL(config.getString(path + "url")).getValue(),
                 config.getString(path + "name"),
                 URLUtil.parseURL(config.getString(path + "avatar_url")).getValue()
         );
