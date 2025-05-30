@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class VoucherManager implements Reloadable{
+public class VoucherManager implements Reloadable {
 
     private final ConfigFile configFile;
     @Getter
@@ -52,6 +52,9 @@ public class VoucherManager implements Reloadable{
             if (section.getString("textures") != null) voucher.setTextures(section.getString("textures"));
             if (section.getString("permission") != null) voucher.setPermission(section.getString("permission"));
             if (section.getBoolean("discord_notification")) voucher.setDiscordNotification(true);
+
+            int redeemTimes = section.getInt("redeem_times", -1);
+            if (redeemTimes != -1) voucher.setRedeemTimes(redeemTimes);
 
             List<String> itemFlagsAsStrings = section.getStringList("item_flags");
             if (!itemFlagsAsStrings.isEmpty()) {
