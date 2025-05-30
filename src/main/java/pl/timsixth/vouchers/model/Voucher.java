@@ -45,6 +45,10 @@ public class Voucher implements Generable {
     private String permission;
     private List<ItemFlag> itemFlags;
     private boolean discordNotification;
+    private int redeemTimes = REDEEM_ALL_THE_TIME;
+
+    public static final int REDEEM_ALL_THE_TIME = -1;
+    private static final int DISABLE_REDEEMING = 0;
 
     public static final Pattern VOUCHER_NAME_PATTERN = Pattern.compile("[a-zA-Z\\d]{2,30}");
 
@@ -148,5 +152,17 @@ public class Voucher implements Generable {
         item.setAmount(amount);
 
         player.getInventory().addItem(replacePlaceholders(player, item));
+    }
+
+    public boolean isRedeemingDisabled() {
+        return redeemTimes == DISABLE_REDEEMING;
+    }
+
+    public boolean canRedeemAllTheTime() {
+        return redeemTimes == REDEEM_ALL_THE_TIME;
+    }
+
+    public boolean hasRedeemTimes() {
+        return redeemTimes >= 1;
     }
 }

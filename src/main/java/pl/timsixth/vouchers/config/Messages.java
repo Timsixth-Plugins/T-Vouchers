@@ -53,6 +53,7 @@ public final class Messages implements CommandMessages, VersionCheckerMessages {
     private String pluginVersionOnTheServer;
     private String currentPluginVersion;
     private String pluginUpToDate;
+    private String canNotRedeemVoucher;
 
     @Getter(value = AccessLevel.NONE)
     private final VouchersPlugin vouchersPlugin;
@@ -94,6 +95,7 @@ public final class Messages implements CommandMessages, VersionCheckerMessages {
         pluginVersionOnTheServer = ChatUtil.hexColor(config.getString("messages.plugin_version_on_the_server"));
         currentPluginVersion = ChatUtil.hexColor(config.getString("messages.current_plugin_version"));
         pluginUpToDate = ChatUtil.hexColor(config.getString("messages.plugin_up_to_date"));
+        canNotRedeemVoucher = ChatUtil.hexColor(config.getString("messages.can_not_redeem_voucher"));
     }
 
     @Override

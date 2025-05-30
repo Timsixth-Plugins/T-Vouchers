@@ -24,7 +24,9 @@ public final class ConfigFile {
     private final File vouchersFile;
     private final File guisFile;
     private final File logsFile;
+    private final File voucherRedeemsFile;
     private final YamlConfiguration ymlLogs;
+    private final YamlConfiguration ymlVoucherRedeems;
     private YamlConfiguration ymlVouchers;
     private YamlConfiguration ymlGuis;
 
@@ -33,10 +35,12 @@ public final class ConfigFile {
         vouchersFile = createFile("vouchers.yml");
         guisFile = createFile("guis.yml");
         logsFile = createFile("logs.yml");
+        voucherRedeemsFile = createFile("vouchers_redeems.yml");
 
         ymlVouchers = loadYaml(vouchersFile);
         ymlLogs = loadYaml(logsFile);
         ymlGuis = loadYaml(guisFile);
+        ymlVoucherRedeems = loadYaml(voucherRedeemsFile);
         migrateGuisFile();
     }
 
@@ -107,7 +111,7 @@ public final class ConfigFile {
         return ymlFile;
     }
 
-    private void save(YamlConfiguration yamlConfiguration, File file){
+    private void save(YamlConfiguration yamlConfiguration, File file) {
         try {
             yamlConfiguration.save(file);
         } catch (IOException e) {

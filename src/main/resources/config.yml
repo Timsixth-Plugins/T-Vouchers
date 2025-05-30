@@ -23,7 +23,7 @@ discord:
       icon_url: 'https://www.spigotmc.org/data/resource_icons/93/93682.jpg?1642107439'
     footer:
       icon_url: 'https://www.spigotmc.org/data/resource_icons/93/93682.jpg?1642107439'
-    timestamp: '2025-05-21T22:00:00.000Z'
+    timestamp: '2025-05-21T22:00:00'
     image_url: 'https://www.spigotmc.org/data/resource_icons/93/93682.jpg?1642107439'
     thumbnail_url: 'https://www.spigotmc.org/data/resource_icons/93/93682.jpg?1642107439'
     color: '#32b834' #only in HEX
@@ -52,6 +52,7 @@ messages:
   used_voucher: '&aYou have redeemed {VOUCHER_DISPLAY_NAME} &avoucher'
   not_number: '&cThis is not a number'
   voucher_redeem_rejected: '&cYou have rejected voucher redeem'
+  can_not_redeem_voucher: '&cYou can not redeem this voucher'
   service_unavailable: '&cThe version checker service is unavailable'
   please_update_plugin: '&c[{PLUGIN_NAME}] Please update plugin to newest version.'
   plugin_version_on_the_server: '&ePlugin version on your server: {PLUGIN_VERSION}'
